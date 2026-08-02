@@ -1,0 +1,218 @@
+<odoo>
+    <record id="view_view_picking_form_kit_qty" model="ir.ui.view">
+        <field name="name">stock.picking.form.kit.qty</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='origin']" position="after">
+                <field name="sent_to_kit_qty_move" invisible="1"/>
+            </xpath>
+            <xpath expr="//button[@name='do_print_picking']" position="before">
+                <button class="oe_stat_button" name="add_to_kit_product_qty" string="Update KIT Quantities"
+                    groups="mrp.group_mrp_user"
+                    type="object"  invisible="has_kits != True" >
+                </button>
+            </xpath>
+              <xpath expr="//form[1]/sheet[1]/notebook[1]" position="inside">
+                <page string="Picking KIT Products" name="pikcing_kit_products"  invisible="has_kits != True">
+                    <field name="bom_products_line_ids" mode="tree,kanban" widget="stock_move_one2many" readonly="1">
+                        <list string="Picking KIT Products" editable="bottom">  
+                            <field name="sequence" widget="handle" optional="show"/>
+                            <field name="reference" readonly="1"/>
+                            <field name="product_id" readonly="1" />
+                            <field name="product_uom"  readonly="1" optional="show"/>
+                            <field name="standard_price" readonly="1" optional="show" groups="account.group_account_readonly"/>
+                            <field name="kit_qty_requested"  readonly="1" optional="show"/>
+                            <field name="qty_requested_total_cost"  readonly="1" optional="show" groups="account.group_account_readonly"/>
+                            <field name="kit_qty_delivered" readonly="1" optional="show"/>
+                            <field name="qty_delivered_total_cost" readonly="1" optional="show" groups="account.group_account_readonly"/>
+                            <field name="qty_deviation" readonly="1" optional="show"/>
+                            <field name="qty_deviation_total_cost" readonly="1" optional="show" groups="account.group_account_readonly"/>
+                            <field name="company_id"  column_invisible="1"/>
+                        </list>
+                    </field>
+                </page>
+              </xpath>
+        </field>
+    </record>
+
+    <record id="view_view_picking_tree_kit_qty" model="ir.ui.view">
+        <field name="name">stock.picking.tree.kit.qty</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.vpicktree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='company_id']" position="after">
+                    <field name="has_kits" column_invisible="True"/>
+                    <field name="sent_to_kit_qty_move" column_invisible="True"/>
+            </xpath>
+            <xpath expr="//button[@name='action_assign']" position="after">
+                <button string="Re-Compute KIT Qty" name="mass_add_to_kit_product_qty" type="object"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="bom_products_stock_move_form" model="ir.ui.view">
+        <field name="name">bom.products.stock.move.form</field>
+        <field name="model">bom.products.stock.move</field>
+        <field name="arch" type="xml">
+            <form string="Picking KIT Products">
+                <header>
+                    <button name="action_copute_kit_qty"
+                        string="Re-Compute KIT Qty"
+                        type="object"
+                        class="oe_link pt-0"/>
+                        <button name="button_bom_cost"
+                            string="Compute Price from BoM"
+                            type="object"
+                            class="oe_link pt-0"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="reference" readonly="1"/>
+                        <field name="picking_id" readonly="1" />
+                        <field name="origin" readonly="1" />
+                        <field name="state" readonly="1" />
+                        <field name="date" readonly="1"/>
+                        <field name="product_id" readonly="1"/>
+                        <field name="product_uom" readonly="1"/>
+                        <field name="standard_price" readonly="1" groups="account.group_account_readonly"/>
+                        <field name="kit_qty_requested" readonly="1"/>
+                        <field name="qty_requested_total_cost" readonly="1" groups="account.group_account_readonly"/>
+                        <field name="kit_qty_delivered" readonly="1"/>
+                        <field name="qty_delivered_total_cost" readonly="1" groups="account.group_account_readonly"/>
+                        <field name="qty_deviation" readonly="1"/>
+                        <field name="qty_deviation_total_cost" readonly="1" groups="account.group_account_readonly"/>
+                        <field name="company_id"  invisible="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="bom_products_stock_move_tree" model="ir.ui.view">
+        <field name="name">bom.products.stock.move.tree</field>
+        <field name="model">bom.products.stock.move</field>
+        <field name="arch" type="xml">
+            <list string="Picking KIT Products"   default_order="date asc, product_id, reference, sequence" create="false" edit="true" expand="context.get('expand', False)" sample="1" multi_edit="0">    
+                <field name="sequence" widget="handle"/>
+                <field name="product_id" readonly="1" />
+                <field name="product_uom" readonly="1" />
+                <field name="standard_price" readonly="1" groups="account.group_account_readonly"/>
+                <field name="kit_qty_requested" readonly="1" optional="show"/>
+                <field name="qty_requested_total_cost" readonly="1" optional="show" groups="account.group_account_readonly"/>
+                <field name="kit_qty_delivered"   readonly="1" optional="show"/>
+                <field name="qty_delivered_total_cost" readonly="1" optional="show" groups="account.group_account_readonly"/>
+                <field name="qty_deviation"   readonly="1" optional="show"/>
+                <field name="qty_deviation_total_cost" readonly="1" optional="show" groups="account.group_account_readonly"/>
+                <field name="reference" readonly="1"/>
+                <field name="picking_id" widget="many2one" readonly="1"/>
+                <field name="stock_move_ids" widget="many2many_tags"  column_invisible="1"/>
+                <field name="picking_type_id" readonly="1"/>
+                <field name="origin" optional="show"/>
+                <field name="state"   readonly="1" optional="show"/>
+                <field name="date"   readonly="1" optional="show"/>
+                <field name="company_id"  column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_bom_products_stock_move_search" model="ir.ui.view">
+        <field name="name">bom.products.stock.move.select</field>
+        <field name="model">bom.products.stock.move</field>
+        <field name="arch" type="xml">
+            <search string="Search Picking KIT Products">
+                <field name="reference"/>
+                <field name="product_id"/>
+                <field name="picking_id"/>
+                <field name="picking_type_id" />
+                <field name="origin" />
+                <field name="state" />
+                <group expand="0" string="Group By...">
+                    <filter name="group_by_product_id" string="Product" context="{'group_by': 'product_id'}"/>
+                    <filter name="group_by_reference" string="BOM" context="{'group_by': 'reference'}"/>
+                    <filter name="group_by_picking_id" string="Transfer" context="{'group_by': 'picking_id'}"/>
+                    <filter name="group_by_picking_type_id" string="Operation Type" context="{'group_by': 'picking_type_id'}"/>
+                    <filter name="group_by_state" string="Picking Status" context="{'group_by': 'state'}"/>
+                    <filter name="group_by_origin" string="Source Document" context="{'group_by': 'origin'}"/>
+                    <filter name="group_by_date" string="Picking Date" context="{'group_by': 'date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="bom_products_stock_move_graph" model="ir.ui.view">
+        <field name="name">bom.products.stock.move.graph</field>
+        <field name="model">bom.products.stock.move</field>
+        <field name="arch" type="xml">
+            <graph string="Picking KIT Products" stacked="0" sample="1">    
+                <field name="sequence" invisible="True"/>
+                <field name="product_id" />
+                <field name="product_uom" invisible="True" />
+                <field name="standard_price" groups="account.group_account_readonly"/>
+                <field name="kit_qty_requested" />
+                <field name="qty_requested_total_cost" groups="account.group_account_readonly"/>
+                <field name="kit_qty_delivered" />
+                <field name="qty_delivered_total_cost" groups="account.group_account_readonly"/>
+                <field name="qty_deviation"/>
+                <field name="qty_deviation_total_cost" groups="account.group_account_readonly"/>
+                <field name="reference" />
+                <field name="picking_id"/>
+                <field name="picking_type_id" />
+                <field name="origin" />
+                <field name="state" />
+                <field name="date" />
+                <field name="company_id"  invisible="1"/>
+            </graph>
+        </field>
+    </record>
+        <record id="bom_products_stock_move_pivot" model="ir.ui.view">
+            <field name="name">bom.products.stock.move.pivot</field>
+            <field name="model">bom.products.stock.move</field>
+            <field name="arch" type="xml">
+                <pivot string="Picking KIT Products" sample="1">  
+                <field name="sequence" invisible="True"/>
+                <field name="product_id"/>
+                <field name="product_uom" invisible="True"/>
+                <field name="standard_price" groups="account.group_account_readonly"/>
+                <field name="kit_qty_requested" type="measure" />
+                <field name="qty_requested_total_cost" type="measure" groups="account.group_account_readonly"/>
+                <field name="kit_qty_delivered" type="measure" />
+                <field name="qty_delivered_total_cost" type="measure" groups="account.group_account_readonly"/>
+                <field name="qty_deviation" type="measure" />
+                <field name="qty_deviation_total_cost" type="measure" groups="account.group_account_readonly"/>
+                <field name="reference"/>
+                <field name="picking_id" />
+                <field name="picking_type_id"/>
+                <field name="origin" />
+                <field name="state" />
+                <field name="date" type="row" />
+                <field name="company_id" invisible="1"/>
+                </pivot>
+            </field>
+        </record>
+    <record id="bom_products_stock_move_action" model="ir.actions.act_window">
+        <field name="name">Picking KIT Products</field>
+        <field name="res_model">bom.products.stock.move</field>
+        <field name="view_mode">list,pivot,graph,form</field>
+        <field name="search_view_id" ref="stock_kit_produced_quantity.view_bom_products_stock_move_search"/>
+        <field name="view_id" ref="stock_kit_produced_quantity.bom_products_stock_move_tree"/>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+          </p>
+      </field>
+    </record>
+        <menuitem
+            id="bom_products_stock_move_menu"
+            name="Picking KIT Products"
+            parent="mrp.menu_mrp_manufacturing"
+            sequence="3"
+            action="stock_kit_produced_quantity.bom_products_stock_move_action"
+            groups="mrp.group_mrp_user,account.group_account_readonly">
+        </menuitem>
+        <menuitem
+            id="bom_products_stock_menu"
+            name="Picking KIT Products"
+            parent="stock.menu_warehouse_report"
+            sequence="227"
+            action="stock_kit_produced_quantity.bom_products_stock_move_action"
+            groups="stock.group_stock_user">
+        </menuitem>
+</odoo>
