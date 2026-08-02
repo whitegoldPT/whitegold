@@ -1,0 +1,448 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+
+    <!-- ============================================================
+         WIZARD FORM VIEW
+    ============================================================ -->
+    <record id="view_forensic_graph" model="ir.ui.view">
+        <field name="name">account.move.line.forensic.graph</field>
+        <field name="model">account.move.line</field>
+        <field name="arch" type="xml">
+            <graph string="Risk Distribution" type="pie">
+                <field name="audit_status"/>
+                <field name="balance" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Pivot View -->
+    <record id="view_forensic_pivot" model="ir.ui.view">
+        <field name="name">account.move.line.forensic.pivot</field>
+        <field name="model">account.move.line</field>
+        <field name="arch" type="xml">
+            <pivot string="Forensic Analysis">
+                <field name="balance" type="measure"/>
+                <field name="debit" type="measure"/>
+                <field name="credit" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+
+    <!-- List View for Forensic Lines -->
+    <record id="view_forensic_list" model="ir.ui.view">
+        <field name="name">account.move.line.forensic.list</field>
+        <field name="model">account.move.line</field>
+        <field name="arch" type="xml">
+            <list string="Forensic Lines" decoration-danger="audit_status == 'pending'" decoration-success="audit_status == 'reviewed'">
+                <field name="date"/>
+                <field name="move_id"/>
+                <field name="account_id"/>
+                <field name="partner_id"/>
+                <field name="create_uid" widget="many2one_avatar_user" string="الموظف المسؤول"/>
+                <field name="diagnostic_reason" string="🔎 سبب الخطأ"/>
+                <field name="suggested_action" string="🛠️ طريقة التصحيح"/>
+                <field name="balance" sum="Total at Risk"/>
+                <field name="audit_status" widget="badge" decoration-warning="audit_status == 'pending'" decoration-success="audit_status == 'reviewed'"/>
+                <field name="risk_score" string="🎯 Risk Score" widget="progressbar" options="{'current_value': 'risk_score', 'max_value': 100}"/>
+                <button name="action_view_golden_thread" string="الخيط الذهبي" type="object" icon="fa-share-alt" class="btn-info" title="تتبع المستندات المرتبطة"/>
+                <button name="action_smart_fix" string="إصلاح" type="object" icon="fa-wrench" class="btn-primary"/>
+                <button name="action_mark_as_fixed" string="تجاهل/تم" type="object" icon="fa-check" class="btn-success"/>
+            </list>
+        </field>
+    </record>
+
+
+    <record id="action_forensic_kanban" model="ir.actions.act_window">
+        <field name="name">Forensic Center</field>
+        <field name="res_model">account.move.line</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="domain">[('diagnostic_reason', '!=', False)]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                🛡️ لا توجد حالات مشبوهة بعد!
+            </p>
+            <p>اذهب إلى <strong>Operations Audit ← Run Audit Scan</strong> لتشغيل الفحص الجنائي وملء هذه الصفحة بالبيانات.</p>
+        </field>
+    </record>
+
+    <record id="view_forensic_kanban" model="ir.ui.view">
+        <field name="name">account.move.line.forensic.kanban</field>
+        <field name="model">account.move.line</field>
+        <field name="arch" type="xml">
+            <kanban sample="1" quick_create="false">
+                <field name="move_id"/>
+                <field name="account_id"/>
+                <field name="partner_id"/>
+                <field name="balance"/>
+                <field name="diagnostic_reason"/>
+                <field name="suggested_action"/>
+                <field name="audit_status"/>
+                <field name="forensic_category"/>
+                <field name="is_cross_department"/>
+                <field name="risk_score"/>
+                <field name="risk_level"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_global_click o_kanban_record"
+                             style="border-left: 5px solid; border-left-color: {{ record.audit_status.raw_value == 'pending' ? '#dc3545' : record.audit_status.raw_value == 'reviewed' ? '#28a745' : record.audit_status.raw_value == 'fixed' ? '#ffc107' : '#17a2b8' }}; border-radius: 10px; margin-bottom: 12px; background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+                            <div class="o_kanban_record_top" style="padding: 12px 14px 0; display: block;">
+                                <div class="mb-1">
+                                    <strong class="o_kanban_record_title text-truncate" style="font-size: 15px; color: #1e3c72; display: block; width: 100%;">
+                                        <i class="fa fa-file-text-o me-1"/>
+                                        <field name="move_id"/>
+                                    </strong>
+                                </div>
+                                <div class="mt-2 mb-2 d-flex align-items-center">
+                                    <field name="audit_status" widget="label_selection" options="{'classes': {'pending': 'danger', 'reviewed': 'success', 'fixed': 'info', 'disputed': 'warning'}}"/>
+                                    <!-- Risk Level Badge -->
+                                    <span class="badge ms-2" t-attf-style="background-color: {{ record.risk_level.raw_value == 'critical' ? '#8b0000' : record.risk_level.raw_value == 'high' ? '#dc3545' : record.risk_level.raw_value == 'medium' ? '#fd7e14' : '#28a745' }}; color: white; border: 1px solid rgba(0,0,0,0.1);">
+                                        <field name="risk_score"/> نقطة
+                                    </span>
+                                    <!-- Cross Department Alert -->
+                                    <t t-if="record.is_cross_department.raw_value">
+                                        <span class="badge ms-2" style="background-color: #6f42c1; color: white; font-size: 11px; padding: 4px 6px;" title="القيد يحتوي على أخطاء في أكثر من قسم">
+                                            <i class="fa fa-random"/> مشترك
+                                        </span>
+                                    </t>
+                                </div>
+                            </div>
+
+
+                            <!-- سبب الخطأ - Cause of Error -->
+                            <div style="padding: 10px; background: #fff5f5; margin: 10px 10px 5px; border-radius: 6px; border-right: 4px solid #dc3545;">
+                                <div style="font-weight: bold; color: #a71d2a; font-size: 13px; margin-bottom: 4px;">
+                                    🔎 سبب الخطأ:
+                                </div>
+                                <div style="color: #333; font-size: 14px; line-height: 1.4;">
+                                    <field name="diagnostic_reason"/>
+                                </div>
+                            </div>
+
+                            <!-- طريقة التصحيح - Correction -->
+                            <div style="padding: 10px; background: #f0fff4; margin: 5px 10px 10px; border-radius: 6px; border-right: 4px solid #28a745;">
+                                <div style="font-weight: bold; color: #1a6e2e; font-size: 13px; margin-bottom: 4px;">
+                                    🛠️ طريقة التصحيح:
+                                </div>
+                                <div style="color: #333; font-size: 14px; line-height: 1.4;">
+                                    <field name="suggested_action"/>
+                                </div>
+                            </div>
+
+                            <div class="o_kanban_record_bottom" style="padding: 8px 14px 12px; display: flex; justify-content: space-between; align-items: center;">
+                                <div class="oe_kanban_bottom_left text-muted" style="font-size: 13px;">
+                                    <span class="badge bg-light text-dark"><i class="fa fa-user me-1"/> <field name="partner_id"/></span>
+                                    <div class="mt-1 small">✍️ <field name="create_uid"/></div>
+                                </div>
+                                <div class="oe_kanban_bottom_right">
+                                    <button name="action_view_golden_thread" type="object" class="btn btn-sm btn-outline-info me-1" title="تتبع الخيط الذهبي">🧶 تتبع</button>
+                                    <button name="action_smart_fix" type="object" class="btn btn-sm btn-outline-primary me-1">🛠️ إصلاح</button>
+                                    <button name="action_mark_as_fixed" type="object" class="btn btn-sm btn-outline-success">✅ تم</button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- ============================================================
+         ROOT MENU (Standalone App)
+    ============================================================ -->
+    <menuitem id="menu_forensic_root"
+              name="Forensic Engine"
+              web_icon="fa fa-shield,#1e3c72,#ffffff"
+              sequence="1"/>
+
+    <!-- Parent Menus -->
+    <menuitem id="menu_forensic_dashboard_parent"
+              name="Dashboard"
+              parent="menu_forensic_root"
+              sequence="10"/>
+    <menuitem id="menu_forensic_operations_parent"
+              name="Operations Audit"
+              parent="menu_forensic_root"
+              sequence="20"/>
+
+    <!-- Child Menus -->
+    <menuitem id="menu_forensic_dashboard"
+              name="لوحة تحليل المخاطر (Heatmap)"
+              parent="menu_forensic_dashboard_parent"
+              action="action_forensic_dashboard_new"
+              sequence="1"/>
+    <menuitem id="menu_forensic_kanban"
+              name="Forensic Center"
+              parent="menu_forensic_operations_parent"
+              action="action_forensic_kanban"
+              sequence="5"/>
+    <menuitem id="menu_forensic_wizard"
+              name="Run Audit Scan"
+              parent="menu_forensic_operations_parent"
+              action="action_account_interim_wizard"
+              sequence="10"/>
+
+    <!-- ============================================================
+         INTEGRATION WITH STANDARD ODOO REPORTING MENU
+    ============================================================ -->
+    <record id="action_forensic_trial_balance_pivot" model="ir.actions.act_window">
+        <field name="name">ميزان المراجعة الجنائي (Forensic Trial Balance)</field>
+        <field name="res_model">account.move.line</field>
+        <field name="view_mode">list,kanban,pivot</field>
+        <field name="view_id" ref="view_forensic_list"/>
+        <field name="domain">[('diagnostic_reason', '!=', False)]</field>
+        <field name="context">{}</field>
+    </record>
+
+    <!-- Adding to native Accounting > Reporting -->
+    <menuitem id="menu_account_forensic_reports_root"
+              name="Forensic Audit (الرقابة الجنائية)"
+              parent="account.menu_finance_reports"
+              sequence="5"/>
+              
+    <menuitem id="menu_account_forensic_dashboard"
+              name="Risk Dashboard (لوحة المخاطر)"
+              parent="menu_account_forensic_reports_root"
+              action="action_forensic_dashboard_new"
+              sequence="1"/>
+              
+    <menuitem id="menu_account_forensic_pivot"
+              name="Forensic Trial Balance (ميزان الأخطاء)"
+              parent="menu_account_forensic_reports_root"
+              action="action_forensic_trial_balance_pivot"
+              sequence="2"/>
+
+    <!-- ============================================================
+         INHERITED account.account FORM: Forensic Smart Button
+    ============================================================ -->
+    <record id="view_account_form_forensic_inherit" model="ir.ui.view">
+        <field name="name">account.account.form.forensic.inherit</field>
+        <field name="model">account.account</field>
+        <field name="inherit_id" ref="account.view_account_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_forensic_issues" 
+                        type="object" 
+                        class="oe_stat_button" 
+                        icon="fa-shield text-danger" >
+                    <div class="o_stat_info">
+                        <field name="forensic_issues_count" class="o_stat_value"/>
+                        <span class="o_stat_text text-danger">مشكلة جنائية</span>
+                    </div>
+                </button>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_account_move_line_forensic_search" model="ir.ui.view">
+        <field name="name">account.move.line.search.forensic</field>
+        <field name="model">account.move.line</field>
+        <field name="inherit_id" ref="account.view_account_move_line_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search" position="inside">
+                <filter string="⚠️ Audit Issues (مشاكل جنائية)" name="audit_issues" domain="[('diagnostic_reason', '!=', False)]"/>
+                <separator/>
+                <filter string="🛡️ High Risk" name="high_risk" domain="[('risk_score', '>=', 70)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Audit Status" name="group_audit" context="{'group_by':'audit_status'}"/>
+                    <filter string="Forensic Category" name="group_cat" context="{'group_by':'forensic_category'}"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+
+    <record id="view_move_line_tree_forensic_inherit" model="ir.ui.view">
+        <field name="name">account.move.line.tree.forensic.inherit</field>
+        <field name="model">account.move.line</field>
+        <field name="inherit_id" ref="account.view_move_line_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//list" position="inside">
+                <header>
+                    <button name="%(action_forensic_dashboard_new)d" type="action" string="📊 Forensic Dashboard" class="btn-primary" icon="fa-dashboard"/>
+                    <button name="action_run_forensic_scan" type="object" string="🔍 Run Forensic Scan" class="btn-danger" icon="fa-search-plus"/>
+                    <button name="action_universal_deep_scrub" type="object" string="🪄 فحص النزاهة الشامل" class="btn-info text-white" icon="fa-magic"/>
+                </header>
+            </xpath>
+            <xpath expr="//field[@name='account_id']" position="after">
+                <field name="audit_status" 
+                       widget="badge" 
+                       decoration-danger="audit_status == 'pending'"
+                       decoration-success="audit_status == 'approved'"
+                       decoration-warning="audit_status == 'fixed'"
+                       decoration-info="audit_status == 'disputed'"
+                       optional="show" string="حالتها الجنائية"
+                       invisible="not diagnostic_reason"/>
+                <field name="diagnostic_reason" optional="show" string="🔎 التشخيص (السبب)"
+                       invisible="not diagnostic_reason"/>
+                <button name="action_view_golden_thread" string="🧵 الخيط الذهبي" type="object" icon="fa-share-alt" class="btn-link" title="تتبع المستندات"
+                        invisible="not diagnostic_reason"/>
+                <button name="action_smart_fix" string="🛠️ إصلاح" type="object" icon="fa-wrench" class="btn-link text-primary"
+                        invisible="not diagnostic_reason"/>
+                <button name="action_mark_as_fixed" string="✅ تم" type="object" icon="fa-check" class="btn-link text-success"
+                        invisible="not diagnostic_reason or audit_status == 'fixed'"/>
+            </xpath>
+            <xpath expr="//list" position="attributes">
+                <attribute name="decoration-danger">diagnostic_reason != False</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- ============================================================
+         SMART CORRECTION WIZARD FORM
+    ============================================================ -->
+    <record id="view_account_interim_correction_wizard_form" model="ir.ui.view">
+        <field name="name">account.interim.correction.wizard.form</field>
+        <field name="model">account.interim.correction.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Smart Correction Engine">
+                <sheet>
+                    <div class="alert alert-danger mb-4" role="alert" style="border-radius: 8px; font-size: 14px; border-right: 5px solid darkred;">
+                        <h5 class="alert-heading"><i class="fa fa-stethoscope me-2"/> <strong>التشخيص الجنائي الحالي:</strong></h5>
+                        <div class="mt-2 mb-1" style="font-weight: bold;">
+                            <field name="diagnostic_reason"/>
+                        </div>
+                        <div style="font-size: 13px; color: #555;">
+                            <em>التوصية الافتراضية:</em> <field name="suggested_action"/>
+                        </div>
+                    </div>
+                    
+                    <group>
+                        <field name="line_id" options="{'no_open': True}" decoration-bf="1"/>
+                        <field name="correction_strategy" widget="radio" style="font-size: 15px; font-weight: bold;"/>
+                        <field name="target_account_id" invisible="correction_strategy != 'reclassify'" required="correction_strategy == 'reclassify'" placeholder="اختر الحساب الصحيح لنقل القيد إليه..."/>
+                        <field name="reason_text" placeholder="اكتب مبررك هنا ليتم تسجيله في الـ Chatter كسجل تدقيق لا يُمحى..."/>
+                    </group>
+
+                </sheet>
+                <footer>
+                    <button name="action_execute_correction"
+                            string="تنفيذ آمن (Safe Execute)"
+                            type="object"
+                            class="btn-primary"
+                            icon="fa-shield"
+                            style="font-size: 15px; padding: 10px 20px;"/>
+                    <button string="إلغاء التعديل" class="btn-secondary" special="cancel" style="padding: 10px;"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- ============================================================
+         GOLDEN THREAD WIZARD VIEW
+    ============================================================ -->
+    <record id="view_forensic_thread_wizard_form" model="ir.ui.view">
+        <field name="name">forensic.thread.wizard.form</field>
+        <field name="model">forensic.thread.wizard</field>
+        <field name="arch" type="xml">
+            <form string="🧶 الخيط الذهبي لتتبع المستندات">
+                <sheet>
+                    <field name="thread_html" readonly="1" nolabel="1"/>
+                </sheet>
+                <footer>
+                    <button string="إغلاق" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- ============================================================
+         INHERITED account.move FORM: Forensic Audit Tab
+    ============================================================ -->
+    <record id="view_move_form_forensic_inherit" model="ir.ui.view">
+        <field name="name">account.move.form.forensic.inherit</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <!-- Badge on each journal line in Lines tab -->
+            <xpath expr="//field[@name='line_ids']/list/field[@name='account_id']" position="before">
+                <field name="audit_status"
+                       widget="badge"
+                       decoration-danger="audit_status == 'pending'"
+                       decoration-success="audit_status == 'reviewed'"
+                       decoration-warning="audit_status == 'fixed'"
+                       decoration-info="audit_status == 'disputed'"
+                       optional="hide"/>
+            </xpath>
+            <!-- Forensic Audit Notebook Tab -->
+            <xpath expr="//notebook" position="inside">
+                <page string="Forensic Audit" name="forensic_audit">
+                    <field name="line_ids" nolabel="1">
+                        <list editable="bottom" create="0" delete="0">
+                            <field name="account_id" readonly="1"/>
+                            <field name="partner_id" readonly="1"/>
+                            <field name="balance" readonly="1"/>
+                            <field name="diagnostic_reason" readonly="1" string="🔎 سبب الخطأ"/>
+                            <field name="suggested_action" readonly="1" string="🛠️ طريقة التصحيح"/>
+                            <field name="audit_status" widget="selection"/>
+                            <field name="audit_note"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- ============================================================
+         INHERITED account.move.line FORM: Audit Details
+    ============================================================ -->
+    <record id="view_move_line_forensic_form_inherit" model="ir.ui.view">
+        <field name="name">account.move.line.forensic.form.inherit</field>
+        <field name="model">account.move.line</field>
+        <field name="inherit_id" ref="account.view_move_line_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="inside">
+                <group string="🔍 Forensic Analysis - مراجعة جنائية" style="background-color: #f8f9fa; border: 1px solid #dee2e6; border-radius: 8px; padding: 15px; margin-top: 20px;">
+                    <group>
+                        <field name="audit_status" widget="radio" options="{'horizontal': true}"/>
+                        <field name="diagnostic_reason" style="color: #dc3545; font-weight: bold;" string="🔎 سبب الخطأ المكتشف"/>
+                    </group>
+                    <group>
+                        <field name="suggested_action" style="color: #28a745; font-weight: bold;" string="🛠️ طريقة التصحيح المقترحة"/>
+                        <field name="audit_note" placeholder="أضف ملاحظات المراجع هنا..."/>
+                    </group>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Forensic Fix Wizard View -->
+    <record id="view_account_move_line_res_partner_wizard_form" model="ir.ui.view">
+        <field name="name">account.move.line.res.partner.wizard.form</field>
+        <field name="model">account.move.line.res.partner.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Correction: Set Missing Partner">
+                <sheet>
+                    <p class="alert alert-info">
+                        🛠️ يرجى اختيار الشريك الصحيح لهذا السطر لربطه بالقيد المحاسبي وتصحيح الخطأ آلياً.
+                    </p>
+                    <group>
+                        <field name="move_line_id" readonly="1" options="{'no_open': True}"/>
+                        <field name="partner_id" widget="res_partner_many2one" options="{'no_create': True}"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_apply_fix" string="تطبيق التصحيح" type="object" class="btn-primary"/>
+                    <button string="إلغاء" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Server Action: Global Forensic Cleanup -->
+    <record id="action_account_forensic_cleanup_srv" model="ir.actions.server">
+        <field name="name">🛡️ تنظيف جنائي (Magic Cleanup)</field>
+        <field name="model_id" ref="account.model_account_account"/>
+        <field name="binding_model_id" ref="account.model_account_account"/>
+        <field name="state">code</field>
+        <field name="code">action = records.action_forensic_cleanup()</field>
+    </record>
+
+    </data>
+</odoo>
+
+

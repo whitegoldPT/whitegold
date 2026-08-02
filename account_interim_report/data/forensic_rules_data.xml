@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <!-- 1. Behavioral: Late Night Entry -->
+        <record id="rule_late_night" model="forensic.rule">
+            <field name="name">سلوكي: إدخال بيانات في وقت متأخر (12 ص - 5 ص)</field>
+            <field name="category">behavioral</field>
+            <field name="severity">medium</field>
+            <field name="weight">30</field>
+            <field name="action_type">warn</field>
+            <field name="rule_type">python</field>
+            <field name="python_code">result = move.late_night_activity</field>
+            <field name="description">إدخال البيانات في ساعات متأخرة قد يشير إلى وصول غير مصرح به أو محاولة تلاعب بالبيانات بعيداً عن الرقابة الإدارية.</field>
+            <field name="suggested_action">تحقق من سجلات تسجيل الدخول والمهام المكلف بها هذا المستخدم في هذا التوقيت.</field>
+        </record>
+
+        <!-- 2. Compliance: Missing Partner on AR/AP -->
+        <record id="rule_missing_partner" model="forensic.rule">
+            <field name="name">امتثال: نقص اسم الشريك (عميل/مورد) في حسابات الذمم</field>
+            <field name="category">compliance</field>
+            <field name="severity">critical</field>
+            <field name="weight">100</field>
+            <field name="action_type">block</field>
+            <field name="rule_type">python</field>
+            <field name="python_code">
+result = False
+for line in lines:
+    if line.account_id.account_type in ('asset_receivable', 'liability_payable') and not line.partner_id:
+        result = True
+        break
+            </field>
+            <field name="description">تتطلب المعايير المحاسبية (IFRS) ربط حسابات العملاء والموردين بشركاء محددين. القيود بدون شريك تكسر تقارير أعمار الديون.</field>
+            <field name="suggested_action">يرجى تحديد الشريك الصحيح أو استخدام حساب تسوية مؤقت إذا كان الشريك غير معروف.</field>
+        </record>
+
+        <!-- 3. Standard: Account Type vs Journal Consistency -->
+        <record id="rule_account_journal_mismatch" model="forensic.rule">
+            <field name="name">Standard: Account Type / Journal Mismatch</field>
+            <field name="category">compliance</field>
+            <field name="severity">high</field>
+            <field name="weight">60</field>
+            <field name="action_type">approve</field>
+            <field name="rule_type">python</field>
+            <field name="python_code">
+result = False
+if move.journal_id.type == 'sale':
+    for line in lines:
+        if line.account_id.account_type not in ('income', 'income_other', 'asset_receivable', 'liability_current'):
+            result = True # Non-sales related account in Sales Journal
+            break
+            </field>
+            <field name="description">Entries in the Sales Journal should only concern Income, Tax, or Receivable accounts. Mixing other accounts violates departmental accounting standards.</field>
+            <field name="suggested_action">Move the entry to a General Journal or correct the account selection.</field>
+        </record>
+
+        <!-- 4. Anti-Tampering: Excessive Write Audit -->
+        <record id="rule_excessive_edits" model="forensic.rule">
+            <field name="name">مكافحة تلاعب: تعديلات متكررة ومفرطة (أكثر من 3 مرات)</field>
+            <field name="category">behavioral</field>
+            <field name="severity">high</field>
+            <field name="weight">80</field>
+            <field name="action_type">warn</field>
+            <field name="rule_type">python</field>
+            <field name="python_code">
+log_count = env['forensic.audit.log'].search_count([('move_id', '=', move.id), ('action', '=', 'write')])
+result = log_count > 3
+            </field>
+            <field name="description">تعديل المستند أكثر من 3 مرات يشير إما إلى خطأ بشري جسيم أو محاولة "تعديل" الأرقام لإخفاء فجوات مالية.</field>
+            <field name="suggested_action">قم بإجراء فحص ومقارنة للنسخة الأولى والنسخة الأخيرة من سجل التدقيق لهذا المستند.</field>
+        </record>
+
+        <!-- 5. Fraud: Direct Manual Entry on Cash/Bank -->
+        <record id="rule_manual_cash" model="forensic.rule">
+            <field name="name">احتيال: قيود يدوية مباشرة على حسابات النقدية والبنك</field>
+            <field name="category">fraud</field>
+            <field name="severity">critical</field>
+            <field name="weight">150</field>
+            <field name="action_type">block</field>
+            <field name="rule_type">python</field>
+            <field name="python_code">
+result = False
+if move.move_type == 'entry' and move.journal_id.type not in ('bank', 'cash'):
+    for line in lines:
+        if line.account_id.account_type in ('asset_cash', 'liability_current'):
+            # Detect manual bypass of payment system
+            result = True
+            break
+            </field>
+            <field name="description">القيود اليدوية المباشرة على حسابات النقدية تتجاوز ضوابط الرقابة الداخلية (الاعتمادات والمطابقة) وتزيد من مخاطر الاختلاس عالي الخطورة.</field>
+            <field name="suggested_action">يجب توجيه المستخدم لاستخدام "سداد" أو "كشوف حسابات البنك" بدلاً من القيود اليدوية.</field>
+        </record>
+        <!-- 6. Inventory: Received Not Invoiced (Accruals) -->
+        <record id="rule_received_not_invoiced" model="forensic.rule">
+            <field name="name">مخازن: بضاعة مستلمة لم تُفومر بعد (تسرب استحقاقات)</field>
+            <field name="category">compliance</field>
+            <field name="severity">high</field>
+            <field name="weight">90</field>
+            <field name="action_type">warn</field>
+            <field name="rule_type">python</field>
+            <field name="python_code">
+result = False
+# Try to find default input accounts configured in system
+input_accounts = env['product.category'].search([]).mapped('property_stock_account_input_categ_id')
+for line in lines:
+    acc_name = line.account_id.name.lower()
+    acc_type = line.account_id.account_type
+    
+    is_interim = False
+    if line.account_id in input_accounts:
+        is_interim = True
+    elif ('interim' in acc_name) or ('input' in acc_name) or ('وسيط' in acc_name) or ('استلام' in acc_name) or ('مستلم' in acc_name) or ('مؤقت' in acc_name) or ('وارد' in acc_name):
+        is_interim = True
+
+    if is_interim and ('purchase' in acc_type or 'payable' in acc_type or 'liability' in acc_type or 'asset' in acc_type):
+        if not line.reconciled:
+            result = True
+            break
+            </field>
+            <field name="description">تم استلام البضاعة مخزنياً ولكن لم تصل "فاتورة المورد" بعد. هذا يؤدي إلى تقليل الالتزامات المالية بشكل وهمي وتشويه التقارير الدورية.</field>
+            <field name="suggested_action">طابق "إذن الاستلام" مع فواتير المورد ومطالبته بالفاتورة أو تسجيل استحقاق مؤقت.</field>
+        </record>
+
+        <!-- 7. Fraud: Positive Qty with Zero Price -->
+        <record id="rule_zero_price_stock" model="forensic.rule">
+            <field name="name">احتيال: دخول بضاعة للمخازن بتقييم (صفر)</field>
+            <field name="category">fraud</field>
+            <field name="severity">critical</field>
+            <field name="weight">120</field>
+            <field name="action_type">block</field>
+            <field name="rule_type">python</field>
+            <field name="python_code">
+result = False
+if any(l.account_id.account_type == 'asset_current' and 'inventory' in l.account_id.name.lower() for l in lines):
+    # If it's an inventory move, check if any credit/debit is zero for quantity > 0
+    for line in lines:
+        if line.quantity > 0 and line.debit == 0 and line.credit == 0:
+            result = True
+            break
+            </field>
+            <field name="description">تزداد كمية المخزون بدون أي قيمة مالية مقابلة. هذا يتجاوز منطق "تكلفة البضاعة المباعة" ويخفي القيمة الحقيقية للمخزون.</field>
+            <field name="suggested_action">تحقق من "سعر التكلفة" في بطاقة المنتج أو سعر الوحدة في أمر الشراء.</field>
+        </record>
+
+        <!-- 8. Compliance: Purchase Price Variance (PO vs Bill) -->
+        <record id="rule_price_variance" model="forensic.rule">
+            <field name="name">امتثال: انحراف كبير في سعر الشراء (>10%)</field>
+            <field name="category">compliance</field>
+            <field name="severity">medium</field>
+            <field name="weight">45</field>
+            <field name="action_type">approve</field>
+            <field name="rule_type">python</field>
+            <field name="python_code">
+result = False
+if move.move_type == 'in_invoice' and move.purchase_id:
+    for line in move.invoice_line_ids:
+        po_line = move.purchase_id.order_line.filtered(lambda p: p.product_id == line.product_id)
+        if po_line and abs(line.price_unit - po_line[0].price_unit) > (po_line[0].price_unit * 0.10):
+            result = True
+            break
+            </field>
+            <field name="description">سعر الوحدة في الفاتورة يختلف بشكل كبير (>10%) عن السعر المتفق عليه في "أمر الشراء". مخاطرة تضخم الأسعار غير المصرح به.</field>
+            <field name="suggested_action">راجع أمر الشراء المعتمد وتفاوض مع المورد على "إشعار خصم" أو تصحيح الفاتورة.</field>
+        </record>
+        <!-- 9. Fraud: Duplicate Vendor Bill Detection -->
+        <record id="rule_duplicate_bill" model="forensic.rule">
+            <field name="name">احتيال: احتمالية تكرار فاتورة مورد</field>
+            <field name="category">fraud</field>
+            <field name="severity">critical</field>
+            <field name="weight">150</field>
+            <field name="action_type">block</field>
+            <field name="rule_type">python</field>
+            <field name="python_code">result = move._check_duplicate_vendor_bill()</field>
+            <field name="description">تم اكتشاف فواتير متعددة لنفس المورد بنفس المرجع. خطر تكرار الصرف أو التلاعب المالي.</field>
+            <field name="suggested_action">تحقق من "مرجع المورد" والنسخة الورقية للفاتورة قبل الاعتماد.</field>
+        </record>
+
+        <!-- 10. Manufacturing: Production Entry Detection -->
+        <record id="rule_manufacturing_production_entry" model="forensic.rule">
+            <field name="name">Manufacturing: Production / MRP Related Entry</field>
+            <field name="category">compliance</field>
+            <field name="severity">medium</field>
+            <field name="weight">50</field>
+            <field name="action_type">warn</field>
+            <field name="rule_type">python</field>
+            <field name="python_code">
+result = False
+text = ' '.join(filter(None, [move.name, move.ref, move.invoice_origin or ''])).lower()
+if any(keyword in text for keyword in ('production', 'mrp', 'work order', 'mo/')):
+    result = True
+else:
+    for line in move.line_ids:
+        acct_name = (line.account_id.name or '').lower()
+        if any(keyword in acct_name for keyword in ('work in progress', 'wip', 'finished goods', 'production', 'manufactur')):
+            result = True
+            break
+            </field>
+            <field name="description">This entry appears to relate to manufacturing or production activity. Manufacturing documents should be reviewed for proper costing and work order alignment.</field>
+            <field name="suggested_action">Verify the production order, WIP costing, and related stock move before approving.</field>
+        </record>
+
+        <!-- 11. Fraud: Sales Below Product Cost -->
+        <record id="rule_sales_under_cost" model="forensic.rule">
+            <field name="name">احتيال: بيع بأقل من سعر التكلفة الفعلي</field>
+            <field name="category">fraud</field>
+            <field name="severity">high</field>
+            <field name="weight">80</field>
+            <field name="action_type">approve</field>
+            <field name="rule_type">python</field>
+            <field name="python_code">
+result = False
+if move.move_type == 'out_invoice':
+    for line in move.invoice_line_ids:
+        if line.product_id and line.price_unit &lt; line.product_id.standard_price:
+            result = True
+            break
+            </field>
+            <field name="description">تم بيع المنتج بسعر أقل من تكلفته المسجلة في النظام. قد يشير هذا إلى حرق أسعار غير مصرح به أو خصومات مريبة لأطراف مقربة.</field>
+            <field name="suggested_action">تأكد من وجود موافقة إدارية على هذه العملية الخاسرة أو قم بتصحيح سعر البيع.</field>
+        </record>
+
+        <!-- 11. Tax: Large Transaction without VAT -->
+        <record id="rule_missing_vat" model="forensic.rule">
+            <field name="name">Tax: Large Transaction without Partner VAT</field>
+            <field name="category">compliance</field>
+            <field name="severity">high</field>
+            <field name="weight">70</field>
+            <field name="action_type">warn</field>
+            <field name="rule_type">python</field>
+            <field name="python_code">
+result = False
+if move.amount_total &gt; 1000 and move.partner_id and not move.partner_id.vat:
+    result = True
+            </field>
+            <field name="description">Large financial transactions with partners missing a Tax ID (VAT/TIN) increase the risk of tax audits and penalty of non-compliance with local tax laws.</field>
+            <field name="suggested_action">Update the partner profile with their official VAT number before finalizing documentation.</field>
+        </record>
+
+        <!-- 12. Behavioral: Weekend Posting -->
+        <record id="rule_weekend_posting" model="forensic.rule">
+            <field name="name">Behavioral: Weekend Document Creation</field>
+            <field name="category">behavioral</field>
+            <field name="severity">low</field>
+            <field name="weight">20</field>
+            <field name="action_type">warn</field>
+            <field name="rule_type">python</field>
+            <field name="python_code">
+result = False
+if move.create_date and move.create_date.weekday() in (4, 5): # Friday/Saturday in many Arab countries
+    result = True
+            </field>
+            <field name="description">Documents created during non-working days (Weekends) may indicate work-from-home without supervision or rush entries to avoid weekday scrutiny.</field>
+            <field name="suggested_action">Verify if the employee was officially authorized for overtime work.</field>
+        </record>
+
+        <!-- 13. Audit: Backdated Entry (>7 Days) -->
+        <record id="rule_backdated_entry" model="forensic.rule">
+            <field name="name">Audit: Significant Backdated Entry (>7 days)</field>
+            <field name="category">compliance</field>
+            <field name="severity">medium</field>
+            <field name="weight">40</field>
+            <field name="action_type">approve</field>
+            <field name="rule_type">python</field>
+            <field name="python_code">
+result = False
+if move.date and move.create_date:
+    diff = (move.create_date.date() - move.date).days
+    result = diff &gt; 7
+            </field>
+            <field name="description">The accounting date is more than 7 days prior to the system entry date. This can distort monthly reporting and performance period analysis.</field>
+            <field name="suggested_action">Review the reason for delayed entry and ensure it belongs to the correct accounting period.</field>
+        </record>
+
+        <!-- 14. Integrity: Mismatched Bank Account on Payment -->
+        <record id="rule_bank_mismatch" model="forensic.rule">
+            <field name="name">Security: Payment to Unofficial Vendor Bank</field>
+            <field name="category">fraud</field>
+            <field name="severity">critical</field>
+            <field name="weight">200</field>
+            <field name="action_type">block</field>
+            <field name="rule_type">python</field>
+            <field name="python_code">
+result = False
+if move.move_type in ('in_payment', 'out_payment') and move.partner_bank_id and move.partner_id:
+    if move.partner_bank_id not in move.partner_id.bank_ids:
+        result = True
+            </field>
+            <field name="description">Payment is being sent to a bank account that is NOT registered in the vendor's official profile. HIGH RISK of redirection fraud (phishing/internal theft).</field>
+            <field name="suggested_action">Verify the bank account details via a phone call to the vendor's finance department before releasing funds.</field>
+        </record>
+        <!-- 15. Financial Logic: Negative Liquidity Balance -->
+        <record id="rule_negative_liquidity" model="forensic.rule">
+            <field name="name">Financial: Negative Cash/Bank Balance</field>
+            <field name="category">compliance</field>
+            <field name="severity">critical</field>
+            <field name="weight">180</field>
+            <field name="action_type">warn</field>
+            <field name="rule_type">python</field>
+            <field name="python_code">
+result = False
+for line in lines:
+    if line.account_id.account_type == 'asset_cash':
+        # Check current balance of the account via direct compute
+        balance = sum(env['account.move.line'].search([
+            ('account_id', '=', line.account_id.id),
+            ('parent_state', '=', 'posted')
+        ]).mapped('balance'))
+        if balance &lt; 0:
+            result = True
+            break
+            </field>
+            <field name="description">The Cash or Bank account has reached a negative balance. This is physically impossible for cash and indicates missing recorded receipts or unauthorized spending.</field>
+            <field name="suggested_action">Perform an immediate physical cash count and reconcile with bank statements.</field>
+        </record>
+
+        <!-- 16. Fraud: Suspicious Round Number Adjustments -->
+        <record id="rule_round_numbers" model="forensic.rule">
+            <field name="name">Fraud: Suspicious Large Round Number Entry</field>
+            <field name="category">fraud</field>
+            <field name="severity">high</field>
+            <field name="weight">95</field>
+            <field name="action_type">approve</field>
+            <field name="rule_type">python</field>
+            <field name="python_code">
+result = False
+if move.move_type == 'entry' and move.amount_total &gt;= 1000:
+    # Check if the total is a suspicious round number (ending in 000)
+    if move.amount_total % 1000 == 0:
+        result = True
+            </field>
+            <field name="description">Manual journal entries with large perfectly round numbers (e.g., 10,000, 50,000) are statistically rare in real business and often used for fraudulent adjustments.</field>
+            <field name="suggested_action">Require a legal document or signed memo justifying the round-number adjustment.</field>
+        </record>
+
+        <!-- 17. Compliance: Direct Manual Entry on Revenue Accounts -->
+        <record id="rule_manual_revenue" model="forensic.rule">
+            <field name="name">مخالفة سياسة: تسجيل إيرادات بـ قيد يومية مباشر</field>
+            <field name="category">compliance</field>
+            <field name="severity">high</field>
+            <field name="weight">100</field>
+            <field name="action_type">warn</field>
+            <field name="rule_type">python</field>
+            <field name="python_code">
+result = False
+if move.move_type == 'entry':
+    for line in lines:
+        if line.account_id.account_type in ('income', 'income_other'):
+            result = True
+            break
+            </field>
+            <field name="description">تسجيل الإيرادات عبر قيود اليومية اليدوية يتجاوز دورة أوامر البيع والفواتير الرسمية. هذا يخفي تفاصيل الضرائب، شروط الدفع، ويفقد القدرة على تتبع الإيرادات في التقارير.</field>
+            <field name="suggested_action">تثقيف المستخدم بضرورة إرسال "فاتورة عميل" بدلاً من القيد اليدوي، وعكس القيد فوراً.</field>
+        </record>
+        <!-- 18. Fraud/Accuracy: Refund Price Lower Than Bill -->
+        <record id="rule_refund_price_variance" model="forensic.rule">
+            <field name="name">احتيال: سعر المرتجع أقل من فاتورة الشراء الأصلية</field>
+            <field name="category">fraud</field>
+            <field name="severity">critical</field>
+            <field name="weight">120</field>
+            <field name="action_type">block</field>
+            <field name="rule_type">python</field>
+            <field name="python_code">
+result = False
+if move.move_type == 'in_refund' and move.reversed_entry_id:
+    for line in move.invoice_line_ids:
+        orig_line = move.reversed_entry_id.invoice_line_ids.filtered(lambda l: l.product_id == line.product_id)
+        if orig_line and line.price_unit &lt; orig_line[0].price_unit:
+            result = True
+            break
+            </field>
+            <field name="description">إصدار إشعار دائن (مرتجع مشتريات) بسعر وحدة أقل من السعر الذي تم دفعه في الفاتورة الأصلية. هذا يسبب خسارة فارق السعر للشركة لصالح المورد، وقد يكون تلاعباً متعمداً لاختلاس الفارق.</field>
+            <field name="suggested_action">تطابق سعر إشعار الخصم مع الفاتورة الأصلية، وطلب إشعار مصحح من المورد بالمبلغ الكامل.</field>
+        </record>
+    </data>
+</odoo>

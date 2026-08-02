@@ -1,0 +1,23 @@
+{
+    'name': 'Forensic Audit & Financial Integrity System',
+    'version': '18.0.9.0',
+    'category': 'Accounting',
+    'summary': 'Forensic Engine - Ultra Minimal.',
+    'depends': ['account', 'purchase', 'sale', 'stock', 'mail', 'mrp'],
+    'data': [
+        'views/account_interim_wizard_view.xml',
+        'security/security.xml',
+        'security/ir.model.access.csv',
+        'data/forensic_rules_data.xml',
+        'data/cron.xml',
+        'views/forensic_dashboard_view.xml',
+        'views/forensic_views.xml',
+        'views/all_views.xml',
+        'views/audit_cleanup_center.xml',
+        'report/account_interim_report.xml',
+        'report/account_interim_report_template.xml',
+    ],
+    'installable': True,
+    'application': True,
+    'license': 'LGPL-3',
+}

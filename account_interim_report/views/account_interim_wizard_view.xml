@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_account_interim_wizard_form" model="ir.ui.view">
+            <field name="name">account.interim.wizard.form</field>
+            <field name="model">account.interim.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Forensic Audit Analysis">
+                    <sheet>
+                        <group>
+                            <group name="filters" string="Filters">
+                                <field name="date_from"/>
+                                <field name="date_to"/>
+                                <field name="company_id" groups="base.group_multi_company"/>
+                                <field name="tag_ids" widget="many2many_tags"/>
+                            </group>
+                            <group name="options" string="Audit Options">
+                                <field name="aging_threshold"/>
+                                <field name="show_detail_lines"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button name="action_print_pdf" string="Print Analysis" type="object" class="btn-primary"/>
+                        <button name="action_scan_all_issues" string="Run Forensic Scan" type="object" class="btn-danger" groups="account_interim_report.group_super_auditor"/>
+                        <button name="action_magic_reconcile" string="Magic Reconcile" type="object" class="btn-info"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_account_interim_wizard" model="ir.actions.act_window">
+            <field name="name">Forensic Audit Wizard</field>
+            <field name="res_model">account.interim.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+    </data>
+</odoo>
