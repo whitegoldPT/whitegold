@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="stock_transit_quantity_tree" model="ir.ui.view">
+        <field name="name">stock.transit.quantity.tree</field>
+        <field name="model">stock.transit.quantity</field>
+        <field name="arch" type="xml">
+            <tree string="Products in Transit">
+                <field name="transfer_id"/>
+                <field name="product_id"/>
+                <field name="product_qty"/>
+                <field name="product_uom_id"/>
+                <!-- ADDED: Second UOM fields -->
+                <field name="need_second_uom" column_invisible="1"/>
+                <field name="second_uom" string="Second UOM"
+                       force_save="1"
+                       groups="uom.group_uom"
+                       optional="show"
+                       readonly="not need_second_uom"/>
+                <field name="lot_id"/>
+                <field name="company_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="stock_transit_quantity_form" model="ir.ui.view">
+        <field name="name">stock.transit.quantity.form</field>
+        <field name="model">stock.transit.quantity</field>
+        <field name="arch" type="xml">
+            <form string="Product in Transit">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="transfer_id" readonly="1"/>
+                            <field name="product_id" readonly="1"/>
+                            <field name="product_qty" readonly="1"/>
+                            <field name="product_uom_id" readonly="1"/>
+                            <!-- ADDED: Second UOM fields in form -->
+                            <field name="need_second_uom" readonly="1" invisible="1"/>
+<!--                            <div attrs="{'invisible': [('need_second_uom', '=', False)]}">-->
+<!--                                <field name="second_uom" string="Second UOM" readonly="1"/>-->
+<!--                            </div>-->
+                            <div>
+                                <field name="second_uom" string="Second UOM" readonly="1"/>
+                            </div>
+                        </group>
+                        <group>
+                            <field name="lot_id" readonly="1"/>
+                            <field name="send_picking_id" widget="many2one" options="{'no_open': True}" readonly="1"/>
+                            <field name="move_id" readonly="1"/>
+                            <field name="company_id" readonly="1"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

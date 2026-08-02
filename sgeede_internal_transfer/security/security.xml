@@ -1,0 +1,16 @@
+<odoo>
+    <data>
+
+<!--        <record id="access_stock_internal_transfer_menu" model="res.groups">-->
+<!--            <field name="name">Access Internal Transfer</field>-->
+<!--        </record>-->
+
+
+        <record model="ir.rule" id="stock_internal_transfer_rule">
+            <field name="name">stock internal transfer  multi-company</field>
+            <field name="model_id" ref="model_stock_internal_transfer"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id', 'in', company_ids)]</field>
+       </record>
+    </data>
+</odoo>

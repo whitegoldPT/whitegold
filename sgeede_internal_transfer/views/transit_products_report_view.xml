@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Transit Products Report Tree View (Read-only) -->
+    <record id="transit_products_report_tree" model="ir.ui.view">
+        <field name="name">transit.products.report.tree</field>
+        <field name="model">stock.transit.quantity</field>
+        <field name="arch" type="xml">
+            <tree string="Products in Transit Report" create="0" edit="0" duplicate="0" delete="0">
+                <field name="transfer_date" string="Date"/>
+                <field name="product_id" string="Product"/>
+                <field name="transfer_reference" string="Reference"/>
+                <field name="source_warehouse" string="Source Warehouse"/>
+                <field name="dest_warehouse" string="Destination Warehouse"/>
+                <field name="partial_receive_reason" string="Partial Receive Reason"/>
+                <field name="product_qty" string="Quantity in Transit"/>
+                <field name="product_uom_id" string="Unit of Measure"/>
+                <!-- ADDED: Second UOM in report -->
+                <field name="need_second_uom" column_invisible="1"/>
+<!--                <field name="second_uom" string="Second UOM" attrs="{'invisible': [('need_second_uom', '=', False)]}"/>-->
+                <field name="second_uom" string="Second UOM" invisible="not need_second_uom"/>
+                <field name="lot_id" string="Lot/Serial" optional="hide"/>
+                <field name="transfer_state" string="Transfer State" widget="badge"
+                    decoration-muted="transfer_state == 'draft'"
+                    decoration-info="transfer_state == 'send'"
+                    decoration-success="transfer_state in ('receive','done')"
+                    decoration-warning="transfer_state == 'partial_receive'"
+                    decoration-danger="transfer_state == 'cancel'"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Transit Products Report Search View -->
+    <record id="transit_products_report_search" model="ir.ui.view">
+        <field name="name">transit.products.report.search</field>
+        <field name="model">stock.transit.quantity</field>
+        <field name="arch" type="xml">
+            <search string="Search Products in Transit">
+                <field name="transfer_reference"/>
+                <field name="product_id"/>
+                <field name="source_warehouse"/>
+                <field name="dest_warehouse"/>
+                <field name="lot_id"/>
+                <filter string="Active Transfers" name="active_transfers" domain="[('product_qty','>',0)]"/>
+                <filter string="Partial Receives" name="partial_receives" domain="[('transfer_state','=','partial_receive')]"/>
+                <filter string="By Source Warehouse" name="group_source_warehouse" context="{'group_by':'source_warehouse'}"/>
+                <filter string="By Destination Warehouse" name="group_dest_warehouse" context="{'group_by':'dest_warehouse'}"/>
+                <group expand="0" string="Group By">
+                    <filter string="Transfer Reference" name="group_transfer" context="{'group_by':'transfer_reference'}"/>
+                    <filter string="Product" name="group_product" context="{'group_by':'product_id'}"/>
+                    <filter string="Source Warehouse" name="group_source" context="{'group_by':'source_warehouse'}"/>
+                    <filter string="Destination Warehouse" name="group_dest" context="{'group_by':'dest_warehouse'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action for Transit Products Report -->
+    <record id="action_transit_products_report" model="ir.actions.act_window">
+        <field name="name">Products in Transit Report</field>
+        <field name="res_model">stock.transit.quantity</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="transit_products_report_tree"/>
+        <field name="search_view_id" ref="transit_products_report_search"/>
+        <field name="domain">[('product_qty','>',0)]</field>
+        <field name="context">{'search_default_active_transfers':1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No products in transit.
+            </p>
+            <p>
+                This report shows all products currently in transit between warehouses.
+                Products appear here when they have been sent but not yet fully received.
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu Item for Transit Products Report -->
+    <menuitem action="action_transit_products_report"
+              id="menu_transit_products_report"
+              parent="stock.menu_stock_warehouse_mgmt"
+              sequence="5"
+              name="Products in Transit Report"/>
+</odoo>
