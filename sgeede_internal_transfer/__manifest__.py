@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 {
     'name': "SGEEDE Internal Transfer.",
-    'version': '17.0.0.1.4',  # Updated version
+    'version': '18.0.0.1.4',  # Updated version
     'category': 'Tools',
     'summary': """Odoo's enhanced advanced stock internal transfer module""",
     'description': """Odoo's enhanced advanced stock internal transfer module with transit tracking and partial receive handling""",
