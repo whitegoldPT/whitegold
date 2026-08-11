@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Bom cost report template -->
+    <template id="report_bom_overhead_cost">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <t t-foreach="docs" t-as="bom">
+                        <span style="font-size:30px;">
+                            <strong>BoM Costs(Material And Variable OverHead)</strong>
+                        </span>
+                        <table class="table table-borderless">
+                            <tr>
+                                <td>
+                                    <p>
+                                        <strong>Product :</strong>
+                                        <t t-esc="bom['product_tmpl_id'].name"/>
+                                    </p>
+                                </td>
+                                <td>
+                                    <p>
+                                        <strong>Reference :</strong>
+                                        <t t-esc="bom['code']"/>
+                                    </p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <p>
+                                        <strong>Product Variant :</strong>
+                                        <t t-esc="bom['product_id'].name"/>
+                                    </p>
+                                </td>
+                                <td>
+                                    <p>
+                                        <strong>Bom Type :</strong>
+                                        <t t-esc="bom['type']"/>
+                                    </p>
+                                </td>
+                            </tr>
+                        </table>
+                        <br/>
+                        <span style="font-size:25px;">
+                            <strong>Raw Materials</strong>
+                        </span>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Quantity</th>
+                                    <th>UOM</th>
+                                    <th>Cost/Unit</th>
+                                    <th>Total Cost</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="bom['bom_line_ids']" t-as="raw">
+                                    <td>
+                                        <t t-esc="raw.product_id.name"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="raw.qty_bom_unit"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="raw.product_uom_id.name" groups="uom.group_uom"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="raw.unit_cost"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="raw.total_cost"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <h6 class="oe_subtotal_footer oe_right">
+                            <strong>
+                            Total Material Costs :
+                            <t t-esc="bom['total_material_cost']"  widget="monetary" />
+                            </strong>
+                        </h6>
+                        <br/>
+                        <span  t-if="bom.service_cost_ids" style="font-size:25px;">
+                            <strong>Variable OverHead Costs</strong>
+                        </span>
+                        <table class="table" t-if="bom.service_cost_ids">
+                            <thead>
+                                <tr>
+                                    <th>Item</th>
+                                    <th>OverHead Type</th>
+                                    <th>Quantity</th>
+                                    <th>UOM</th>
+                                    <th>Cost/Unit</th>
+                                    <th>Total Cost</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="bom['service_cost_ids']" t-as="ser">
+                                    <td>
+                                        <t t-esc="ser.product_id.name"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="ser.mrp_overhead_type_id.name"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="ser.qty_bom_unit"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="ser.product_uom_id.name" groups="uom.group_uom"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="ser.price_unit"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="ser.total_cost"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                         <h6 class="oe_subtotal_footer oe_right" t-if="bom.service_cost_ids" >
+                            <strong>
+                            Total Variable OverHead Costs :
+                                <t t-esc="bom['total_service_cost']" widget="monetary"/>
+                            </strong>
+                        </h6>
+                        <br/>
+                         <h6 class="oe_subtotal_footer oe_right" t-if="bom.service_cost_ids">
+                            <strong>
+                            Total BOM Cost:
+                                <t t-esc="bom['total_bom_cost']" widget="monetary"/>
+                            </strong>
+                        </h6>
+                        <br/>
+                    </t>
+                </div>
+            </t>
+        </t>
+    </template>
+    <record id="action_report_overhead_bom_cost" model="ir.actions.report">
+        <field name="name">BoM Costs(Material And Variable OverHead)</field>
+        <field name="model">mrp.bom</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">zero_industry_extra_costs.report_bom_overhead_cost</field>
+        <field name="report_file">BoM Costs Material And Variable OverHead</field>
+        <field name="print_report_name">'BoM Costs(Material And Variable OverHead) - %s' % object.display_name</field>
+        <field name="binding_model_id" ref="model_mrp_bom"/>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>

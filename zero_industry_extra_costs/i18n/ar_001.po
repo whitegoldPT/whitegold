@@ -1,0 +1,1508 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* zero_industry_extra_costs
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 17.0+e-20240719\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-08-06 02:48+0000\n"
+"PO-Revision-Date: 2024-08-06 02:48+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,help:zero_industry_extra_costs.field_industry_production_service_cost__state
+msgid ""
+" * Draft: The MO is not confirmed yet.\n"
+" * Confirmed: The MO is confirmed, the stock rules and the reordering of the components are trigerred.\n"
+" * In Progress: The production has started (on the MO or on the WO).\n"
+" * To Close: The production is done, the MO has to be closed.\n"
+" * Done: The MO is closed, the stock moves are posted. \n"
+" * Cancelled: The MO has been cancelled, can't be confirmed anymore."
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,help:zero_industry_extra_costs.field_industry_production_service_cost__kit_state
+msgid ""
+" * Draft: The transfer is not confirmed yet. Reservation doesn't apply.\n"
+" * Waiting another operation: This transfer is waiting for another operation before being ready.\n"
+" * Waiting: The transfer is waiting for the availability of some products.\n"
+"(a) The shipping policy is \"As soon as possible\": no product could be reserved.\n"
+"(b) The shipping policy is \"When all products are ready\": not all the products could be reserved.\n"
+" * Ready: The transfer is ready to be processed.\n"
+"(a) The shipping policy is \"As soon as possible\": at least one product has been reserved.\n"
+"(b) The shipping policy is \"When all products are ready\": all product have been reserved.\n"
+" * Done: The transfer has been processed.\n"
+" * Cancelled: The transfer has been cancelled."
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_overhead_type__services_count
+msgid "# OverHead Item"
+msgstr "بنود التكلفة الاضافية"
+
+#. module: zero_industry_extra_costs
+#: model:ir.actions.report,print_report_name:zero_industry_extra_costs.action_report_overhead_bom_cost
+msgid "'BoM Costs(Material And Variable OverHead) - %s' % object.display_name"
+msgstr ""
+"'تكاليف قائمة المواد(خامات و أعباء اضافية متغيرة) - %s' % "
+"object.display_name"
+
+#. module: zero_industry_extra_costs
+#: model:ir.actions.report,print_report_name:zero_industry_extra_costs.action_report_production_order_deviations
+msgid ""
+"'Production Order Deviations for Quantity Producing - %s' % object.name"
+msgstr "'انحرافات أمر الإنتاج لإنتاج الكمية - %s' % object.name"
+
+#. module: zero_industry_extra_costs
+#: model:ir.actions.report,print_report_name:zero_industry_extra_costs.action_report_production_order_estemation
+msgid ""
+"'Production Order Estemations To Complete Producing - %s' % object.name"
+msgstr "'تقديرات امر الانتاج لاستكمال كمية الأمر - %s' % object.name"
+
+#. module: zero_industry_extra_costs
+#: model:ir.actions.report,print_report_name:zero_industry_extra_costs.action_report_production_order
+msgid ""
+"'Production Order With OverHead for Quantity Producing- %s' % object.name"
+msgstr ""
+"'امر الانتاج مع الأعباء الاضافية المتغيرة للكمية المنتجة- %s' % object.name"
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_deviations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_estemations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_overhead_mrporder
+msgid "100"
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_deviations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_estemations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_overhead_mrporder
+msgid "2023-09-15"
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_deviations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_estemations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_overhead_mrporder
+msgid "50"
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_deviations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_estemations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_overhead_mrporder
+msgid "58"
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_deviations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_estemations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_overhead_mrporder
+msgid "60"
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_deviations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_estemations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_overhead_mrporder
+msgid "987654321098"
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_bom_cost
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_bom_overhead_cost
+msgid ""
+"<br/>\n"
+"                        <span style=\"font-size:25px;\">\n"
+"                            <strong>Raw Materials</strong>\n"
+"                        </span>"
+msgstr ""
+"<br/>\n"
+"                        <span style=\"font-size:25px;\">\n"
+"                            <strong>المواد الخام</strong>\n"
+"                        </span>"
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_bom_cost
+msgid ""
+"<br/>\n"
+"                        <span style=\"font-size:25px;\">\n"
+"                            <strong>Variable OverHead Costs</strong>\n"
+"                        </span>"
+msgstr ""
+"<br/>\n"
+"                        <span style=\"font-size:25px;\">\n"
+"                            <strong>تكاليف الأعباء الاضافية المتغيرة</strong>\n"
+"                        </span>"
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.mrp_overhead_type_form_view
+msgid "<span class=\"o_stat_text\">BOM</span>"
+msgstr "<span class=\"o_stat_text\">قائمة المواد</span>"
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.mrp_overhead_type_form_view
+msgid "<span class=\"o_stat_text\">Manufacturing Order</span>"
+msgstr "<span class=\"o_stat_text\">أمر الانتاج</span>"
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.mrp_overhead_type_form_view
+msgid "<span class=\"o_stat_text\">OverHead Items</span>"
+msgstr "<span class=\"o_stat_text\">بنود الأعباء الاضافية</span>"
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_estemations_mrporder
+msgid ""
+"<span style=\"font-size:25px;\">\n"
+"                            <strong>Estemated Materials Cost TO Complete Producing</strong>\n"
+"                        </span>"
+msgstr ""
+"<span style=\"font-size:25px;\">\n"
+"                            <strong>تكلفة الخامات المتوقعة لاستكمال الانتاج</strong>\n"
+"                        </span>"
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_estemations_mrporder
+msgid ""
+"<span style=\"font-size:25px;\">\n"
+"                            <strong>Estemated Variable OverHead Cost TO Complete Producing</strong>\n"
+"                        </span>"
+msgstr ""
+"<span style=\"font-size:25px;\">\n"
+"                            <strong>تكلفة الأعباء الاضافية المتوقعة لاستكمال الانتاج</strong>\n"
+"                        </span>"
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_deviations_mrporder
+msgid ""
+"<span style=\"font-size:25px;\">\n"
+"                            <strong>Raw Materials Deviation for Quantity Producing</strong>\n"
+"                        </span>"
+msgstr ""
+"<span style=\"font-size:25px;\">\n"
+"                            <strong>انحراف الخامات للكمية المنتجة</strong>\n"
+"                        </span>"
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_overhead_mrporder
+msgid ""
+"<span style=\"font-size:25px;\">\n"
+"                            <strong>Raw Materials for Quantity Producing</strong>\n"
+"                        </span>"
+msgstr ""
+"<span style=\"font-size:25px;\">\n"
+"                            <strong>الخامنات المستخدمة للكمية المنتجة</strong>\n"
+"                        </span>"
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_deviations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_overhead_mrporder
+msgid ""
+"<span style=\"font-size:25px;\">\n"
+"                            <strong>Variable OverHead Costs for Quantity Producing</strong>\n"
+"                        </span>"
+msgstr ""
+"<span style=\"font-size:25px;\">\n"
+"                            <strong>تكاليف الأعباء الاضافية المتغيرة للكمية المنتجة</strong>\n"
+"                        </span>"
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_bom_cost
+msgid ""
+"<span style=\"font-size:30px;\">\n"
+"                            <strong>BoM Costs Overview</strong>\n"
+"                        </span>"
+msgstr ""
+"<span style=\"font-size:30px;\">\n"
+"                            <strong>نظرة عامة على تكاليف شجرة المواد</strong>\n"
+"                        </span>"
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_bom_overhead_cost
+msgid ""
+"<span style=\"font-size:30px;\">\n"
+"                            <strong>BoM Costs(Material And Variable OverHead)</strong>\n"
+"                        </span>"
+msgstr ""
+"<span style=\"font-size:30px;\">\n"
+"                            <strong>تكاليف قائمة المواد(خامات وأعباء اضافية متغيرة)</strong>\n"
+"                        </span>"
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_deviations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_estemations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_overhead_mrporder
+msgid "<strong>Actual Duration (minutes)</strong>"
+msgstr "<strong>المدة الفعلية (بالدقائق)</strong>"
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_deviations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_estemations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_overhead_mrporder
+msgid "<strong>Barcode</strong>"
+msgstr "<strong>باركود</strong>"
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_bom_cost
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_bom_overhead_cost
+msgid "<strong>Bom Type :</strong>"
+msgstr "<strong>نوع شجرة المواد :</strong>"
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_deviations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_estemations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_overhead_mrporder
+msgid "<strong>Deadline:</strong><br/>"
+msgstr "<strong>موعد التسليم:</strong><br/>"
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_deviations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_estemations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_overhead_mrporder
+msgid "<strong>Description:</strong><br/>"
+msgstr "<strong>الوصف:</strong><br/>"
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_deviations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_estemations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_overhead_mrporder
+msgid "<strong>Duration (minutes)</strong>"
+msgstr "<strong>المدة (بالدقائق)</strong>"
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_deviations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_estemations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_overhead_mrporder
+msgid "<strong>Operation</strong>"
+msgstr "<strong>العملية</strong>"
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_bom_cost
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_bom_overhead_cost
+msgid "<strong>Product :</strong>"
+msgstr "<strong>الصنف :</strong>"
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_bom_cost
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_bom_overhead_cost
+msgid "<strong>Product Variant :</strong>"
+msgstr "<strong>متغير الصنف :</strong>"
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_deviations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_estemations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_overhead_mrporder
+msgid "<strong>Product:</strong><br/>"
+msgstr "<strong>الصنف:</strong><br/>"
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_deviations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_estemations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_overhead_mrporder
+msgid "<strong>Quantity Producing:</strong><br/>"
+msgstr "<strong>الكمية المنتجة:</strong><br/>"
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_deviations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_estemations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_overhead_mrporder
+msgid "<strong>Quantity to Produce:</strong><br/>"
+msgstr "<strong>الكمية المراد انتاجها:</strong><br/>"
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_bom_cost
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_bom_overhead_cost
+msgid "<strong>Reference :</strong>"
+msgstr "<strong>المرجع :</strong>"
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_deviations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_estemations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_overhead_mrporder
+msgid "<strong>Responsible:</strong><br/>"
+msgstr "<strong>المسئول:</strong><br/>"
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_deviations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_estemations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_overhead_mrporder
+msgid "<strong>Source:</strong><br/>"
+msgstr "<strong>المصدر:</strong><br/>"
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_bom_overhead_cost
+msgid "<strong>Variable OverHead Costs</strong>"
+msgstr "<strong>تكاليف الأعباء الاضافية المتغيرة</strong>"
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_deviations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_estemations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_overhead_mrporder
+msgid "<strong>WorkCenter</strong>"
+msgstr "<strong>مركز الانتاج</strong>"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_overhead_type__access_warning
+msgid "Access warning"
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_industry_production_service_cost__account_move_ids
+msgid "Account Move"
+msgstr "القيود المحاسبية"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_overhead_type__message_needaction
+msgid "Action Needed"
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_overhead_type__activity_ids
+msgid "Activities"
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_overhead_type__activity_exception_decoration
+msgid "Activity Exception Decoration"
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_overhead_type__activity_state
+msgid "Activity State"
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_overhead_type__activity_type_icon
+msgid "Activity Type Icon"
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.mrp_production_variable_overhead_form_view
+msgid "Actual Cost"
+msgstr "التكلفة الفعلية"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_unbuild__total_service_cost
+msgid "Actual Variable OverHead Costs"
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.constraint,message:zero_industry_extra_costs.constraint_industry_service_cost_bom_qty_zero
+msgid ""
+"All Variable OverHead quantities must be greater or equal to 0.\n"
+"Lines with 0 quantities can be used as optional lines.!"
+msgstr ""
+"يجب ان تكون كمية كافة الخدمات اكبر من او تساوي 0.\n"
+"يمكن استخدام السطور الصفرية كسطور اختيارية.!"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.constraint,message:zero_industry_extra_costs.constraint_industry_production_service_cost_bom_qty_zero
+msgid ""
+"All product quantities must be greater or equal to 0.\n"
+"Lines with 0 quantities can be used as optional lines. \n"
+"You should install the mrp_byproduct module if you want to manage extra products on BoMs!"
+msgstr ""
+"كمية الاصناف يجب ان تكون اكبر من او تساوي 0.\n"
+"السطور الصفرية يمكن ان تستخدم كسطور اختيارية. \n"
+"You should install the mrp_byproduct module if you want to manage extra products on BoMs!"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_industry_service_cost__operation_id
+msgid "Applied in Operation"
+msgstr "مطبق على العملية"
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_deviations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_estemations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_overhead_mrporder
+msgid "Assembling"
+msgstr "تجميع"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_overhead_type__message_attachment_count
+msgid "Attachment Count"
+msgstr "عدد المرفقات"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_industry_service_cost__bom_id
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.view_bom_variable_overhead_search
+msgid "BOM"
+msgstr "قائمة المواد"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_industry_service_cost__user_id
+msgid "BOM Responsible"
+msgstr "المسئول"
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.view_bom_variable_overhead_search
+msgid "BOM Type"
+msgstr "نوع قائمة المواد"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_bom__bom_product_uom_qty
+msgid "BOM UOM Quantity"
+msgstr "الكمية لوحدة قائمة المواد"
+
+#. module: zero_industry_extra_costs
+#: model:ir.ui.menu,name:zero_industry_extra_costs.bom_variable_overhead_menu
+msgid "BOM Variable OverHead Details"
+msgstr "تفاصيل الأعباء الاضافية المتغيرة لقائمة المواد"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_industry_service_cost__child_line_ids
+msgid "BOM lines of the referred bom"
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model:ir.model,name:zero_industry_extra_costs.model_mrp_bom
+msgid "Bill of Material"
+msgstr "قائمة المواد"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model,name:zero_industry_extra_costs.model_mrp_bom_line
+msgid "Bill of Material Line"
+msgstr "بند قائمة المواد"
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.mrp_bom_service_line_view_form
+msgid "Bill of Material Service line"
+msgstr "ببنود الاصناف الخدمية لقائمة المواد"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model,name:zero_industry_extra_costs.model_industry_service_cost
+msgid "Bill of Material Variable OverHead Costs"
+msgstr "تكاليف الأعباء الاضافية المتغيرة لقائمة المواد"
+
+#. module: zero_industry_extra_costs
+#: model:ir.actions.act_window,name:zero_industry_extra_costs.bom_variable_overhead_action
+#: model:ir.actions.report,name:zero_industry_extra_costs.action_report_overhead_bom_cost
+msgid "BoM Costs(Material And Variable OverHead)"
+msgstr "الأعباء الاضافية المتغيرة لقائمة المواد"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_industry_service_cost__bom_type
+msgid "BoM Type"
+msgstr "نوع قائمة المواد"
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_deviations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_estemations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_overhead_mrporder
+msgid "Center A"
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.actions.act_window,help:zero_industry_extra_costs.mrp_overhead_type_action
+msgid "Click to add a new Service to MRP OverHead Type."
+msgstr "اضف صنف خدمي جديد الى انواع الأعباء الاضافية الصناعية"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_overhead_type__color
+msgid "Color Index"
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_industry_production_service_cost__company_id
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_industry_service_cost__company_id
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_overhead_type__company_id
+msgid "Company"
+msgstr "الشركة"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_industry_production_service_cost__company_currency_id
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_industry_service_cost__company_currency_id
+msgid "Company Currency"
+msgstr "عملة الشركة"
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_deviations_mrporder
+msgid "Consumed Quantity"
+msgstr "الكمية المستخدمة"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_bom_line__unit_cost
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_stock_move__standard_price
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_bom_cost
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_bom_overhead_cost
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_overhead_mrporder
+msgid "Cost/Unit"
+msgstr "التكلفة/الوحدة"
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.extra_costs_mrp_bom_form_view
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.mrp_production_variable_overhead_form_view
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.mrp_unbuild_variable_overhead_form_view
+msgid "Costs"
+msgstr "التكاليف"
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.mrp_production_variable_overhead_form_view
+msgid "Costs Deviations"
+msgstr "انحرافات التكاليف"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_industry_production_service_cost__create_uid
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_industry_service_cost__create_uid
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_overhead_type__create_uid
+msgid "Created by"
+msgstr "انشئ بواسطة"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_industry_production_service_cost__create_date
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_industry_service_cost__create_date
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_overhead_type__create_date
+msgid "Created on"
+msgstr "انشئ في تاريخ"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,help:zero_industry_extra_costs.field_mrp_overhead_type__access_url
+msgid "Customer Portal URL"
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,help:zero_industry_extra_costs.field_industry_production_service_cost__product_uom_id
+#: model:ir.model.fields,help:zero_industry_extra_costs.field_industry_service_cost__product_uom_id
+msgid "Default unit of measure used for all stock operations."
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_production__total_material_cost
+msgid "Demanded Materials Costs"
+msgstr "تكلفة الخامات المطلوبة"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_production__total_service_cost
+msgid "Demanded Variable OverHead Costs"
+msgstr "تكاليف الأعباء الاضافية المطلوبة"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_overhead_type__description
+msgid "Description"
+msgstr "الوصف"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_industry_production_service_cost__total_deviation_cost
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_stock_move__total_deviation_cost
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_deviations_mrporder
+msgid "Deviation Cost"
+msgstr "تكلفة الانحراف"
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.mrp_unbuild_variable_overhead_form_view
+msgid "Deviations"
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_industry_production_service_cost__display_name
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_industry_service_cost__display_name
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_overhead_type__display_name
+msgid "Display Name"
+msgstr "اسم العرض"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_industry_production_service_cost__cost_to_complete
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_stock_move__cost_to_complete
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.mrp_production_variable_overhead_form_view
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_estemations_mrporder
+msgid "Estemated Cost TO Complete"
+msgstr "التكلفة المتوقعة للاستكمال"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_production__total_material_cost_to_complete
+msgid "Estemated Material Cost TO Complete"
+msgstr "تكلفة الخامات المتوقعة للاستكمال"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_industry_production_service_cost__qty_to_complete
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_stock_move__qty_to_complete
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_estemations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.view_mrp_variable_overhead_graph
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.view_mrp_variable_overhead_pivot
+msgid "Estemated Quantity TO Complete"
+msgstr "الكمية المتوقعة للاستكمال"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_production__total_service_cost_to_complete
+msgid "Estemated Variable OverHead Cost TO Complete"
+msgstr "تكلفة الأعباء الاضافية المتوقعة للاستكمال"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_overhead_type__message_follower_ids
+msgid "Followers"
+msgstr "المتابعون"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_overhead_type__message_partner_ids
+msgid "Followers (Partners)"
+msgstr "الشركاء المتابعون"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,help:zero_industry_extra_costs.field_mrp_overhead_type__activity_type_icon
+msgid "Font awesome icon e.g. fa-tasks"
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.view_bom_variable_overhead_search
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.view_mrp_variable_overhead_search
+msgid "Group By..."
+msgstr "رتب حسب"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_overhead_type__has_message
+msgid "Has Message"
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_industry_production_service_cost__id
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_industry_service_cost__id
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_overhead_type__id
+msgid "ID"
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_overhead_type__activity_exception_icon
+msgid "Icon"
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,help:zero_industry_extra_costs.field_mrp_overhead_type__activity_exception_icon
+msgid "Icon to indicate an exception activity."
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,help:zero_industry_extra_costs.field_mrp_overhead_type__message_needaction
+msgid "If checked, new messages require your attention."
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,help:zero_industry_extra_costs.field_mrp_overhead_type__message_has_error
+#: model:ir.model.fields,help:zero_industry_extra_costs.field_mrp_overhead_type__message_has_sms_error
+msgid "If checked, some messages have a delivery error."
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_overhead_type__image_1920
+msgid "Image"
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_overhead_type__image_1024
+msgid "Image 1024"
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_overhead_type__image_128
+msgid "Image 128"
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_overhead_type__image_256
+msgid "Image 256"
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_overhead_type__image_512
+msgid "Image 512"
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_overhead_type__message_is_follower
+msgid "Is Follower"
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_bom_cost
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_bom_overhead_cost
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_deviations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_estemations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_overhead_mrporder
+msgid "Item"
+msgstr "بند"
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_deviations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_estemations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_overhead_mrporder
+msgid "John Doe"
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model:ir.model,name:zero_industry_extra_costs.model_account_move
+msgid "Journal Entry"
+msgstr "قيد اليومية"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_industry_production_service_cost__kit_production_id
+msgid "KIT Picking Order"
+msgstr "امر شحن الصنف المجمع"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_industry_production_service_cost__kit_state
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.view_mrp_variable_overhead_search
+msgid "KIT Picking Order Status"
+msgstr "حالة شحن الصنف المجمع"
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_deviations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_estemations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_overhead_mrporder
+msgid "Laptop Model X"
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_deviations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_estemations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_overhead_mrporder
+msgid "Laptop with 16GB RAM"
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_industry_production_service_cost__write_uid
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_industry_service_cost__write_uid
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_overhead_type__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_industry_production_service_cost__write_date
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_industry_service_cost__write_date
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_overhead_type__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_industry_production_service_cost__state
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.view_mrp_variable_overhead_search
+msgid "MO Order Status"
+msgstr "حالة امر الانتاج"
+
+#. module: zero_industry_extra_costs
+#: model:ir.ui.menu,name:zero_industry_extra_costs.mrp_variable_overhead_menu
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.bom_variable_overhead_tree_view
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.mrp_variable_overhead_tree_view
+msgid "MO Variable OverHead Details"
+msgstr "تفاصيل الأعباء الاضافية المتغير لامر الانتاج"
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.product_template_form_view
+msgid "MRP OverHead"
+msgstr "الاعباء الاضافية الصناعية"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_account_bank_statement_line__mrp_overhead_cost
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_account_move__mrp_overhead_cost
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_account_payment__mrp_overhead_cost
+msgid "MRP OverHead Move"
+msgstr "حركة الاعباء الاضافية الصناعية"
+
+#. module: zero_industry_extra_costs
+#: model:ir.actions.act_window,name:zero_industry_extra_costs.mrp_overhead_type_action
+#: model:ir.model,name:zero_industry_extra_costs.model_mrp_overhead_type
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.mrp_overhead_type_form_view
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.mrp_overhead_type_tree_view
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.res_mrp_overhead_type_kanban_view
+msgid "MRP OverHead Type"
+msgstr "تبويب الأعباء الاضافية الصناعية"
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_deviations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_estemations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_overhead_mrporder
+msgid "MRP-001"
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.view_mrp_variable_overhead_search
+msgid "Manufacturing Order"
+msgstr "امر الانتاج"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_production__total_prd_cost
+msgid "Manufacturing Order Cost"
+msgstr "تكلفة الأمر الانتاجي"
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_overhead_mrporder
+msgid "Manufacturing Order Cost for Quantity Producing:"
+msgstr ":تكلفة الأمر الانتاجي للكمية المنتجة"
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_deviations_mrporder
+msgid "Manufacturing Order Deviations Cost for Quantity Producing:"
+msgstr "تكلفة انحرافات الأمر الانتاجي للكمية المنتجة"
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_estemations_mrporder
+msgid "Manufacturing Order Estemated Cost TO Complete Producing:"
+msgstr "التكلفة المتوقعة للامر الانتاجي لاستكمال الانتاج"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_stock_move__total_to_consume_material_cost
+msgid "Material Costs To Produced Quantity"
+msgstr "التكلفة القياسية لخامات للكمية المنتجة"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_production__total_material_deviation_cost
+msgid "Materials Deviation Cost"
+msgstr "تكلفة انحراف الخامات"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_overhead_type__message_has_error
+msgid "Message Delivery error"
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_overhead_type__message_ids
+msgid "Messages"
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model:ir.actions.act_window,name:zero_industry_extra_costs.mrp_variable_overhead_action
+msgid "Mnufacturing Orders Variable OverHead"
+msgstr "الأعباء الاضافية للأوامر الانتاجية"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_overhead_type__more_details
+msgid "More Details"
+msgstr "تفاصيل اكثر"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_industry_production_service_cost__date
+msgid "Move Date"
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_overhead_type__my_activity_date_deadline
+msgid "My Activity Deadline"
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_overhead_type__name
+msgid "Name"
+msgstr "الاسم"
+
+#. module: zero_industry_extra_costs
+#. odoo-python
+#: code:addons/zero_industry_extra_costs/models/industry_service_cost.py:0
+#, python-format
+msgid "New BoM from %(mo_name)s"
+msgstr "قائمة مواد جديدة من %(mo_name)s"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_overhead_type__activity_date_deadline
+msgid "Next Activity Deadline"
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_overhead_type__activity_summary
+msgid "Next Activity Summary"
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_overhead_type__activity_type_id
+msgid "Next Activity Type"
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_overhead_type__message_needaction_counter
+msgid "Number of Actions"
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_overhead_type__message_has_error_counter
+msgid "Number of errors"
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,help:zero_industry_extra_costs.field_mrp_overhead_type__message_needaction_counter
+msgid "Number of messages requiring action"
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,help:zero_industry_extra_costs.field_mrp_overhead_type__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.mrp_bom_service_line_view_form
+msgid "Operation"
+msgstr "العملية"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_industry_production_service_cost__operation_id
+msgid "Operation To Consume"
+msgstr "المخصصة انفاقة على العملية"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_industry_production_service_cost__allowed_operation_ids
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_industry_service_cost__allowed_operation_ids
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_deviations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_estemations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_overhead_mrporder
+msgid "Operations"
+msgstr "العمليات"
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_deviations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_estemations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_overhead_mrporder
+msgid "Operations Done"
+msgstr "العمليات المنتهية"
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_deviations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_estemations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_overhead_mrporder
+msgid "Operations Planned"
+msgstr "العمليات المخططة"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_bom_products_stock_move__overhead_entry_count
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_production__overhead_entry_count
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_unbuild__overhead_entry_count
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.mrp_production_variable_overhead_form_view
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.mrp_unbuild_variable_overhead_form_view
+msgid "OverHead Account Entry Count"
+msgstr "عدد قيود حسابات الاعباء الاضافية"
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.view_bom_variable_overhead_search
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.view_mrp_variable_overhead_search
+msgid "OverHead Item"
+msgstr "بند الأعباء الاضافية"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_overhead_type__product_ids
+msgid "OverHead Items"
+msgstr "بنود الأعباء الاضافية"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_industry_production_service_cost__mrp_overhead_type_id
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_industry_service_cost__mrp_overhead_type_id
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_product_product__mrp_overhead_type_id
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_product_template__mrp_overhead_type_id
+#: model:ir.ui.menu,name:zero_industry_extra_costs.mrp_overhead_type_menu
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_bom_cost
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_bom_overhead_cost
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_deviations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_estemations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_overhead_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.view_bom_variable_overhead_search
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.view_mrp_variable_overhead_search
+msgid "OverHead Type"
+msgstr "تصنيف الأعباء الاضافية"
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_deviations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_estemations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_overhead_mrporder
+msgid "Package barcode"
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_industry_service_cost__parent_product_tmpl_id
+msgid "Parent Product Template"
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model:ir.model,name:zero_industry_extra_costs.model_bom_products_stock_move
+msgid "Picking KIT Products"
+msgstr "اوامر شحن الاصناف المجمعة"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_overhead_type__access_url
+msgid "Portal Access URL"
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model:ir.model,name:zero_industry_extra_costs.model_product_template
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_bom_cost
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_bom_overhead_cost
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_deviations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_estemations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_overhead_mrporder
+msgid "Product"
+msgstr "المنتج"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model,name:zero_industry_extra_costs.model_product_category
+msgid "Product Category"
+msgstr "فئة المنتج"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_production__product_cost
+msgid "Product Unit Cost"
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_production__product_material_cost
+msgid "Product Unit Share of Materials"
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_production__product_service_cost
+msgid "Product Unit Share of OverHead"
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_industry_production_service_cost__product_uom_id
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_industry_service_cost__product_uom_id
+msgid "Product Unit of Measure"
+msgstr "وحدة البند"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model,name:zero_industry_extra_costs.model_product_product
+msgid "Product Variant"
+msgstr "متغير المنتج "
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_industry_production_service_cost__bom_id
+msgid "Production BOM"
+msgstr "قائمة مواد العملية الانتاجية"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_product_category__property_stock_account_indirect_cost_id
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_product_product__property_stock_account_indirect_cost_id
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_product_template__property_stock_account_indirect_cost_id
+msgid "Production Indirect Cost Account"
+msgstr "حساب المصاريف الصناعية الغير مباشرة"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model,name:zero_industry_extra_costs.model_mrp_production
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_industry_production_service_cost__production_id
+msgid "Production Order"
+msgstr "أمر الإنتاج"
+
+#. module: zero_industry_extra_costs
+#: model:ir.actions.report,name:zero_industry_extra_costs.action_report_production_order_deviations
+msgid "Production Order Deviations"
+msgstr "انحرافات الأمر الانتاجي"
+
+#. module: zero_industry_extra_costs
+#: model:ir.actions.report,name:zero_industry_extra_costs.action_report_production_order_estemation
+msgid "Production Order Estemations To Complete Producing"
+msgstr "تقديرات الأمر الانتاجي لاستكمال الانتاج"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model,name:zero_industry_extra_costs.model_industry_production_service_cost
+msgid "Production Order Variable Costs"
+msgstr "تكاليف الأعباء الاضافية المتغيرة للامر الانتاجي"
+
+#. module: zero_industry_extra_costs
+#: model:ir.actions.report,name:zero_industry_extra_costs.action_report_production_order
+msgid "Production Order With OverHead"
+msgstr "الأمر الانتاجي مع الأعباء الاضافية"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_bom_line__qty_bom_unit
+msgid "Qty Bom Unit"
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_industry_service_cost__product_qty
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.mrp_bom_service_line_view_form
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_bom_cost
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_bom_overhead_cost
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_overhead_mrporder
+msgid "Quantity"
+msgstr "الكمية"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_industry_production_service_cost__qty_deviation
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_stock_move__qty_deviation
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_deviations_mrporder
+msgid "Quantity Deviation"
+msgstr "انحراف الكمية"
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_deviations_mrporder
+msgid "Quantity Should Consumed"
+msgstr "الكمية الواجب استهلاكها"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_industry_production_service_cost__product_qty
+msgid "Quantity TO Produce"
+msgstr "المطلوب للانتاج"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_industry_production_service_cost__each_unit_product_uom_qty
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_industry_service_cost__each_unit_product_uom_qty
+msgid "Quantity for each one uom_id unit"
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_industry_service_cost__qty_bom_unit
+#: model:ir.model.fields,help:zero_industry_extra_costs.field_mrp_bom_line__qty_bom_unit
+msgid "Quantity/BOM Unit"
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_industry_production_service_cost__reference
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_industry_service_cost__reference
+msgid "Reference"
+msgstr "المرجع"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_production__qty_to_complete
+msgid "Remaining Quantity TO Complete"
+msgstr "الكمية المتبقية للانتاج"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_industry_production_service_cost__user_id
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.view_mrp_variable_overhead_search
+msgid "Responsible"
+msgstr "المسئول"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_overhead_type__activity_user_id
+msgid "Responsible User"
+msgstr "المسئول"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_overhead_type__message_has_sms_error
+msgid "SMS Delivery error"
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.view_mrp_overhead_type_search
+msgid "Search OverHead Type"
+msgstr "البحث بنوع التكلفة الاضافية"
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.view_bom_variable_overhead_search
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.view_mrp_variable_overhead_search
+msgid "Search Variable OverHead"
+msgstr "البحث ببند التكلفة الاضافية"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_overhead_type__access_token
+msgid "Security Token"
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_industry_production_service_cost__sequence
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_industry_service_cost__sequence
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_overhead_type__sequence
+msgid "Sequence"
+msgstr "التسلسل"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_industry_production_service_cost__total_planned_cost
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.mrp_production_variable_overhead_form_view
+msgid "Standard Costs To Produced Quantity"
+msgstr "التكاليف القياسية للانتاج الفعلي"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_production__total_planned_material_cost
+msgid "Standard Material Costs To Produced Quantity"
+msgstr "التكلفة القياسية لخامات للكمية المنتجة"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_industry_production_service_cost__planned_product_qty
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.view_mrp_variable_overhead_graph
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.view_mrp_variable_overhead_pivot
+msgid "Standard Quantity TO Produce"
+msgstr "الكمية القياسية المطلوبة للانتاج"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_unbuild__total_planned_service_cost
+msgid "Standard Variable OverHead Costs"
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_production__total_planned_service_cost
+msgid "Standard Variable OverHead Costs To Produced Quantity"
+msgstr "التكلفة القياسية للأعباءالاضافية المتغيرة للكمية المنتجة"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,help:zero_industry_extra_costs.field_mrp_overhead_type__activity_state
+msgid ""
+"Status based on activities\n"
+"Overdue: Due date is already passed\n"
+"Today: Activity date is today\n"
+"Planned: Future activities."
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model:ir.model,name:zero_industry_extra_costs.model_stock_move
+msgid "Stock Move"
+msgstr "حركة المخزون"
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.mrp_production_variable_overhead_form_view
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.mrp_unbuild_variable_overhead_form_view
+msgid "Stock Move Journal Entry"
+msgstr "قيود صادرة من الحركة المخزنية"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_industry_service_cost__child_bom_id
+msgid "Sub BoM"
+msgstr "قتئمة المواد الفرعية"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_industry_production_service_cost__total_cost
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_industry_service_cost__sub_total_cost
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_bom_line__sub_total_cost
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_stock_move__total_cost
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.bom_variable_overhead_tree_view
+msgid "SubTotal"
+msgstr "الاجمالي الفرعي"
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.mrp_variable_overhead_tree_view
+msgid "Sum of Deviation Cost"
+msgstr "اجمالي تكلفة الانحراف"
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.mrp_variable_overhead_tree_view
+msgid "Sum of Estemated Cost TO Complete"
+msgstr "اجمالي التكلفة التقديرة لاكمال الامر"
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.mrp_variable_overhead_tree_view
+msgid "Sum of Standard Costs To Produced Quantity"
+msgstr "اجمالي التكلفة القياسية للكمية المنتتجة"
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.mrp_variable_overhead_tree_view
+msgid "Sum of SubTotal"
+msgstr "مجموع الاجماليات الفرعية"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,help:zero_industry_extra_costs.field_mrp_overhead_type__services_count
+msgid "The number of Variable OverHead under this Type"
+msgstr "عدد  بنود التكلفة المدرجة تحت هذا النوع"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,help:zero_industry_extra_costs.field_industry_service_cost__operation_id
+msgid ""
+"The operation where the Variable OverHeads are Applied, or the finished "
+"products created."
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,help:zero_industry_extra_costs.field_product_category__property_stock_account_indirect_cost_id
+#: model:ir.model.fields,help:zero_industry_extra_costs.field_product_product__property_stock_account_indirect_cost_id
+#: model:ir.model.fields,help:zero_industry_extra_costs.field_product_template__property_stock_account_indirect_cost_id
+msgid ""
+"This account will be used as a valuation counterpart for both OverHead and final products for manufacturing orders or Kit Products Deliveries.\n"
+"                If there are any workcenter/employee costs, this value will remain on the account once the production is completed or Kit Products Delivered."
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.actions.act_window,help:zero_industry_extra_costs.mrp_overhead_type_action
+msgid "This allows to classify your Service to MRP OverHead Type."
+msgstr ""
+"يتيح لك هذا تصنيف الخدمة الخاصة بك إلى نوع النفقات العامة لتخطيط متطلبات "
+"المواد (MRP)"
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.mrp_production_variable_overhead_form_view
+msgid "Total Actual Cost"
+msgstr "اجمالي التكلفة الفعلية"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_bom__total_bom_cost
+msgid "Total BOM Cost"
+msgstr "اجمالي تكلفة قائمة المواد"
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_bom_overhead_cost
+msgid "Total BOM Cost:"
+msgstr "التكلفة الاجمالية لقائمة المواد"
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_bom_cost
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_bom_overhead_cost
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_overhead_mrporder
+msgid "Total Cost"
+msgstr "التكلفة الكلية"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_industry_service_cost__total_cost
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_bom_line__total_cost
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.bom_variable_overhead_tree_view
+msgid "Total Cost/BOM Unit"
+msgstr "التكلفة الكلية/لوحدة قائمة المواد"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_production__total_deviation_cost
+msgid "Total Deviations Cost"
+msgstr "تكلفة الانحرافات الكلية"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_production__total_est_prd_cost_to_complete
+msgid "Total Estemated Cost TO Complete Producing"
+msgstr "اجمالي التكلفة المتوقعة لاستكمال الانتاج"
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_estemations_mrporder
+msgid "Total Estemated Materials Cost TO Complete Producing:"
+msgstr "التكلفة الكلية للمواد لاستكمال الانتاج"
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_estemations_mrporder
+msgid "Total Estemated Variable OverHead Cost TO Complete Producing :"
+msgstr "التكلفة الكلية المتوقعة للأعباء الاضافية المتغيرة لاستكمال الانتاج"
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_bom_cost
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_bom_overhead_cost
+msgid "Total Material Costs :"
+msgstr "اجمالى التكلفة للخامات"
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_overhead_mrporder
+msgid "Total Material Costs for Quantity Producing:"
+msgstr "اجمالى التكلفة للخامات للكمية المنتجة"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_bom__total_material_cost
+msgid "Total Materials Costs"
+msgstr "اجمالى التكلفة للخامات"
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_deviations_mrporder
+msgid "Total Materials Deviation Cost for Quantity Producing:"
+msgstr "تكلفة انحراف الخامات الكلي للكمية المنتجة"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_unbuild__product_uom_qty
+msgid "Total Quantity"
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_bom__total_service_cost
+msgid "Total Variable OverHead Costs"
+msgstr "اجمالي تكاليف الأعباء الاضافية المتغيرة"
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_bom_overhead_cost
+msgid "Total Variable OverHead Costs :"
+msgstr "اجمالى التكلفة للأعباء الاضافية المتغيرة"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_production__total_service_deviation_cost
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_unbuild__total_service_deviation_cost
+msgid "Total Variable OverHead Deviation Costs"
+msgstr "اجمالى التكلفة لانحراف الأعباء الاضافية المتغيرة"
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_deviations_mrporder
+msgid "Total Variable OverHead Deviation Costs for Quantity Producing :"
+msgstr "ااجمالي تكاليف انحراف الأعباء الاضافية المتغيرة للكمية المنتجة"
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_overhead_mrporder
+msgid "Total Variable Overhead Costs for Quantity Producing :"
+msgstr "اجمالي تكاليف الأعباء الاضافية للكمية المنتجة"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,help:zero_industry_extra_costs.field_mrp_overhead_type__activity_exception_decoration
+msgid "Type of the exception activity on record."
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_bom_cost
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_bom_overhead_cost
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_deviations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_estemations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_overhead_mrporder
+msgid "UOM"
+msgstr "الوحدة"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_industry_service_cost__unbiled_product_qty
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.mrp_bom_service_line_view_form
+msgid "Unbiled Quantity"
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model:ir.model,name:zero_industry_extra_costs.model_mrp_unbuild
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_industry_production_service_cost__services_unbuild_id
+msgid "Unbuild Order"
+msgstr "أمر التفكيك "
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_industry_production_service_cost__price_unit
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_industry_service_cost__price_unit
+msgid "Unit Cost"
+msgstr "تكلفة الوحدة"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_bom__bom_unit_factor
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_production__prd_unit_factor
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_unbuild__prd_unit_factor
+msgid "Unit Factor"
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_deviations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_estemations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_overhead_mrporder
+msgid "Units"
+msgstr "الوحدات"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,help:zero_industry_extra_costs.field_industry_production_service_cost__price_unit
+#: model:ir.model.fields,help:zero_industry_extra_costs.field_industry_service_cost__price_unit
+#: model:ir.model.fields,help:zero_industry_extra_costs.field_mrp_bom_line__unit_cost
+#: model:ir.model.fields,help:zero_industry_extra_costs.field_stock_move__standard_price
+msgid ""
+"Value of the product (automatically computed in AVCO).\n"
+"        Used to value the product when the purchase cost is not known (e.g. inventory adjustment).\n"
+"        Used to compute margins on sale orders."
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_bom_products_stock_move__services_move_raw_ids
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_industry_production_service_cost__product_id
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_industry_service_cost__product_id
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_bom__service_cost_ids
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_production__services_move_raw_ids
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_unbuild__services_move_raw_ids
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.extra_costs_mrp_bom_form_view
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.mrp_bom_service_line_view_form
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.mrp_production_variable_overhead_form_view
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.mrp_unbuild_variable_overhead_form_view
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.view_bom_variable_overhead_graph
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.view_bom_variable_overhead_pivot
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.view_mrp_variable_overhead_graph
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.view_mrp_variable_overhead_pivot
+msgid "Variable OverHead"
+msgstr "الأعباء الاضافية المتغيرة"
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.mrp_variable_overhead_form
+msgid "Variable OverHead Detail"
+msgstr "تفاصيل الأعباء الاضافية المتغيرة"
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_industry_production_service_cost__product_tmpl_id
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_industry_service_cost__product_tmpl_id
+msgid "Variable OverHead Item"
+msgstr "بند التكلفة"
+
+#. module: zero_industry_extra_costs
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_deviations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_estemations_mrporder
+#: model_terms:ir.ui.view,arch_db:zero_industry_extra_costs.report_overhead_mrporder
+msgid "Vendor ABC"
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,field_description:zero_industry_extra_costs.field_mrp_overhead_type__website_message_ids
+msgid "Website Messages"
+msgstr ""
+
+#. module: zero_industry_extra_costs
+#: model:ir.model.fields,help:zero_industry_extra_costs.field_mrp_overhead_type__website_message_ids
+msgid "Website communication history"
+msgstr ""

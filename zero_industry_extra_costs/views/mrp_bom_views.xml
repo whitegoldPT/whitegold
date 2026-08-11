@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="extra_costs_mrp_bom_form_view" model="ir.ui.view">
+        <field name="name">mrp.bom.industry.extra.costs</field>
+        <field name="model">mrp.bom</field>
+        <field name="inherit_id" ref="mrp.mrp_bom_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='components']/field[@name='bom_line_ids']/list[1]/field[@name='product_qty']" position="after">
+                <field name="unit_cost" groups="account.group_account_readonly" optional="show"/>
+                <field name="total_cost" groups="account.group_account_readonly" optional="show"/>
+                <field name="sub_total_cost" groups="account.group_account_readonly" optional="show"/>
+            </xpath>
+            <xpath expr="//field[@name='bom_line_ids']" position="after">
+                <h2 class="oe_subtotal_footer oe_right">
+                    <group>
+                        <field name="total_material_cost" groups="account.group_account_readonly"/>
+                    </group>
+                </h2>
+            </xpath>
+            <xpath expr="//page[@name='operations']" position="after">
+                <page string="Variable OverHead" name="Variable OverHead" groups="account.group_account_readonly">
+                    <field name="service_cost_ids" widget="one2many" context="{'default_parent_product_tmpl_id': product_tmpl_id, 'default_product_id': False, 'default_bom_id': id}">
+                        <list default_order="sequence" editable="bottom">
+                            <field name="sequence" widget="handle"/>
+                            <field name="company_id" column_invisible="True"/>
+                            <field name="company_currency_id" column_invisible="1"/>
+                            <field name="product_id"  context="{'default_type': 'service'}"/>
+                            <field name="product_tmpl_id" column_invisible="True"/>
+                            <field name="each_unit_product_uom_qty" column_invisible="True"/>
+                            <field name="qty_bom_unit" column_invisible="True"/>
+                            <field name="mrp_overhead_type_id" groups="account.group_account_readonly"  optional="show"/>
+                            <field name="product_qty" />
+                            <field name="unbiled_product_qty" />
+                            <field name="parent_product_tmpl_id" column_invisible="True" />
+                            <field name="product_uom_id" readonly="1" groups="uom.group_uom"/>
+                            <field name="price_unit" groups="account.group_account_readonly"  optional="show"/>
+                            <field name="total_cost" groups="account.group_account_readonly"  optional="show" />
+                            <field name="sub_total_cost" groups="account.group_account_readonly" />
+                            <field name="allowed_operation_ids" column_invisible="True"/>
+                            <field name="operation_id" groups="mrp.group_mrp_routings" optional="hidden" column_invisible="parent.type not in ('normal', 'phantom')" options="{'no_quick_create':True,'no_create_edit':True}"/>
+                        </list>
+                    </field>
+                <h2 class="oe_subtotal_footer oe_right">
+                    <group>
+                        <field name="total_service_cost" groups="account.group_account_readonly"/>
+                    </group>
+                </h2>
+                </page>
+                <page string="Costs" name="costs" groups="account.group_account_readonly">
+                    <group>
+                        <group>
+                            <field name="total_material_cost" />
+                            <field name="total_service_cost" />
+                        </group>
+                        <group>
+                            <field name="total_bom_cost" />
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+        <record id="mrp_bom_service_line_view_form" model="ir.ui.view">
+            <field name="name">industry.service.cost.view.form</field>
+            <field name="model">industry.service.cost</field>
+            <field name="arch" type="xml">
+                <form string="Bill of Material Service line" create="0" edit="0">
+                    <sheet>
+                        <group>
+                            <group string="Variable OverHead">
+                                <field name="product_id"/>
+                                <field name="parent_product_tmpl_id" invisible="1"/>
+                                <field name="product_tmpl_id" invisible="1"/>
+                                <field name="mrp_overhead_type_id" groups="account.group_account_readonly"/>
+                                <label for="product_qty" string="Quantity"/>
+                                <div class="o_row">
+                                    <field name="product_qty"/>
+                                    <field name="product_uom_id" options="{'no_open':True,'no_create':True}" groups="uom.group_uom"/>
+                                </div>
+                                <label for="unbiled_product_qty" string="Unbiled Quantity"/>
+                                <div class="o_row">
+                                    <field name="unbiled_product_qty"/>
+                                    <field name="product_uom_id" options="{'no_open':True,'no_create':True}" groups="uom.group_uom"/>
+                                </div>                                          
+                            </group>
+                            <group string="Operation">
+                                <field name="company_id" invisible="1"/>
+                                <field name="sequence" groups="base.group_no_one"/>
+                                <field name="allowed_operation_ids" invisible="1"/>
+                                <field name="operation_id" groups="mrp.group_mrp_routings"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+    <record id="bom_variable_overhead_tree_view" model="ir.ui.view">
+        <field name="name">industry.service.cost.list</field>
+        <field name="model">industry.service.cost</field>
+        <field name="arch" type="xml">
+            <list string="MO Variable OverHead Details" default_group_by="reference" create="false" edit="true" expand="context.get('expand', False)" sample="1" multi_edit="0">           
+                <field name="company_id"  column_invisible="1"/>
+                <field name="company_currency_id" column_invisible="1"/>
+                <field name="sequence" widget="handle" optional="show"/>
+                <field name="mrp_overhead_type_id" optional="show"/>
+                <field name="reference" optional="show" readonly="1"/>
+                <field name="bom_id" readonly="1" column_invisible="1"/>
+                <field name="product_id" readonly="1"/>
+                <field name="product_tmpl_id" readonly="1" column_invisible="1"/>
+                <field name="product_uom_id" readonly="1" optional="show"/>
+                <field name="product_qty" readonly="1"/>
+                <field name="unbiled_product_qty" readonly="1"/>
+                <field name="price_unit" readonly="1" groups="account.group_account_readonly" optional="show"/>
+                <field name="sub_total_cost"  groups="account.group_account_readonly" optional="show"  sum="SubTotal" options="{'currency_field':'company_currency_id', 'no_symbol':True}"/>
+                <field name="total_cost"  groups="account.group_account_readonly" optional="show" sum="Total Cost/BOM Unit" options="{'currency_field':'company_currency_id', 'no_symbol':True}"/>
+                <field name="bom_type" optional="hide"/>
+                <field name="user_id" readonly="1" optional="hide"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_bom_variable_overhead_search" model="ir.ui.view">
+        <field name="name">industry.service.cost.select</field>
+        <field name="model">industry.service.cost</field>
+        <field name="arch" type="xml">
+            <search string="Search Variable OverHead">
+                <field name="reference"/>
+                <field name="mrp_overhead_type_id"/>
+                <field name="product_id"/>
+                <separator/>
+                <filter name="group_by_mrp_overhead_type_id" string="OverHead Type" context="{'group_by': 'mrp_overhead_type_id'}"/>
+                <group expand="0" string="Group By...">
+                    <filter name="group_by_reference" string="BOM" context="{'group_by': 'reference'}"/>
+                    <filter name="group_by_product_id" string="OverHead Item" context="{'group_by': 'product_id'}"/>
+                    <filter name="group_by_bom_type" string="BOM Type" context="{'group_by': 'bom_type'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="view_bom_variable_overhead_graph" model="ir.ui.view">
+        <field name="name">industry.service.cost.graph</field>
+        <field name="model">industry.service.cost</field>
+        <field name="arch" type="xml">
+            <graph string="Variable OverHead" stacked="0" sample="1">
+                <field name="each_unit_product_uom_qty" invisible="True"/>
+                <field name="qty_bom_unit" invisible="True"/>
+                <field name="product_id"/>
+                <field name="mrp_overhead_type_id" />
+                <field name="sub_total_cost" type="measure"/>
+                <field name="total_cost" />
+                <field name="product_qty" />
+                <field name="unbiled_product_qty" invisible="True"/>
+                <field name="reference" />
+            </graph>
+        </field>
+    </record>
+        <record id="view_bom_variable_overhead_pivot" model="ir.ui.view">
+            <field name="name">industry.service.cost.pivot</field>
+            <field name="model">industry.service.cost</field>
+            <field name="arch" type="xml">
+                <pivot string="Variable OverHead" sample="1">
+                    <field name="each_unit_product_uom_qty" invisible="True"/>
+                    <field name="qty_bom_unit" invisible="True"/>
+                    <field name="product_id"/>
+                    <field name="mrp_overhead_type_id" />
+                    <field name="reference" />
+                    <field name="product_qty" type="measure"/>
+                    <field name="unbiled_product_qty" invisible="True"/>
+                    <field name="price_unit" type="measure"/>
+                    <field name="sub_total_cost" type="measure"/>
+                    <field name="total_cost" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+    <record id="bom_variable_overhead_action" model="ir.actions.act_window">
+        <field name="name">BoM Costs(Material And Variable OverHead)</field>
+        <field name="res_model">industry.service.cost</field>
+        <field name="view_mode">list,pivot,graph</field>
+        <field name="search_view_id" ref="zero_industry_extra_costs.view_bom_variable_overhead_search"/>
+        <field name="view_id" ref="zero_industry_extra_costs.bom_variable_overhead_tree_view"/>
+    </record>
+
+    <menuitem
+        id="bom_variable_overhead_menu"
+        name="BOM Variable OverHead Details"
+        parent="mrp.menu_mrp_bom"
+        sequence="14"
+        action="zero_industry_extra_costs.bom_variable_overhead_action">
+    </menuitem>
+
+</odoo>
