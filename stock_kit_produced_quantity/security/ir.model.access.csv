@@ -1,5 +1,0 @@
-id,name,model_id/id,group_id/id,perm_read,perm_write,perm_create,perm_unlink
-access_bom_products_stock_move_stock,access.bom.products.stock.move.stock,model_bom_products_stock_move,stock.group_stock_user,1,1,1,0
-access_bom_products_stock_move_erp,access.bom.products.stock.move.erp,model_bom_products_stock_move,base.group_erp_manager,1,1,1,0
-access_bom_products_stock_move_mrp,access.bom.products.stock.move.mrp,model_bom_products_stock_move,mrp.group_mrp_user,1,1,1,0
-access_bom_products_stock_move_acc,access.bom.products.stock.move.account,model_bom_products_stock_move,account.group_account_readonly,1,1,1,0
