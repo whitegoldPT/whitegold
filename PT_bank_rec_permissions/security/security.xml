@@ -1,0 +1,13 @@
+<odoo>
+    <!-- Group to allow matching / setting checked -->
+<!--    <record id="group_bank_rec_match" model="res.groups">-->
+<!--        <field name="name">Bank Reconciliation Match</field>-->
+<!--        <field name="category_id" ref="base.module_category_accounting"/>-->
+<!--    </record>-->
+
+    <!-- Group to allow validation / reset -->
+    <record id="group_bank_rec_validate" model="res.groups">
+        <field name="name">Bank Reconciliation Validate</field>
+        <field name="category_id" ref="base.module_category_accounting"/>
+    </record>
+</odoo>
