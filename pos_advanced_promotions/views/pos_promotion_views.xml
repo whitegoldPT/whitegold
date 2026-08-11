@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ========================
+         إضافة حقول Advanced Bundle على نموذج loyalty.program
+         ======================== -->
+    <record id="view_loyalty_program_form_inherit_adv" model="ir.ui.view">
+        <field name="name">loyalty.program.form.inherit.adv.bundle</field>
+        <field name="model">loyalty.program</field>
+        <field name="inherit_id" ref="loyalty.loyalty_program_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='program_type']" position="after">
+                <div class="o_row" invisible="program_type != 'advanced_bundle'">
+                    <field name="is_advanced_bundle" nolabel="1"/>
+                    <label for="is_advanced_bundle" string="تفعيل منطق Mix &amp; Match المتقدم"/>
+                </div>
+                <!-- <div class="o_row" invisible="program_type != 'advanced_bundle' or not is_advanced_bundle">
+                    <field name="bundle_apply_once" nolabel="1"/>
+                    <label for="bundle_apply_once" string="تطبيق العرض مرة واحدة فقط في الفاتورة (لا يتضاعف مع الكمية)"/>
+                </div> -->
+                <div class="o_row" invisible="program_type != 'advanced_bundle' or not is_advanced_bundle">
+                    <label for="bundle_price" string="السعر الثابت للباقة (احتياطي)"/>
+                    <field name="bundle_price" nolabel="1"/>
+                    <span class="oe_grey ms-1">EGP - يُستخدم إذا لم تُحدَّد جائزة Fixed Price</span>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- ========================
+         إضافة حقل fixed_price على نموذج loyalty.reward
+         ======================== -->
+    <record id="view_loyalty_reward_form_inherit_adv" model="ir.ui.view">
+        <field name="name">loyalty.reward.form.inherit.adv.bundle</field>
+        <field name="model">loyalty.reward</field>
+        <field name="inherit_id" ref="loyalty.loyalty_reward_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='reward_type']" position="after">
+                <field name="fixed_price"
+                       invisible="reward_type != 'fixed_price'"
+                       required="reward_type == 'fixed_price'"
+                       string="السعر الثابت للباقة (EGP)"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- ========================
+         إضافة حقل uom_id بجانب minimum_qty في نموذج loyalty.rule
+         ======================== -->
+    <record id="view_loyalty_rule_form_inherit_uom" model="ir.ui.view">
+        <field name="name">loyalty.rule.form.inherit.uom</field>
+        <field name="model">loyalty.rule</field>
+        <field name="inherit_id" ref="loyalty.loyalty_rule_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='minimum_qty']" position="attributes">
+                <attribute name="string">Quantity</attribute>
+            </xpath>
+            <xpath expr="//field[@name='minimum_qty']" position="after">
+                <field name="uom_id" options="{'no_create': True, 'no_open': True}"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
