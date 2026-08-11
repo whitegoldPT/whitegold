@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Report Action -->
+        <record id="action_traccar_pdf_report" model="ir.actions.report">
+            <field name="name">Traccar Report</field>
+            <field name="model">traccar.report.wizard</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">traccar_integration.report_traccar_wizard_template</field>
+            <field name="report_file">traccar_integration.report_traccar_wizard_template</field>
+            <field name="binding_model_id" ref="model_traccar_report_wizard"/>
+            <field name="binding_type">report</field>
+        </record>
+
+        <!-- Main Template -->
+        <template id="report_traccar_wizard_template">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="web.external_layout">
+                        <div class="page">
+                            <div class="oe_structure"/>
+                            
+                            <div class="text-center">
+                                <h2>
+                                    <t t-if="o.report_type == 'device_summary'">Device Summary Report</t>
+                                    <t t-if="o.report_type == 'position_history'">Position History Report</t>
+                                    <t t-if="o.report_type == 'travel_report'">Travel Report</t>
+                                    <t t-if="o.report_type == 'stop_report'">Stop Report</t>
+                                </h2>
+                                <p>
+                                    <strong>Period:</strong> 
+                                    <span t-field="o.from_date"/> to <span t-field="o.to_date"/>
+                                </p>
+                            </div>
+
+                            <div class="mt-4">
+                                <!-- Device Summary Table -->
+                                <t t-if="o.report_type == 'device_summary'">
+                                    <table class="table table-sm table-reports">
+                                        <thead>
+                                            <tr>
+                                                <th>Device Name</th>
+                                                <th>Unique ID</th>
+                                                <th>Status</th>
+                                                <th>Last Update</th>
+                                                <th class="text-end">Positions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <t t-set="devices" t-value="o.device_ids or request.env['traccar.device'].search([])"/>
+                                            <t t-foreach="devices" t-as="device">
+                                                <tr>
+                                                    <td><span t-field="device.name"/></td>
+                                                    <td><span t-field="device.unique_id"/></td>
+                                                    <td><span t-field="device.status"/></td>
+                                                    <td><span t-field="device.last_update"/></td>
+                                                    <td class="text-end">
+                                                        <t t-set="pos_count" t-value="len(device.position_ids.filtered(lambda p: o.from_date &lt;= p.device_time &lt;= o.to_date))"/>
+                                                        <t t-out="pos_count"/>
+                                                    </td>
+                                                </tr>
+                                            </t>
+                                        </tbody>
+                                    </table>
+                                </t>
+
+                                <!-- Position History Table -->
+                                <t t-if="o.report_type == 'position_history'">
+                                    <table class="table table-sm table-reports">
+                                        <thead>
+                                            <tr>
+                                                <th>Device</th>
+                                                <th>Time</th>
+                                                <th>Latitude</th>
+                                                <th>Longitude</th>
+                                                <th class="text-end">Speed (km/h)</th>
+                                                <th>Valid</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <t t-set="domain" t-value="[('device_time', '&gt;=', o.from_date), ('device_time', '&lt;=', o.to_date)]"/>
+                                            <t t-if="o.device_ids" t-set="domain" t-value="domain + [('device_id', 'in', o.device_ids.ids)]"/>
+                                            <t t-set="positions" t-value="request.env['traccar.position'].search(domain, order='device_time desc', limit=1000)"/>
+                                            <t t-foreach="positions" t-as="pos">
+                                                <tr>
+                                                    <td><span t-field="pos.device_id.name"/></td>
+                                                    <td><span t-field="pos.device_time"/></td>
+                                                    <td><span t-field="pos.latitude"/></td>
+                                                    <td><span t-field="pos.longitude"/></td>
+                                                    <td class="text-end"><span t-field="pos.speed_kmh"/></td>
+                                                    <td>
+                                                        <t t-if="pos.valid">Yes</t>
+                                                        <t t-else="">No</t>
+                                                    </td>
+                                                </tr>
+                                            </t>
+                                        </tbody>
+                                    </table>
+                                    <p t-if="len(positions) >= 1000" class="text-muted small mt-2">
+                                        * Showing first 1000 records. For full data, please use Excel export.
+                                    </p>
+                                </t>
+                                
+                                <t t-if="o.report_type in ['travel_report', 'stop_report']">
+                                    <div class="alert alert-info">
+                                        PDF layout for <t t-out="o.report_type.replace('_', ' ')"/> is currently under development. 
+                                        Please use Excel export for these reports.
+                                    </div>
+                                </t>
+                            </div>
+
+                            <div class="oe_structure"/>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

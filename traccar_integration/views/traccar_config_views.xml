@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Traccar Configuration Tree View -->
+        <record id="view_traccar_config_tree" model="ir.ui.view">
+            <field name="name">traccar.config.tree</field>
+            <field name="model">traccar.config</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="server_url"/>
+                    <field name="username"/>
+                    <field name="active"/>
+                    <field name="last_sync"/>
+                    <field name="sync_interval"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Traccar Configuration Form View -->
+        <record id="view_traccar_config_form" model="ir.ui.view">
+            <field name="name">traccar.config.form</field>
+            <field name="model">traccar.config</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="test_connection" type="object"
+                                string="Test Connection" class="oe_highlight"/>
+                        <button name="sync_all_data" type="object"
+                                string="Sync All Data" class="btn-primary"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group string="Server Configuration">
+                                <field name="server_url" placeholder="http://your-traccar-server:8082"/>
+                                <field name="username"/>
+                                <field name="password" password="True"/>
+                                <field name="active"/>
+                            </group>
+                            <group string="Synchronization">
+                                <field name="sync_interval"
+                                       help="Automatic sync interval in minutes"/>
+                                <field name="browser_sync_interval"
+                                       placeholder="e.g. 30"/>
+                                <field name="last_sync" readonly="1"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Traccar Configuration Action -->
+        <record id="action_traccar_config" model="ir.actions.act_window">
+            <field name="name">Traccar Configuration</field>
+            <field name="res_model">traccar.config</field>
+            <field name="view_mode">list,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Configure your Traccar GPS server connection
+                </p>
+                <p>
+                    Set up the connection to your Traccar server to start
+                    tracking GPS devices and positions.
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

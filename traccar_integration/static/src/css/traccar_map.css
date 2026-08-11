@@ -1,0 +1,513 @@
+:root {
+    --traccar-primary: #3b82f6;
+    --traccar-primary-hover: #2563eb;
+    --traccar-success: #10b981;
+    --traccar-danger: #ef4444;
+    --traccar-warning: #f59e0b;
+    --traccar-surface: #ffffff;
+    --traccar-bg: #f8fafc;
+    --traccar-text: #1e293b;
+    --traccar-text-muted: #64748b;
+    --traccar-border: #e2e8f0;
+    --traccar-radius: 12px;
+    --traccar-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+/* Hide Odoo Technical Breadcrumbs for Dashboard */
+.o_form_view:has(.traccar-dashboard-wrapper) .o_breadcrumb {
+    visibility: hidden;
+    height: 0;
+    margin: 0;
+    padding: 0;
+}
+
+/* Dashboard Wrapper */
+.traccar-dashboard-wrapper {
+    background: var(--traccar-bg);
+    min-height: calc(100vh - 150px);
+    display: flex;
+    flex-direction: column;
+}
+
+/* Stats Header */
+.traccar-header-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    padding: 8px 0;
+}
+
+.stat-card {
+    background: var(--traccar-surface);
+    padding: 16px;
+    border-radius: var(--traccar-radius);
+    box-shadow: var(--traccar-shadow);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    border: 1px solid var(--traccar-border);
+    transition: transform 0.2s;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+}
+
+.stat-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+}
+
+.bg-primary-soft { background-color: #dbeafe; }
+.bg-success-soft { background-color: #d1fae5; }
+.bg-danger-soft { background-color: #fee2e2; }
+.bg-info-soft { background-color: #e0f2fe; }
+.bg-warning-soft { background-color: #fef3c7; }
+.bg-info-light { background-color: rgba(224, 242, 254, 0.4); }
+.bg-danger-light { background-color: rgba(254, 226, 226, 0.4); }
+.bg-success-light { background-color: rgba(209, 250, 229, 0.4); }
+
+/* Pulsing Sync Icon */
+@keyframes pulse-sync {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.1); opacity: 0.7; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.syncing-active .stat-icon {
+    animation: pulse-sync 1.5s infinite ease-in-out;
+    background-color: #bae6fd !important; /* Slightly darker info blue */
+}
+
+.stat-content h4 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--traccar-text);
+}
+
+.stat-content span {
+    font-size: 13px;
+    color: var(--traccar-text-muted);
+}
+
+.status-badge {
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+    display: inline-block;
+}
+
+/* Main Layout */
+.traccar-main-layout {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 16px;
+    flex: 1;
+    min-height: 500px;
+}
+
+/* Sidebar */
+.traccar-sidebar {
+    background: var(--traccar-surface);
+    border-radius: var(--traccar-radius);
+    box-shadow: var(--traccar-shadow);
+    border: 1px solid var(--traccar-border);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.sidebar-search {
+    padding: 16px;
+    background: #fdfdfd;
+    border-bottom: 1px solid var(--traccar-border);
+}
+
+.sidebar-search input {
+    border-radius: 8px !important;
+    font-size: 14px;
+}
+
+.sidebar-list {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.device-item {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--traccar-border);
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.device-item:hover {
+    background: #f8fafc;
+}
+
+.device-item.active {
+    background: #eff6ff;
+    border-left: 4px solid var(--traccar-primary);
+}
+
+.device-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+}
+
+.device-name {
+    font-weight: 600;
+    color: var(--traccar-text);
+    font-size: 14px;
+}
+
+.device-status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.status-online { background-color: var(--traccar-success); box-shadow: 0 0 8px var(--traccar-success); }
+.status-offline { background-color: var(--traccar-danger); }
+.status-unknown { background-color: var(--traccar-warning); }
+
+.device-meta {
+    font-size: 12px;
+    color: var(--traccar-text-muted);
+    display: flex;
+    gap: 12px;
+}
+
+.device-item-name {
+    font-weight: 600;
+    color: var(--traccar-text);
+    font-size: 14px;
+}
+
+.device-item-sub {
+    font-size: 12px;
+    color: var(--traccar-text-muted);
+    margin-top: 2px;
+}
+
+.battery-badge {
+    background: #f1f5f9;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--traccar-text);
+    border: 1px solid var(--traccar-border);
+}
+
+.battery-low {
+    background: #fee2e2;
+    color: var(--traccar-danger);
+    border-color: #fca5a5;
+}
+
+/* Map Section */
+.traccar-map-section {
+    border-radius: var(--traccar-radius);
+    overflow: hidden;
+    position: relative;
+    box-shadow: var(--traccar-shadow);
+    border: 1px solid var(--traccar-border);
+}
+
+#traccar_live_map_container {
+    height: 100%;
+    width: 100%;
+}
+
+#traccar_live_map {
+    height: 100%;
+    width: 100%;
+}
+
+/* Map Overlays */
+.map-overlay-controls {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 5000; /* Much higher to beat Leaflet layers */
+    pointer-events: auto !important;
+}
+
+/* Replay Overlay */
+.traccar-replay-overlay {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    z-index: 5000;
+    width: 260px;
+}
+
+.replay-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: var(--traccar-radius);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--traccar-border);
+    overflow: hidden;
+}
+
+.replay-header {
+    background: #1e293b;
+    color: white;
+    padding: 10px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.btn-close-replay {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+}
+
+.replay-body {
+    padding: 16px;
+}
+
+/* Replay Button in Sidebar */
+.btn-replay-sidebar {
+    background: #f1f5f9;
+    color: #475569;
+    border: 1px solid #e2e8f0;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: all 0.2s;
+}
+
+.btn-replay-sidebar:hover {
+    background: var(--traccar-primary);
+    color: white;
+    border-color: var(--traccar-primary);
+}
+
+.map-overlay-controls button {
+    pointer-events: auto !important;
+    cursor: pointer !important;
+    position: relative;
+    z-index: 5001;
+}
+
+/* Custom Marker */
+.custom-device-marker {
+    background: transparent !important;
+}
+
+.marker-inner {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 2px solid white;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    position: relative;
+}
+
+.marker-inner::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 8px;
+    height: 8px;
+    background: white;
+    border-radius: 50%;
+}
+
+/* Popup Glassmorphism */
+.leaflet-popup-content-wrapper {
+    background: rgba(255, 255, 255, 0.9) !important;
+    backdrop-filter: blur(10px);
+    border-radius: 12px !important;
+    padding: 0 !important;
+    overflow: hidden;
+}
+
+.leaflet-popup-content {
+    margin: 0 !important;
+}
+
+.popup-header {
+    padding: 12px 16px;
+    background: #1e293b;
+    color: white;
+}
+
+.popup-body {
+    padding: 16px;
+}
+
+.popup-info-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+    font-size: 13px;
+    color: #4b5563;
+}
+
+.popup-info-row i {
+    width: 16px;
+    text-align: center;
+    color: var(--traccar-text-muted);
+}
+
+.popup-badge {
+    margin-top: 4px;
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    display: inline-block;
+}
+
+/* Scrollbar Style */
+.sidebar-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sidebar-list::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.sidebar-list::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 3px;
+}
+
+/* Expanded State */
+.traccar-dashboard-wrapper.map-expanded .traccar-header-stats {
+    display: none;
+}
+
+.traccar-dashboard-wrapper.map-expanded .traccar-sidebar {
+    display: none;
+}
+
+.traccar-dashboard-wrapper.map-expanded .traccar-main-layout {
+    grid-template-columns: 1fr;
+    height: calc(100vh - 120px); /* Fill most of the screen */
+}
+
+.traccar-dashboard-wrapper.map-expanded .traccar-map-section {
+    height: 100%;
+}
+
+/* Route Replay Enhancements */
+.replay-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    filter: drop-shadow(0 1px 2px rgba(0,0,0,0.7));
+    pointer-events: none !important;
+}
+
+.replay-arrow svg {
+    display: block;
+    mix-blend-mode: normal;
+}
+
+.point-label {
+    background: white;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 800;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    border: 1px solid #e2e8f0;
+    color: #1e293b;
+    white-space: nowrap;
+    text-transform: uppercase;
+}
+
+.point-label.start { border-left: 3px solid var(--traccar-success); }
+.point-label.finish { border-left: 3px solid var(--traccar-danger); }
+
+/* Playback UI */
+#replay_slider {
+    cursor: pointer;
+}
+
+#replay_slider::-webkit-slider-thumb {
+    background: var(--traccar-primary);
+}
+
+.playback-marker {
+    background: white !important;
+    border: 3px solid var(--traccar-primary);
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+}
+
+.playback-marker-inner {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--traccar-primary);
+}
+
+/* Speed Legend */
+.speed-legend {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    background: rgba(255,255,255,0.9);
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 10px;
+    z-index: 1000;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border: 1px solid var(--traccar-border);
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 2px;
+}
+
+.legend-color {
+    width: 12px;
+    height: 4px;
+    border-radius: 2px;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .traccar-main-layout {
+        grid-template-columns: 1fr;
+    }
+    .traccar-sidebar {
+        display: none;
+    }
+}
