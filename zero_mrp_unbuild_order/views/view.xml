@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+     <record id="mrp_unbild_product_template_form_view" model="ir.ui.view">
+            <field name="name">product.template.overhead</field>
+            <field name="model">product.template</field>
+            <field name="priority">5</field>
+            <field name="inherit_id" ref="product.product_template_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group[@name='properties']" position="after">
+                    <group name="mrp_unbuild">
+                      <group name="product_unbuild" string="MRP Unbuild Profit/Loss Account" groups="account.group_account_readonly,account.group_account_invoice">
+                        <field name="property_stock_account_unbuild_profit_loss_id"/>
+                      </group>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+        <record id="mrp_unbild_product_categ_form" model="ir.ui.view">
+            <field name="name">product.category.overhead.indirect.cost</field>
+            <field name="model">product.category</field>
+            <field name="inherit_id" ref="product.product_category_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='property_account_expense_categ_id']" position="after">
+                    <field name="property_stock_account_unbuild_profit_loss_id" />
+                </xpath>
+            </field>
+        </record>
+
+    <record id="mrp_unbuild_advanced_form_view" model="ir.ui.view">
+        <field name="name">mrp.unbuild.advanced.options</field>
+        <field name="model">mrp.unbuild</field>
+        <field name="inherit_id" ref="mrp.mrp_unbuild_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='product_id']" position="after" >
+                <field name="diff_amount" invisible="True"/>
+                <field name="raw_total_cost" invisible="True"/>
+                <field name="pro_total_cost" invisible="True"/>
+            </xpath>
+            <xpath expr="//div[@name='button_box']" position="inside" >
+                <button type="object"
+                        name="action_get_profit_loss_account_moves"
+                        string="Profit/Loss Account Move" 
+                        class="oe_stat_button"
+                        invisible="diff_amount == 0"
+                        groups="account.group_account_readonly"
+                        icon="fa-usd">
+                </button>
+            </xpath>
+            <xpath expr="//field[@name='product_id']" position="attributes" >
+                <attribute name="domain">[("bom_ids", "!=", False)]</attribute>
+            </xpath>
+            <xpath expr="//form[1]/sheet[1]/group[1]" position="after">
+                <notebook>
+                    <page string="Components" name="components">
+                        <field name="move_raw_ids"
+                            widget="mrp_production_components_x2many"
+                            context="{'default_state': 'draft', 'default_unbuild_id': id,'default_company_id': company_id, 'form_view_ref': 'stock.view_stock_move_operations'}" readonly="1">
+                            <list>
+                                <field name="product_id" force_save="1" context="{'default_detailed_type': 'product'}" required="1" readonly="1" domain="['&amp;', ('type', 'in', ['product', 'consu']), ('id', '!=', parent.product_id)]"/>
+                                <field name="quantity" string="Quantity"/>
+                                <field name="company_id" column_invisible="True"/>
+                                <field name="product_uom_category_id" column_invisible="True"/>
+                                <field name="name" column_invisible="True"/>
+                                <field name="sequence" column_invisible="True"/>
+                                <field name="state" column_invisible="True" force_save="1"/>
+                                <field name="is_storable" column_invisible="True"/>
+                                <field name="product_uom" readonly="1" options="{'no_open': True, 'no_create': True}" groups="uom.group_uom"/>
+                            </list>
+                        </field>
+                    </page>
+                </notebook>
+            </xpath>
+        </field>
+    </record>
+</odoo>
+

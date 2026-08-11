@@ -1,0 +1,107 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* zero_mrp_unbuild_order
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0-20250812\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-08-30 12:48+0000\n"
+"PO-Revision-Date: 2025-08-30 12:48+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: zero_mrp_unbuild_order
+#: model:ir.model.fields,field_description:zero_mrp_unbuild_order.field_mrp_unbuild__move_raw_ids
+#: model_terms:ir.ui.view,arch_db:zero_mrp_unbuild_order.mrp_unbuild_advanced_form_view
+msgid "Components"
+msgstr "Bileşenler"
+
+#. module: zero_mrp_unbuild_order
+#: model:ir.model,name:zero_mrp_unbuild_order.model_account_move
+msgid "Journal Entry"
+msgstr "Dergi girişi"
+
+#. module: zero_mrp_unbuild_order
+#: model:ir.model.fields,field_description:zero_mrp_unbuild_order.field_account_bank_statement_line__mrp_unbuild_cost
+#: model:ir.model.fields,field_description:zero_mrp_unbuild_order.field_account_move__mrp_unbuild_cost
+msgid "MRP Unbuild Order"
+msgstr "MRP YÜKSEK SİPARİŞİ"
+
+#. module: zero_mrp_unbuild_order
+#: model:ir.model.fields,field_description:zero_mrp_unbuild_order.field_product_category__property_stock_account_unbuild_profit_loss_id
+#: model:ir.model.fields,field_description:zero_mrp_unbuild_order.field_product_product__property_stock_account_unbuild_profit_loss_id
+#: model:ir.model.fields,field_description:zero_mrp_unbuild_order.field_product_template__property_stock_account_unbuild_profit_loss_id
+#: model_terms:ir.ui.view,arch_db:zero_mrp_unbuild_order.mrp_unbild_product_template_form_view
+msgid "MRP Unbuild Profit/Loss Account"
+msgstr "MRP İnşaür Kâr/Zarar Hesabı"
+
+#. module: zero_mrp_unbuild_order
+#: model:ir.model,name:zero_mrp_unbuild_order.model_product_template
+msgid "Product"
+msgstr "Ürün"
+
+#. module: zero_mrp_unbuild_order
+#: model:ir.model,name:zero_mrp_unbuild_order.model_product_category
+msgid "Product Category"
+msgstr "Ürün kategorisi"
+
+#. module: zero_mrp_unbuild_order
+#: model_terms:ir.ui.view,arch_db:zero_mrp_unbuild_order.mrp_unbuild_advanced_form_view
+msgid "Profit/Loss Account Move"
+msgstr "Kâr/Zarar Hesabı Hareketi"
+
+#. module: zero_mrp_unbuild_order
+#: model:ir.model.fields,field_description:zero_mrp_unbuild_order.field_mrp_unbuild__diff_amount
+msgid "Profit/loss value"
+msgstr "Kar/kayıp değeri"
+
+#. module: zero_mrp_unbuild_order
+#: model_terms:ir.ui.view,arch_db:zero_mrp_unbuild_order.mrp_unbuild_advanced_form_view
+msgid "Quantity"
+msgstr "Miktar"
+
+#. module: zero_mrp_unbuild_order
+#. odoo-python
+#: code:addons/zero_mrp_unbuild_order/models/unbuild.py:0
+msgid ""
+"The product balance in the storage location from does not allow for a "
+"unbuild order!"
+msgstr "Depolama konumundaki ürün bakiyesi, bir ad bir siparişe izin vermez!"
+
+#. module: zero_mrp_unbuild_order
+#: model:ir.model.fields,help:zero_mrp_unbuild_order.field_product_category__property_stock_account_unbuild_profit_loss_id
+#: model:ir.model.fields,help:zero_mrp_unbuild_order.field_product_product__property_stock_account_unbuild_profit_loss_id
+#: model:ir.model.fields,help:zero_mrp_unbuild_order.field_product_template__property_stock_account_unbuild_profit_loss_id
+msgid ""
+"This Account will be used if the product value in the MRP Unbuild order is "
+"different from the total value of the raw materials in its bill of "
+"materials."
+msgstr ""
+"Bu hesap, MRP gereksiz sırasındaki ürün değeri, Malzeme Yasası'ndaki "
+"hammaddelerin toplam değerinden farklıysa kullanılacaktır."
+
+#. module: zero_mrp_unbuild_order
+#: model:ir.model,name:zero_mrp_unbuild_order.model_mrp_unbuild
+msgid "Unbuild Order"
+msgstr "Müstehcen sipariş"
+
+#. module: zero_mrp_unbuild_order
+#: model:ir.model.fields,field_description:zero_mrp_unbuild_order.field_mrp_unbuild__pro_total_cost
+msgid "product value"
+msgstr "ürün değeri"
+
+#. module: zero_mrp_unbuild_order
+#: model:ir.model.fields,field_description:zero_mrp_unbuild_order.field_mrp_unbuild__raw_total_cost
+msgid "raw material value"
+msgstr "hammadde değeri"
+
+#. module: zero_mrp_unbuild_order
+#. odoo-python
+#: code:addons/zero_mrp_unbuild_order/models/unbuild.py:0
+msgid "you must link product with MRP Unbuild Profit/Loss Account"
+msgstr "Ürünü MRP İnuild Kar/Zarar Hesabı ile bağlamalısınız"
