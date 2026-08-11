@@ -1,0 +1,135 @@
+<templates xml:space="preserve">
+    <t t-name="sales_rep_dashboard_template">
+        <div class="o_sales_dashboard container-fluid h-100 overflow-auto">
+            <div class="row pt-4 px-3">
+                <div class="col-12">
+                    <h2 class="mb-4 font-weight-bold">Sales Representative Dashboard</h2>
+                </div>
+            </div>
+
+            <!-- Filter & Control -->
+            <div class="filter-bar mx-3">
+                <div class="filter-item">
+                    <label>From Date</label>
+                    <input type="date" t-model="state.date_from" t-on-change="refreshData"/>
+                </div>
+                <div class="filter-item">
+                    <label>To Date</label>
+                    <input type="date" t-model="state.date_to" t-on-change="refreshData"/>
+                </div>
+                <div class="filter-item">
+                    <label>Sales Representative <i class="fa fa-question-circle text-muted" title="Filter by specific sales rep"/></label>
+                    <select class="form-control" t-model="state.sales_rep_id" t-on-change="refreshData">
+                        <option value="">All Representatives</option>
+                        <t t-foreach="state.reps" t-as="rep" t-key="rep.id">
+                            <option t-att-value="rep.id"><t t-esc="rep.name"/></option>
+                        </t>
+                    </select>
+                </div>
+                <button class="refresh-btn" t-on-click="refreshData">
+                    <i class="fa fa-refresh"/>
+                </button>
+            </div>
+
+            <!-- KPI Row -->
+            <div class="kpi-row mx-3">
+                <div class="kpi-card kpi-navy">
+                    <div class="icon-box">
+                        <i class="fa fa-road"/>
+                    </div>
+                    <div class="kpi-content">
+                        <div class="kpi-label">Total Routes</div>
+                        <div class="kpi-value"><t t-esc="state.data.kpis.total_routes"/></div>
+                    </div>
+                </div>
+                <div class="kpi-card kpi-teal">
+                    <div class="icon-box">
+                        <i class="fa fa-check-circle"/>
+                    </div>
+                    <div class="kpi-content">
+                        <div class="kpi-label">Completed Routes</div>
+                        <div class="kpi-value"><t t-esc="state.data.kpis.completed_routes"/></div>
+                    </div>
+                </div>
+                <div class="kpi-card kpi-cyan">
+                    <div class="icon-box">
+                        <i class="fa fa-map-marker"/>
+                    </div>
+                    <div class="kpi-content">
+                        <div class="kpi-label">Total Visits</div>
+                        <div class="kpi-value"><t t-esc="state.data.kpis.total_visits"/></div>
+                    </div>
+                </div>
+                <div class="kpi-card kpi-green">
+                    <div class="icon-box">
+                        <i class="fa fa-check-square-o"/>
+                    </div>
+                    <div class="kpi-content">
+                        <div class="kpi-label">Completed Visits</div>
+                        <div class="kpi-value"><t t-esc="state.data.kpis.completed_visits"/></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Financial Row -->
+            <div class="financial-row mx-3">
+                <div class="financial-card">
+                    <div class="icon-box icon-gold">
+                        <i class="fa fa-money"/>
+                    </div>
+                    <div class="fin-content">
+                        <div class="fin-label">Total Sales</div>
+                        <div class="fin-value">$<t t-esc="formatCurrency(state.data.kpis.total_sales)"/></div>
+                    </div>
+                </div>
+                <div class="financial-card">
+                    <div class="icon-box icon-orange">
+                        <i class="fa fa-credit-card"/>
+                    </div>
+                    <div class="fin-content">
+                        <div class="fin-label">Total Payments</div>
+                        <div class="fin-value">$<t t-esc="formatCurrency(state.data.kpis.total_payments)"/></div>
+                    </div>
+                </div>
+                <div class="financial-card gauge-card">
+                    <div class="fin-content">
+                        <div class="fin-label">Payment Efficiency</div>
+                        <div class="fin-value"><t t-esc="state.data.kpis.efficiency"/>%</div>
+                    </div>
+                    <div class="gauge-container">
+                        <canvas t-ref="efficiencyGauge"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chart Row -->
+            <div class="chart-row mx-3">
+                <div class="chart-container">
+                    <h5>Route Completion Rate</h5>
+                    <div class="chart-wrapper">
+                        <canvas t-ref="routeChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <h5>Visit Completion Rate</h5>
+                    <div class="chart-wrapper">
+                        <canvas t-ref="visitChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Actions -->
+            <div class="footer-actions mx-3">
+                <button class="btn-dash btn-purple" t-on-click="() => this.openAction('sales.rep.route')">
+                    <i class="fa fa-road text-white mr-2"/> View Routes
+                </button>
+                <button class="btn-dash btn-navy" t-on-click="() => this.openAction('sales.rep.visit')">
+                    <i class="fa fa-users text-white mr-2"/> View Visits
+                </button>
+                <button class="btn-dash btn-forest" t-on-click="() => this.openAction('sales.rep.collection')">
+                    <i class="fa fa-credit-card text-white mr-2"/> View Payments
+                </button>
+            </div>
+        </div>
+    </t>
+</templates>

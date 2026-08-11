@@ -1,0 +1,60 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_sales_representative_manager,Sales Representative Manager,model_sales_representative,group_sales_manager,1,1,1,1
+access_sales_representative_supervisor,Sales Representative Supervisor,model_sales_representative,group_sales_supervisor,1,1,1,0
+access_sales_representative_user,Sales Representative User,model_sales_representative,group_sales_rep_user,1,0,0,0
+access_sales_rep_route_manager,Sales Rep Route Manager,model_sales_rep_route,group_sales_manager,1,1,1,1
+access_sales_rep_route_supervisor,Sales Rep Route Supervisor,model_sales_rep_route,group_sales_supervisor,1,1,1,1
+access_sales_rep_route_user,Sales Rep Route User,model_sales_rep_route,group_sales_rep_user,1,1,0,0
+access_sales_rep_visit_manager,Sales Rep Visit Manager,model_sales_rep_visit,group_sales_manager,1,1,1,1
+access_sales_rep_visit_supervisor,Sales Rep Visit Supervisor,model_sales_rep_visit,group_sales_supervisor,1,1,1,0
+access_sales_rep_visit_user,Sales Rep Visit User,model_sales_rep_visit,group_sales_rep_user,1,1,1,0
+access_sales_rep_collection_manager,Sales Rep Collection Manager,model_sales_rep_collection,group_sales_manager,1,1,1,1
+access_sales_rep_collection_supervisor,Sales Rep Collection Supervisor,model_sales_rep_collection,group_sales_supervisor,1,1,1,0
+access_sales_rep_collection_user,Sales Rep Collection User,model_sales_rep_collection,group_sales_rep_user,1,1,1,0
+access_sales_rep_collection_finance,Sales Rep Collection Finance,model_sales_rep_collection,group_finance_collections,1,1,0,0
+access_sales_visit_image_manager,Sales Visit Image Manager,model_sales_visit_image,group_sales_manager,1,1,1,1
+access_sales_visit_image_supervisor,Sales Visit Image Supervisor,model_sales_visit_image,group_sales_supervisor,1,1,1,0
+access_sales_visit_image_user,Sales Visit Image User,model_sales_visit_image,group_sales_rep_user,1,1,1,0
+access_sales_rep_daily_report_manager,Sales Rep Daily Report Manager,model_sales_rep_daily_report,group_sales_manager,1,1,1,1
+access_sales_rep_daily_report_supervisor,Sales Rep Daily Report Supervisor,model_sales_rep_daily_report,group_sales_supervisor,1,1,1,0
+access_sales_rep_daily_report_user,Sales Rep Daily Report User,model_sales_rep_daily_report,group_sales_rep_user,1,1,1,0
+access_sales_rep_dashboard_manager,Sales Rep Dashboard Manager,model_sales_rep_dashboard,group_sales_manager,1,1,1,1
+access_sales_rep_dashboard_supervisor,Sales Rep Dashboard Supervisor,model_sales_rep_dashboard,group_sales_supervisor,1,1,1,1
+access_sales_rep_dashboard_user,Sales Rep Dashboard User,model_sales_rep_dashboard,group_sales_rep_user,1,1,1,1
+access_sales_route_customer_manager,Sales Route Customer Manager,model_sales_route_customer,group_sales_manager,1,1,1,1
+access_sales_route_customer_supervisor,Sales Route Customer Supervisor,model_sales_route_customer,group_sales_supervisor,1,1,1,0
+access_sales_route_customer_user,Sales Route Customer User,model_sales_route_customer,group_sales_rep_user,1,1,1,0
+access_visit_result_wizard_user,Visit Result Wizard User,model_visit_result_wizard,group_sales_rep_user,1,0,0,0
+access_inherited_sale_order,Sale Order Route Access,model_sale_order,group_sales_rep_user,1,1,1,0
+access_inherited_pos_order,POS Order Route Access,model_pos_order,group_sales_rep_user,1,1,1,0
+access_inherited_account_payment,Payment Route Access,model_account_payment,group_sales_rep_user,1,1,1,0
+access_visit_result_wizard_manager,Visit Result Wizard Manager,model_visit_result_wizard,group_sales_manager,1,1,1,1
+access_visit_result_wizard_supervisor,Visit Result Wizard Supervisor,model_visit_result_wizard,group_sales_supervisor,1,1,1,1
+access_visit_result_wizard_user,Visit Result Wizard User,model_visit_result_wizard,group_sales_rep_user,1,1,1,1
+access_sales_route_customer_manager,Sales Route Customer Manager,model_sales_route_customer,group_sales_manager,1,1,1,1
+access_sales_route_customer_supervisor,Sales Route Customer Supervisor,model_sales_route_customer,group_sales_supervisor,1,1,1,1
+access_sales_route_customer_user,Sales Route Customer User,model_sales_route_customer,group_sales_rep_user,1,1,1,1
+access_inherited_sale_order,Sale Order Route Access,model_sale_order,group_sales_rep_user,1,1,1,0
+access_inherited_pos_order,POS Order Route Access,model_pos_order,group_sales_rep_user,1,1,1,0
+access_inherited_account_payment,Payment Route Access,model_account_payment,group_sales_rep_user,1,1,1,0
+access_route_sale_orders_user,Route Sale Orders User,model_sale_order,group_sales_rep_user,1,0,0,0
+access_route_sale_orders_supervisor,Route Sale Orders Supervisor,model_sale_order,group_sales_supervisor,1,0,0,0
+access_route_sale_orders_manager,Route Sale Orders Manager,model_sale_order,group_sales_manager,1,0,0,0
+access_route_pos_orders_user,Route POS Orders User,model_pos_order,group_sales_rep_user,1,0,0,0
+access_route_pos_orders_supervisor,Route POS Orders Supervisor,model_pos_order,group_sales_supervisor,1,0,0,0
+access_route_pos_orders_manager,Route POS Orders Manager,model_pos_order,group_sales_manager,1,0,0,0
+access_route_payments_user,Route Payments User,model_account_payment,group_sales_rep_user,1,0,0,0
+access_route_payments_supervisor,Route Payments Supervisor,model_account_payment,group_sales_supervisor,1,0,0,0
+access_route_payments_manager,Route Payments Manager,model_account_payment,group_sales_manager,1,0,0,0
+access_sales_rep_performance_report_manager,Sales Rep Performance Report Manager,model_sales_rep_performance_report,group_sales_manager,1,0,0,0
+access_sales_rep_performance_report_supervisor,Sales Rep Performance Report Supervisor,model_sales_rep_performance_report,group_sales_supervisor,1,0,0,0
+access_sales_rep_performance_report_user,Sales Rep Performance Report User,model_sales_rep_performance_report,group_sales_rep_user,1,0,0,0
+access_sales_rep_payment_method_manager,Sales Rep Payment Method Manager,model_sales_rep_payment_method,group_sales_manager,1,1,1,1
+access_sales_rep_payment_method_supervisor,Sales Rep Payment Method Supervisor,model_sales_rep_payment_method,group_sales_supervisor,1,1,0,0
+access_sales_rep_payment_method_user,Sales Rep Payment Method User,model_sales_rep_payment_method,group_sales_rep_user,1,0,0,0
+access_sales_rep_return_reason_manager,Return Reason Manager,model_sales_rep_return_reason,group_sales_manager,1,1,1,1
+access_sales_rep_return_reason_supervisor,Return Reason Supervisor,model_sales_rep_return_reason,group_sales_supervisor,1,1,0,0
+access_sales_rep_return_reason_user,Return Reason User,model_sales_rep_return_reason,group_sales_rep_user,1,0,0,0
+access_sales_rep_visit_types_manager,Visit Types Manager,model_sales_rep_visit_types,group_sales_manager,1,1,1,1
+access_sales_rep_visit_types_supervisor,Visit Types Supervisor,model_sales_rep_visit_types,group_sales_supervisor,1,1,0,0
+access_sales_rep_visit_types_user,Visit Types User,model_sales_rep_visit_types,group_sales_rep_user,1,0,0,0

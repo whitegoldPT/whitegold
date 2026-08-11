@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Visit Report Template -->
+        <template id="report_visit_document">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <div class="row">
+                        <div class="col-12">
+                            <h2>Visit Report</h2>
+                        </div>
+                    </div>
+                    
+                    <div class="row mt32">
+                        <div class="col-6">
+                            <strong>Visit Reference:</strong> <span t-field="o.name"/><br/>
+                            <strong>Customer:</strong> <span t-field="o.partner_id.name"/><br/>
+                            <strong>Visit Type:</strong> <span t-field="o.visit_type"/><br/>
+                            <strong>Sales Representative:</strong> <span t-field="o.route_id.sales_rep_id.name"/><br/>
+                        </div>
+                        <div class="col-6">
+                            <strong>Planned Time:</strong> <span t-field="o.planned_time" t-options="{'widget': 'datetime'}"/><br/>
+                            <strong>Actual Time:</strong> <span t-field="o.visit_time" t-options="{'widget': 'datetime'}"/><br/>
+                            <strong>Duration:</strong> <span t-field="o.duration"/> hours<br/>
+                            <strong>Status:</strong> <span t-field="o.state"/><br/>
+                        </div>
+                    </div>
+
+                    <div class="row mt32" t-if="o.visit_result">
+                        <div class="col-12">
+                            <h4>Visit Results</h4>
+                            <p><strong>Result:</strong> <span t-field="o.visit_result"/></p>
+                            <p t-if="o.sale_amount"><strong>Sale Amount:</strong> $<span t-field="o.sale_amount"/></p>
+                            <p t-if="o.total_collected"><strong>Collections:</strong> $<span t-field="o.total_collected"/></p>
+                        </div>
+                    </div>
+
+                    <div class="row mt32" t-if="o.notes">
+                        <div class="col-12">
+                            <h4>Visit Notes</h4>
+                            <p t-field="o.notes"/>
+                        </div>
+                    </div>
+
+                    <div class="row mt32" t-if="o.collection_ids">
+                        <div class="col-12">
+                            <h4>Collections</h4>
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Collection Ref</th>
+                                        <th>Amount</th>
+                                        <th>Payment Method</th>
+                                        <th>Receipt #</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="o.collection_ids" t-as="collection">
+                                        <td><span t-field="collection.name"/></td>
+                                        <td>$<span t-field="collection.amount"/></td>
+                                        <td><span t-field="collection.payment_method"/></td>
+                                        <td><span t-field="collection.receipt_number"/></td>
+                                        <td><span t-field="collection.state"/></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="row mt32" t-if="o.image_ids">
+                        <div class="col-12">
+                            <h4>Visit Images</h4>
+                            <div class="row">
+                                <div class="col-3" t-foreach="o.image_ids" t-as="image">
+                                    <div class="card">
+                                        <img t-att-src="image_data_uri(image.image)" class="card-img-top" style="height: 150px; object-fit: cover;"/>
+                                        <div class="card-body p-2">
+                                            <p class="card-text small"><span t-field="image.name"/></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt32" t-if="o.follow_up_required">
+                        <div class="col-12">
+                            <h4>Follow-up Required</h4>
+                            <p><strong>Next Visit Date:</strong> <span t-field="o.next_visit_date"/></p>
+                            <p t-if="o.follow_up_notes"><strong>Follow-up Notes:</strong> <span t-field="o.follow_up_notes"/></p>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+        <!-- Visit Report Action -->
+        <record id="action_report_visit" model="ir.actions.report">
+            <field name="name">Visit Report</field>
+            <field name="model">sales.rep.visit</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">sales_rep_management.report_visit_document</field>
+            <field name="report_file">sales_rep_management.report_visit_document</field>
+            <field name="binding_model_id" ref="model_sales_rep_visit"/>
+            <field name="binding_type">report</field>
+        </record>
+
+    </data>
+</odoo>
