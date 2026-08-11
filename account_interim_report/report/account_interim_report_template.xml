@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+<template id="report_interim_accounts_document">
+    <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="wizard">
+            <t t-set="data" t-value="wizard._get_report_data()"/>
+            <t t-call="web.external_layout">
+                <div class="page" style="direction:rtl; font-family: 'Amiri', 'Arial', sans-serif; font-size: 13px;">
+                    
+                    <!-- Header Section -->
+                    <div style="background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); color: white; padding: 30px; border-radius: 8px; margin-bottom: 30px;">
+                        <div class="row">
+                            <div class="col-8">
+                                <h1 style="margin: 0; font-weight: bold; font-size: 28px;">تقرير كشف الفساد والمراجعة الجنائية</h1>
+                                <p style="margin-top: 5px; opacity: 0.9; font-size: 16px;">Forensic Integrity &amp; Internal Control Audit</p>
+                            </div>
+                            <div class="col-4 text-left">
+                                <div style="font-size: 14px; opacity: 0.8;">تاريخ التقرير: <span t-esc="context_today().strftime('%Y-%m-%d')"/></div>
+                                <div style="font-size: 14px; opacity: 0.8;">الفترة: <span t-esc="data['date_from']"/> إلى <span t-esc="data['date_to']"/></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dashboard Summary -->
+                    <div class="row" style="margin-bottom: 30px;">
+                        <div class="col-3">
+                            <div style="border: 1px solid #ddd; padding: 15px; border-radius: 5px; text-align: center; background: #f8f9fa;">
+                                <div style="font-size: 12px; color: #666;">إجمالي القيود المعلقة</div>
+                                <div style="font-size: 20px; font-weight: bold; color: #212529;" t-esc="data['summary']['total_pending_lines']"/>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div style="border: 1px solid #f5c6cb; padding: 15px; border-radius: 5px; text-align: center; background: #f8d7da;">
+                                <div style="font-size: 12px; color: #721c24;">مخاطر عالية</div>
+                                <div style="font-size: 20px; font-weight: bold; color: #721c24;" t-esc="data['summary']['high_count']"/>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div style="border: 1px solid #ffeeba; padding: 15px; border-radius: 5px; text-align: center; background: #fff3cd;">
+                                <div style="font-size: 12px; color: #856404;">مخاطر متوسطة</div>
+                                <div style="font-size: 20px; font-weight: bold; color: #856404;" t-esc="data['summary']['medium_count']"/>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div style="border: 1px solid #ddd; padding: 15px; border-radius: 5px; text-align: center; background: #e9ecef;">
+                                <div style="font-size: 12px; color: #495057;">صافي الأرصدة التائهة</div>
+                                <div style="font-size: 20px; font-weight: bold; color: #212529;" t-esc="data['summary']['total_balance']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Integrity Findings SECTION -->
+                    <h3 style="border-right: 5px solid #1e3c72; padding-right: 15px; margin-bottom: 15px; color: #1e3c72;">1. فحص نزاهة النظام المالي</h3>
+                    <table class="table table-sm" style="margin-bottom: 30px;">
+                        <thead style="background: #e9ecef;">
+                            <tr>
+                                <th style="width: 25%;">المجال</th>
+                                <th style="width: 50%;">النتيجة / الملاحظة</th>
+                                <th style="width: 10%; text-align: center;">الخطورة</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="data['integrity_findings']" t-as="f">
+                                <tr>
+                                    <td style="font-weight: bold;"><t t-esc="f['title']"/></td>
+                                    <td><t t-esc="f['note']"/><br/><small class="text-muted">الإجراء: <t t-esc="f['solution']"/></small></td>
+                                    <td class="text-center">
+                                        <span t-if="f['severity'] == 'high'" class="badge badge-danger" style="background-color: #dc3545; color: white; padding: 5px 10px;">عالية</span>
+                                        <span t-if="f['severity'] == 'medium'" class="badge badge-warning" style="background-color: #ffc107; color: black; padding: 5px 10px;">متوسطة</span>
+                                        <span t-if="f['severity'] == 'low'" class="badge badge-info" style="background-color: #17a2b8; color: white; padding: 5px 10px;">منخفضة</span>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+
+                    <!-- Warehouse & MRP Findings SECTION -->
+                    <t t-if="data['warehouse_findings']">
+                        <h3 style="border-right: 5px solid #28a745; padding-right: 15px; margin-bottom: 15px; color: #28a745;">2. رادار المخازن والتصنيع</h3>
+                        <table class="table table-sm" style="margin-bottom: 30px;">
+                            <thead style="background: #e9ecef;">
+                                <tr>
+                                    <th style="width: 25%;">المؤشر</th>
+                                    <th style="width: 50%;">التشخيص الجنائي</th>
+                                    <th style="width: 10%; text-align: center;">الخطورة</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="data['warehouse_findings']" t-as="wf">
+                                    <tr>
+                                        <td style="font-weight: bold;"><t t-esc="wf['title']"/></td>
+                                        <td><t t-esc="wf['note']"/><br/><small class="text-muted">الإجراء: <t t-esc="wf['solution']"/></small></td>
+                                        <td class="text-center">
+                                            <span t-if="wf['severity'] == 'high'" class="badge badge-danger" style="background-color: #dc3545; color: white;">عالية</span>
+                                            <span t-if="wf['severity'] == 'medium'" class="badge badge-warning" style="background-color: #ffc107; color: black;">متوسطة</span>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </t>
+
+                    <!-- OPS Audit SECTION -->
+                    <t t-if="data['ops_findings']">
+                        <h3 style="border-right: 5px solid #fd7e14; padding-right: 15px; margin-bottom: 15px; color: #fd7e14;">3. المراجعة التشغيلية (البيع والشراء)</h3>
+                        <table class="table table-sm" style="margin-bottom: 30px;">
+                            <thead style="background: #e9ecef;">
+                                <tr>
+                                    <th style="width: 15%;">القطاع</th>
+                                    <th style="width: 20%;">نوع المخالفة</th>
+                                    <th style="width: 45%;">التفاصيل</th>
+                                    <th style="width: 10%; text-align: center;">الخطورة</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="data['ops_findings']" t-as="opf">
+                                    <tr>
+                                        <td><t t-esc="opf['module']"/></td>
+                                        <td style="font-weight: bold;"><t t-esc="opf['title']"/></td>
+                                        <td><t t-esc="opf['note']"/></td>
+                                        <td class="text-center">
+                                            <span t-if="opf['severity'] == 'high'" class="badge badge-danger" style="background-color: #dc3545; color: white;">عالية</span>
+                                            <span t-if="opf['severity'] == 'medium'" class="badge badge-warning" style="background-color: #ffc107; color: black;">متوسطة</span>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </t>
+
+                    <!-- Detail Section per Account -->
+                    <t t-if="data['show_detail']">
+                        <h3 style="border-right: 5px solid #6c757d; padding-right: 15px; margin-bottom: 15px; color: #6c757d;">4. تفاصيل القيود المشبوهة والمعلقة</h3>
+                        <t t-foreach="data['sections']" t-as="sec">
+                            <div style="page-break-inside: avoid; margin-bottom: 20px;">
+                                <div style="background: #f1f3f5; padding: 10px; border-radius: 4px; border: 1px solid #dee2e6;">
+                                    <div class="row">
+                                        <div class="col-8">
+                                            <strong>الحساب: <t t-esc="sec['account_code']"/> - <t t-esc="sec['account_name']"/></strong>
+                                            <br/><small class="text-muted">المشكلة السائدة: <t t-esc="sec['dominant_problem']"/></small>
+                                        </div>
+                                        <div class="col-4 text-left">
+                                            <strong>الرصيد: <t t-esc="sec['balance']" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/></strong>
+                                        </div>
+                                    </div>
+                                </div>
+                                <table class="table table-sm" style="border: 1px solid #dee2e6; border-top: none;">
+                                    <thead style="font-size: 11px; background: white;">
+                                        <tr>
+                                            <th>التاريخ</th>
+                                            <th>المرجع</th>
+                                            <th>الشريك</th>
+                                            <th class="text-right">مدين</th>
+                                            <th class="text-right">دائن</th>
+                                            <th>التشخيص</th>
+                                            <th class="text-center">العمر</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody style="font-size: 11px;">
+                                        <t t-foreach="sec['lines']" t-as="ln">
+                                            <tr t-att-style="'background: #fff5f5;' if ln['severity'] == 'high' else ''">
+                                                <td><t t-esc="ln['date']"/></td>
+                                                <td><t t-esc="ln['move_ref']"/></td>
+                                                <td><t t-esc="ln['partner_name']"/></td>
+                                                <td class="text-right"><t t-esc="ln['debit']" t-options="{'widget': 'float', 'precision': 2}"/></td>
+                                                <td class="text-right"><t t-esc="ln['credit']" t-options="{'widget': 'float', 'precision': 2}"/></td>
+                                                <td>
+                                                    <strong t-esc="ln['problem_type']"/><br/>
+                                                    <small t-esc="ln['reason']"/>
+                                                </td>
+                                                <td class="text-center">
+                                                    <span t-esc="ln['days_pending']"/> ي
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </t>
+                    </t>
+
+                    <!-- Footer Info -->
+                    <div style="margin-top: 50px; border-top: 2px solid #ddd; padding-top: 10px; font-size: 10px; color: #666; text-align: center;">
+                        تم إنشاء هذا التقرير آلياً بواسطة محرك المراجعة الجنائية - كافة الحقوق محفوظة للنظام.
+                    </div>
+                </div>
+            </t>
+        </t>
+    </t>
+</template>
+</data>

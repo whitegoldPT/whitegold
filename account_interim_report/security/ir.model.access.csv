@@ -1,0 +1,14 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_account_interim_wizard_user,account.interim.wizard user,model_account_interim_wizard,account.group_account_user,1,1,1,1
+access_account_interim_wizard_manager,account.interim.wizard manager,model_account_interim_wizard,account.group_account_manager,1,1,1,1
+access_forensic_dashboard_user,forensic.dashboard user,model_forensic_dashboard,account.group_account_user,1,1,1,1
+access_forensic_dashboard_manager,forensic.dashboard manager,model_forensic_dashboard,account.group_account_manager,1,1,1,1
+access_forensic_partner_wizard_user,account.move.line.res.partner.wizard user,model_account_move_line_res_partner_wizard,account.group_account_user,1,1,1,1
+access_forensic_partner_wizard_manager,account.move.line.res.partner.wizard manager,model_account_move_line_res_partner_wizard,account.group_account_manager,1,1,1,1
+access_forensic_thread_wizard,forensic.thread.wizard,model_forensic_thread_wizard,account.group_account_user,1,1,1,1
+access_account_interim_correction_wizard_user,account.interim.correction.wizard user,model_account_interim_correction_wizard,account.group_account_user,1,1,1,1
+access_account_interim_correction_wizard_manager,account.interim.correction.wizard manager,model_account_interim_correction_wizard,account.group_account_manager,1,1,1,1
+access_forensic_rule_manager,forensic.rule manager,model_forensic_rule,account.group_account_manager,1,1,1,1
+access_forensic_rule_user,forensic.rule user,model_forensic_rule,account.group_account_user,1,0,0,0
+access_forensic_audit_log_user,forensic.audit.log user,model_forensic_audit_log,account.group_account_user,1,0,0,0
+access_forensic_audit_log_manager,forensic.audit.log manager,model_forensic_audit_log,account.group_account_manager,1,1,1,1
