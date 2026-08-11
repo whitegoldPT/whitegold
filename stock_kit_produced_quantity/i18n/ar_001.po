@@ -1,0 +1,245 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* stock_kit_produced_quantity
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 17.0+e-20240707\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-07-13 06:24+0000\n"
+"PO-Revision-Date: 2024-07-13 06:24+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: stock_kit_produced_quantity
+#: model:ir.model.fields,help:stock_kit_produced_quantity.field_bom_products_stock_move__state
+msgid ""
+" * Draft: The transfer is not confirmed yet. Reservation doesn't apply.\n"
+" * Waiting another operation: This transfer is waiting for another operation before being ready.\n"
+" * Waiting: The transfer is waiting for the availability of some products.\n"
+"(a) The shipping policy is \"As soon as possible\": no product could be reserved.\n"
+"(b) The shipping policy is \"When all products are ready\": not all the products could be reserved.\n"
+" * Ready: The transfer is ready to be processed.\n"
+"(a) The shipping policy is \"As soon as possible\": at least one product has been reserved.\n"
+"(b) The shipping policy is \"When all products are ready\": all product have been reserved.\n"
+" * Done: The transfer has been processed.\n"
+" * Cancelled: The transfer has been cancelled."
+msgstr ""
+
+#. module: stock_kit_produced_quantity
+#: model_terms:ir.ui.view,arch_db:stock_kit_produced_quantity.stock_report_delivery_kit_sections
+msgid "3.00"
+msgstr ""
+
+#. module: stock_kit_produced_quantity
+#: model_terms:ir.ui.view,arch_db:stock_kit_produced_quantity.stock_report_delivery_kit_sections
+msgid "<span>KIT Products</span>"
+msgstr "الاصناف المجمعة"
+
+#. module: stock_kit_produced_quantity
+#: model:ir.model.fields,field_description:stock_kit_produced_quantity.field_bom_products_stock_move__bom_id
+#: model_terms:ir.ui.view,arch_db:stock_kit_produced_quantity.view_bom_products_stock_move_search
+msgid "BOM"
+msgstr "قائمة المواد"
+
+#. module: stock_kit_produced_quantity
+#: model:ir.model.fields,field_description:stock_kit_produced_quantity.field_bom_products_stock_move__company_id
+msgid "Company"
+msgstr "الشركة"
+
+#. module: stock_kit_produced_quantity
+#: model_terms:ir.ui.view,arch_db:stock_kit_produced_quantity.bom_products_stock_move_form
+msgid "Re-Compute KIT Qty"
+msgstr "اعادة احتساب كمية الصنف المجمع"
+
+#. module: stock_kit_produced_quantity
+#: model_terms:ir.ui.view,arch_db:stock_kit_produced_quantity.view_view_picking_tree_kit_qty
+msgid "Re-Compute KIT Qty"
+msgstr "اعادة احتساب كمية الصنف المجمع"
+
+#. module: stock_kit_produced_quantity
+#: model_terms:ir.ui.view,arch_db:stock_kit_produced_quantity.bom_products_stock_move_form
+msgid "Compute Price from BoM"
+msgstr "احسب التكلفة من قائمة المواد"
+
+#. module: stock_kit_produced_quantity
+#: model:ir.model.fields,field_description:stock_kit_produced_quantity.field_bom_products_stock_move__standard_price
+msgid "Cost"
+msgstr "التكلفة"
+
+#. module: stock_kit_produced_quantity
+#: model:ir.model.fields,field_description:stock_kit_produced_quantity.field_bom_products_stock_move__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: stock_kit_produced_quantity
+#: model:ir.model.fields,field_description:stock_kit_produced_quantity.field_bom_products_stock_move__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: stock_kit_produced_quantity
+#: model_terms:ir.ui.view,arch_db:stock_kit_produced_quantity.stock_report_delivery_kit_sections
+msgid "Customizable Desk"
+msgstr ""
+
+#. module: stock_kit_produced_quantity
+#: model:ir.model.fields,field_description:stock_kit_produced_quantity.field_bom_products_stock_move__kit_qty_delivered
+msgid "Delivered"
+msgstr "المنصرف"
+
+#. module: stock_kit_produced_quantity
+#: model:ir.model.fields,field_description:stock_kit_produced_quantity.field_bom_products_stock_move__qty_delivered_total_cost
+msgid "Delivered SubTotal"
+msgstr "تكلفة الكمية المنصرفة"
+
+#. module: stock_kit_produced_quantity
+#: model:ir.model.fields,field_description:stock_kit_produced_quantity.field_bom_products_stock_move__qty_deviation_total_cost
+msgid "Deviation SubTotal"
+msgstr "تكلفة الانحراف"
+
+#. module: stock_kit_produced_quantity
+#: model:ir.model.fields,field_description:stock_kit_produced_quantity.field_bom_products_stock_move__display_name
+msgid "Display Name"
+msgstr "اسم العرض"
+
+#. module: stock_kit_produced_quantity
+#: model_terms:ir.ui.view,arch_db:stock_kit_produced_quantity.view_bom_products_stock_move_search
+msgid "Group By..."
+msgstr "رتب حسب"
+
+#. module: stock_kit_produced_quantity
+#: model:ir.model.fields,field_description:stock_kit_produced_quantity.field_bom_products_stock_move__id
+msgid "ID"
+msgstr ""
+
+#. module: stock_kit_produced_quantity
+#: model:ir.model.fields,field_description:stock_kit_produced_quantity.field_bom_products_stock_move__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: stock_kit_produced_quantity
+#: model:ir.model.fields,field_description:stock_kit_produced_quantity.field_bom_products_stock_move__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: stock_kit_produced_quantity
+#: model:ir.model.fields,field_description:stock_kit_produced_quantity.field_bom_products_stock_move__picking_type_id
+#: model_terms:ir.ui.view,arch_db:stock_kit_produced_quantity.view_bom_products_stock_move_search
+msgid "Operation Type"
+msgstr "نوع العملية"
+
+#. module: stock_kit_produced_quantity
+#: model:ir.model.fields,field_description:stock_kit_produced_quantity.field_bom_products_stock_move__kit_qty_requested
+msgid "Ordered"
+msgstr "المطلوب"
+
+#. module: stock_kit_produced_quantity
+#: model:ir.model.fields,field_description:stock_kit_produced_quantity.field_bom_products_stock_move__date
+#: model_terms:ir.ui.view,arch_db:stock_kit_produced_quantity.view_bom_products_stock_move_search
+msgid "Picking Date"
+msgstr "تاريخ الشحن"
+
+#. module: stock_kit_produced_quantity
+#: model:ir.actions.act_window,name:stock_kit_produced_quantity.bom_products_stock_move_action
+#: model:ir.model,name:stock_kit_produced_quantity.model_bom_products_stock_move
+#: model:ir.model.fields,field_description:stock_kit_produced_quantity.field_stock_picking__bom_products_line_ids
+#: model:ir.ui.menu,name:stock_kit_produced_quantity.bom_products_stock_menu
+#: model:ir.ui.menu,name:stock_kit_produced_quantity.bom_products_stock_move_menu
+#: model_terms:ir.ui.view,arch_db:stock_kit_produced_quantity.bom_products_stock_move_form
+#: model_terms:ir.ui.view,arch_db:stock_kit_produced_quantity.bom_products_stock_move_graph
+#: model_terms:ir.ui.view,arch_db:stock_kit_produced_quantity.bom_products_stock_move_pivot
+#: model_terms:ir.ui.view,arch_db:stock_kit_produced_quantity.bom_products_stock_move_tree
+#: model_terms:ir.ui.view,arch_db:stock_kit_produced_quantity.view_view_picking_form_kit_qty
+msgid "Picking KIT Products"
+msgstr "اوامر شحن الاصناف المجمعة"
+
+#. module: stock_kit_produced_quantity
+#: model:ir.model.fields,field_description:stock_kit_produced_quantity.field_stock_picking__sent_to_kit_qty_move
+msgid "Picking Sent To Picking KIT Products"
+msgstr "تم انشاء جدول الاصناف المجمعة"
+
+#. module: stock_kit_produced_quantity
+#: model:ir.model.fields,field_description:stock_kit_produced_quantity.field_bom_products_stock_move__state
+#: model_terms:ir.ui.view,arch_db:stock_kit_produced_quantity.view_bom_products_stock_move_search
+msgid "Picking Status"
+msgstr "حالة الشحن"
+
+#. module: stock_kit_produced_quantity
+#: model:ir.model.fields,field_description:stock_kit_produced_quantity.field_bom_products_stock_move__product_id
+#: model_terms:ir.ui.view,arch_db:stock_kit_produced_quantity.view_bom_products_stock_move_search
+msgid "Product"
+msgstr "الصنف"
+
+#. module: stock_kit_produced_quantity
+#: model:ir.model.fields,field_description:stock_kit_produced_quantity.field_bom_products_stock_move__product_tmpl_id
+msgid "Product Template"
+msgstr "الصنف"
+
+#. module: stock_kit_produced_quantity
+#: model:ir.model.fields,field_description:stock_kit_produced_quantity.field_bom_products_stock_move__qty_deviation
+msgid "QTY Deviation"
+msgstr "انحراف الكمية"
+
+#. module: stock_kit_produced_quantity
+#: model:ir.model.fields,field_description:stock_kit_produced_quantity.field_bom_products_stock_move__reference
+msgid "Reference"
+msgstr "قائمة المواد"
+
+#. module: stock_kit_produced_quantity
+#: model:ir.model.fields,help:stock_kit_produced_quantity.field_bom_products_stock_move__origin
+msgid "Reference of the document"
+msgstr ""
+
+#. module: stock_kit_produced_quantity
+#: model:ir.model.fields,field_description:stock_kit_produced_quantity.field_bom_products_stock_move__qty_requested_total_cost
+msgid "Requested SubTotal"
+msgstr "تكلفة الكمية المطلوبة"
+
+#. module: stock_kit_produced_quantity
+#: model_terms:ir.ui.view,arch_db:stock_kit_produced_quantity.view_bom_products_stock_move_search
+msgid "Search Picking KIT Products"
+msgstr ""
+
+#. module: stock_kit_produced_quantity
+#: model:ir.model.fields,field_description:stock_kit_produced_quantity.field_bom_products_stock_move__sequence
+msgid "Sequence"
+msgstr "م"
+
+#. module: stock_kit_produced_quantity
+#: model:ir.model.fields,field_description:stock_kit_produced_quantity.field_bom_products_stock_move__origin
+#: model_terms:ir.ui.view,arch_db:stock_kit_produced_quantity.view_bom_products_stock_move_search
+msgid "Source Document"
+msgstr "مصدر الحركة"
+
+#. module: stock_kit_produced_quantity
+#: model:ir.model,name:stock_kit_produced_quantity.model_stock_picking
+#: model:ir.model.fields,field_description:stock_kit_produced_quantity.field_bom_products_stock_move__picking_id
+#: model_terms:ir.ui.view,arch_db:stock_kit_produced_quantity.view_bom_products_stock_move_search
+msgid "Transfer"
+msgstr "تحويل "
+
+#. module: stock_kit_produced_quantity
+#: model:ir.model.fields,field_description:stock_kit_produced_quantity.field_bom_products_stock_move__product_uom
+msgid "UOM"
+msgstr "الوحدة"
+
+#. module: stock_kit_produced_quantity
+#: model:ir.model.fields,help:stock_kit_produced_quantity.field_bom_products_stock_move__product_uom
+msgid ""
+"Unit of Measure (Unit of Measure) is the unit of measurement for the "
+"inventory control"
+msgstr ""
+
+#. module: stock_kit_produced_quantity
+#: model_terms:ir.ui.view,arch_db:stock_kit_produced_quantity.view_view_picking_form_kit_qty
+msgid "Update KIT Quantities"
+msgstr "تحديث كميات الصنف المجمع"
+
+#. module: stock_kit_produced_quantity
+#: model_terms:ir.ui.view,arch_db:stock_kit_produced_quantity.stock_report_delivery_kit_sections
+msgid "units"
+msgstr ""

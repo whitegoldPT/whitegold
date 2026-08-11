@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <template id="stock_report_delivery_kit_sections" inherit_id="mrp.stock_report_delivery_kit_sections">
+        <xpath expr="//t[@t-set='boms']" position="replace">
+            <t t-set="kits" t-value="o.bom_products_line_ids.filtered(lambda x: x.kit_qty_requested)"/>
+            <tr t-att-class="'bg-200 fw-bold o_line_section'">
+                <td colspan="99">
+                    <span>KIT Products</span>
+                </td>
+            </tr>
+            <tr t-foreach="kits" t-as="kit">
+                <td>
+                    <span t-field="kit.product_id">Customizable Desk</span>
+                </td>
+                <td>
+                    <span t-field="kit.kit_qty_requested">3.00</span>
+                    <span t-field="kit.product_uom">units</span>
+                </td>
+                <td>
+                    <span t-field="kit.kit_qty_delivered">3.00</span>
+                    <span t-field="kit.product_uom">units</span>
+                </td>
+                <!-- <t t-set="kit_move_lines" t-value="all_kits_move_lines.filtered(lambda l: l.move_id.bom_line_id.bom_id == bom)"/> -->
+               <!--  <t t-if="has_serial_number">
+                    <tr t-foreach="kit_move_lines" t-as="move_line">
+                        <t t-set="description" t-value="move_line.move_id.description_picking"/>
+                        <t t-if="description == kit_product.display_name">
+                            <t t-set="description" t-value=""/>
+                        </t>
+                        <t t-call="stock.stock_report_delivery_has_serial_move_line"/>
+                    </tr>
+                </t> -->
+            </tr>
+        </xpath>
+    </template>
+
+
+</odoo>
