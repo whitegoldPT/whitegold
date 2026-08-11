@@ -1,0 +1,3 @@
+id,name,model_id/id,group_id/id,perm_read,perm_write,perm_create,perm_unlink
+access_mrp_overhead_type_user,access.mrp.user.overhead.type,model_mrp_overhead_type,mrp.group_mrp_user,1,0,0,0
+access_mrp_overhead_type_acc,access.mrp.user.overhead.type,model_mrp_overhead_type,account.group_account_readonly,1,1,1,1

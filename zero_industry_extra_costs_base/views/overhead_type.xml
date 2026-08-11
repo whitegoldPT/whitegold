@@ -1,0 +1,172 @@
+<odoo>
+  <data>
+        <!-- overhead types -->
+    <record id="mrp_overhead_type_form_view" model="ir.ui.view">
+        <field name="name">mrp.overhead.type.form</field>
+        <field name="model">mrp.overhead.type</field>
+        <field name="arch" type="xml">
+            <form string="MRP OverHead Type">
+                <sheet> 
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button"
+                            name="redirect_Services"
+                            icon="fa-sitemap"
+                            type="object">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_value"><field name="services_count"/></span>
+                                <span class="o_stat_text">OverHead Items</span>
+                            </div>
+                        </button>
+                    </div>   
+                    <group>
+                        <field name="name"/>
+                    </group>
+                    <group>
+                        <field name="description"/>
+                        <field name="company_id"  invisible="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+                                        
+    <record model="ir.ui.view" id="res_mrp_overhead_type_kanban_view">
+        <field name="name">mrp.overhead.type.kanban</field>
+        <field name="model">mrp.overhead.type</field>
+        <field name="arch" type="xml">
+            <kanban string="MRP OverHead Type">
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_card oe_kanban_global_click">
+                            <div class="o_kanban_record_headings ml8">
+                                <strong class="o_kanban_record_title"><field name="name"/></strong>
+                                <field name="product_ids" display="full"/>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="mrp_overhead_type_list_view" model="ir.ui.view">
+        <field name="name">mrp.overhead.type.list</field>
+        <field name="model">mrp.overhead.type</field>
+        <field name="arch" type="xml">
+            <list string="MRP OverHead Type" multi_edit="1">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="product_ids" widget="many2many_tags"/>
+                <field name="company_id"  column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_mrp_overhead_type_search" model="ir.ui.view">
+        <field name="name">mrp.overhead.type.select</field>
+        <field name="model">mrp.overhead.type</field>
+        <field name="arch" type="xml">
+            <search string="Search OverHead Type">
+                <field name="name"/>
+                <field name="product_ids"/>
+                <field name="description"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="mrp_overhead_type_action" model="ir.actions.act_window">
+        <field name="name">MRP OverHead Type</field>
+        <field name="res_model">mrp.overhead.type</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="search_view_id" ref="zero_industry_extra_costs_base.view_mrp_overhead_type_search"/>
+        <field name="view_id" ref="zero_industry_extra_costs_base.mrp_overhead_type_list_view"/>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+              Click to add a new Service to MRP OverHead Type.
+          </p>
+          <p>
+              This allows to classify your Service to MRP OverHead Type.
+          </p>
+        </field>
+    </record>
+
+    <record id="mrp_overhead_type_product_template_form" model="ir.ui.view">
+        <field name="name">OverHead.product.product.form</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_only_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='type']" position="after">
+                <field name="mrp_overhead_type_id" groups="account.group_account_readonly" invisible="product_variant_count &gt; 1 or (product_variant_count == 0 and valid_product_template_attribute_line_ids) or type not in ['service']"/>
+            </xpath> 
+        </field>
+    </record>
+
+    <record id="mrp_overhead_type_product_product_form" model="ir.ui.view">
+        <field name="name">OverHead.product.product.form</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_normal_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='type']" position="after">
+                <field name="mrp_overhead_type_id" groups="account.group_account_readonly" invisible="type not in ['service']"/>
+            </xpath> 
+        </field>
+    </record>
+    
+
+  <record id="product_variant_easy_edit_view_mrp_overhead_type" model="ir.ui.view">
+    <field name="active" eval="True"/>
+    <field name="arch" type="xml">
+        <xpath expr="//field[@name='type']" position="after">
+          <field name="mrp_overhead_type_id" groups="account.group_account_readonly"/>
+        </xpath>
+    </field>
+    <field name="inherit_id" ref="product.product_variant_easy_edit_view"/>
+    <field name="model">product.product</field>
+    <field name="name">product.variant.easy.edit.OverHead</field>
+    <field name="type">form</field>
+  </record>
+  
+    <record id="product_template_tree_view" model="ir.ui.view">
+        <field name="name">product.template.product.list</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_tree_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='type']" position="after">
+                <field name="mrp_overhead_type_id" groups="account.group_account_readonly"/>
+            </xpath> 
+        </field>
+    </record>
+
+    
+
+        <record id="OverHead_product_template_search" model="ir.ui.view">
+            <field name="name">OverHead.product.template.search</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_search_view" />
+            <field name="arch" type="xml">
+                <xpath expr="//search[1]/field[@name='name']" position="after">
+                    <field name="mrp_overhead_type_id"/>
+                </xpath>
+            </field>
+        </record>
+        <record id="product_product_tree_view" model="ir.ui.view">
+            <field name="name">product.product.list.OverHead</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_product_tree_view" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='product_template_variant_value_ids']" position="after">
+                    <field name="mrp_overhead_type_id"/>
+                </xpath>
+            </field>
+        </record>
+        <menuitem
+            id="mrp_overhead_type_menu"
+            name="OverHead Type"
+            parent="account.account_account_menu"
+            sequence="6"
+            action="mrp_overhead_type_action"
+            groups="account.group_account_readonly">
+        </menuitem>
+  
+  </data>
+</odoo>
