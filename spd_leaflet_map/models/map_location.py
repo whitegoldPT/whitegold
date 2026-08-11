@@ -3,6 +3,7 @@ from odoo import models, fields
 
 class MapLocation(models.Model):
     _name = 'map.location'
+    _description = 'map.location'
 
     name = fields.Char(string="Name")
     latitude = fields.Char(string="Latitude")
