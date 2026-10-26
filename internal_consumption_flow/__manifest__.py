@@ -25,7 +25,7 @@
         "mrp_account",
         "hr",
         "analytic",
-        "quality_test",
+        
     ],
     "data": [
         "security/consumption_security.xml",
