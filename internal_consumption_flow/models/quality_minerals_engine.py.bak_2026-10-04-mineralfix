@@ -1,0 +1,325 @@
+# -*- coding: utf-8 -*-
+from odoo import models, fields, api, _
+from odoo.exceptions import ValidationError
+import logging
+
+_logger = logging.getLogger(__name__)
+
+
+class MineralsLineInherit(models.Model):
+    _inherit = 'product.template.line'
+
+    @api.depends('percentage_from', 'percentage_to')
+    def _compute_percentage(self):
+        for line in self:
+            if line.percentage_from and line.percentage_to:
+                # Midpoint of the range as the target percentage
+                line.percentage = (line.percentage_from + line.percentage_to) / 2.0
+            elif line.percentage_to:
+                line.percentage = line.percentage_to
+            elif line.percentage_from:
+                line.percentage = line.percentage_from
+            elif not line.percentage:
+                line.percentage = 0.0
+
+
+class MrpBomInherit(models.Model):
+    _inherit = 'mrp.bom'
+
+    @api.depends(
+        'product_tmpl_id', 'product_tmpl_id.mineral_ids',
+        'product_tmpl_id.mineral_ids.percentage',
+        'product_tmpl_id.mineral_ids.percentage_from',
+        'product_tmpl_id.mineral_ids.percentage_to',
+        'bom_line_ids', 'bom_line_ids.product_id',
+        'bom_line_ids.product_id.product_tmpl_id.mineral_ids',
+        'bom_line_ids.product_qty', 'bom_line_ids.product_uom_id', 'product_qty'
+    )
+    def _compute_remaining_minerals(self):
+        for bom in self:
+            if not bom.product_tmpl_id or not bom.product_tmpl_id.has_minerals:
+                bom.remaining_minerals = ""
+                continue
+
+            # Targets: (min, max, target)
+            targets = {}
+            for m in bom.product_tmpl_id.mineral_ids:
+                if m.parameter_id:
+                    min_val = m.percentage_from or m.percentage
+                    max_val = m.percentage_to or m.percentage
+                    tgt = m.percentage or ((min_val + max_val) / 2.0)
+                    targets[m.parameter_id] = {
+                        'min': min_val,
+                        'max': max_val,
+                        'target': tgt,
+                    }
+
+            # BUG-5 FIX: Total input weight = sum of ALL ingredient quantities (not product output qty)
+            # Correct blend formula: blend_pct = Σ(qty_i * pct_i) / Σ(qty_i)
+            total_input_weight = 0.0
+            for bline in bom.bom_line_ids:
+                bqty = bline.product_qty
+                if bqty <= 0 or not bline.product_id:
+                    continue
+                if bline.product_uom_id and bline.product_id.uom_id and bline.product_uom_id != bline.product_id.uom_id:
+                    bqty = bline.product_uom_id._compute_quantity(bqty, bline.product_id.uom_id)
+                total_input_weight += bqty
+            total_input_weight = total_input_weight or bom.product_qty or 1.0
+
+            # Weighted sum: sum(component_qty * component_mineral_pct)
+            weighted_sums = {}
+            for line in bom.bom_line_ids:
+                line_qty = line.product_qty
+                if line_qty <= 0 or not line.product_id:
+                    continue
+
+                if line.product_uom_id and line.product_id.uom_id and line.product_uom_id != line.product_id.uom_id:
+                    line_qty = line.product_uom_id._compute_quantity(line_qty, line.product_id.uom_id)
+
+                if line.product_id.product_tmpl_id.has_minerals:
+                    for m in line.product_id.product_tmpl_id.mineral_ids:
+                        if m.parameter_id:
+                            pct = m.percentage or m.percentage_to or m.percentage_from or 0.0
+                            weighted_sums[m.parameter_id] = weighted_sums.get(m.parameter_id, 0.0) + line_qty * pct
+
+            # Blend percentages using correct denominator (total input weight)
+            currents = {param: ws / total_input_weight for param, ws in weighted_sums.items()}
+
+            html_badges = []
+            for parameter, tgt_info in targets.items():
+                current_pct = currents.get(parameter, 0.0)
+                min_val = tgt_info['min']
+                max_val = tgt_info['max']
+
+                if min_val <= current_pct <= max_val + 0.01:
+                    # Within acceptable target range
+                    html_badges.append(
+                        f'<span class="badge rounded-pill text-bg-success" style="margin-right: 4px; padding: 5px 10px; font-size: 11px;">'
+                        f'{parameter.name}: مطابق ({current_pct:.2f}% | المستهدف: {min_val:.1f}% - {max_val:.1f}%)</span>'
+                    )
+                elif current_pct < min_val:
+                    # Below minimum
+                    deficit = min_val - current_pct
+                    html_badges.append(
+                        f'<span class="badge rounded-pill text-bg-warning" style="margin-right: 4px; padding: 5px 10px; font-size: 11px;">'
+                        f'{parameter.name}: عجز {deficit:.2f}% ({current_pct:.2f}% / أدنى: {min_val:.1f}%)</span>'
+                    )
+                else:
+                    # Above maximum
+                    over = current_pct - max_val
+                    html_badges.append(
+                        f'<span class="badge rounded-pill text-bg-danger" style="margin-right: 4px; padding: 5px 10px; font-size: 11px;">'
+                        f'{parameter.name}: زيادة +{over:.2f}% ({current_pct:.2f}% / أقصى: {max_val:.1f}%)</span>'
+                    )
+
+            bom.remaining_minerals = "".join(html_badges) if html_badges else ""
+
+
+class MrpProductionInherit(models.Model):
+    _inherit = 'mrp.production'
+
+    @api.depends(
+        'product_tmpl_id', 'product_tmpl_id.mineral_ids',
+        'move_raw_ids', 'move_raw_ids.product_id',
+        'move_raw_ids.product_id.product_tmpl_id.mineral_ids',
+        'move_raw_ids.lot_id', 'move_raw_ids.quantity',
+        'move_raw_ids.product_uom_qty', 'move_raw_ids.product_uom',
+        'move_raw_ids.is_topping', 'move_raw_ids.state',
+        'product_qty', 'qty_producing'
+    )
+    def _compute_remaining_minerals(self):
+        for mo in self:
+            if not mo.product_tmpl_id or not mo.product_tmpl_id.has_minerals:
+                mo.remaining_minerals = ""
+                continue
+
+            targets = {}
+            for m in mo.product_tmpl_id.mineral_ids:
+                if m.parameter_id:
+                    min_val = m.percentage_from or m.percentage
+                    max_val = m.percentage_to or m.percentage
+                    tgt = m.percentage or ((min_val + max_val) / 2.0)
+                    targets[m.parameter_id] = {
+                        'min': min_val,
+                        'max': max_val,
+                        'target': tgt,
+                    }
+
+            # BUG-6 FIX: Total input weight = actual ingredient quantities used
+            # BUG-7 FIX: Exclude is_returner and is_customer_return moves (handled by quality_test)
+            # Correct blend formula: blend_pct = Σ(qty_i * pct_i) / Σ(qty_i)
+            total_input_weight = 0.0
+            for line in mo.move_raw_ids:
+                if line.state == 'cancel':
+                    continue
+                if getattr(line, 'is_returner', False) or getattr(line, 'is_customer_return', False):
+                    continue
+                lqty = line.quantity if line.quantity > 0 else line.product_uom_qty
+                if lqty <= 0:
+                    continue
+                if line.product_uom and line.product_id.uom_id and line.product_uom != line.product_id.uom_id:
+                    lqty = line.product_uom._compute_quantity(lqty, line.product_id.uom_id)
+                total_input_weight += lqty
+            total_input_weight = total_input_weight or mo.qty_producing or mo.product_qty or 1.0
+
+            # Weighted sum accumulation (excluding returner/customer_return moves)
+            weighted_sums = {}
+            for line in mo.move_raw_ids:
+                if line.state == 'cancel':
+                    continue
+                # BUG-7 FIX: Exclude returner & customer_return moves correctly
+                if getattr(line, 'is_returner', False) or getattr(line, 'is_customer_return', False):
+                    continue
+
+                line_qty = line.quantity if line.quantity > 0 else line.product_uom_qty
+                if line_qty <= 0:
+                    continue
+
+                if line.product_uom and line.product_id.uom_id and line.product_uom != line.product_id.uom_id:
+                    line_qty = line.product_uom._compute_quantity(line_qty, line.product_id.uom_id)
+
+                line_minerals = {}
+                # 1. Prefer actual tested lot analysis
+                if line.lot_id:
+                    check = self.env['quality.product.check'].search([
+                        ('lot_id', '=', line.lot_id.id),
+                        ('status', '=', 'approved')
+                    ], order='id desc', limit=1) or self.env['quality.product.check'].search([
+                        ('lot_id', '=', line.lot_id.id)
+                    ], order='id desc', limit=1)
+
+                    if check and check.line_ids:
+                        for l in check.line_ids:
+                            if l.parameter_id:
+                                line_minerals[l.parameter_id] = l.percentage
+
+                # 2. Fallback to product template mineral definitions
+                if not line_minerals and line.product_id and line.product_id.product_tmpl_id.has_minerals:
+                    for m in line.product_id.product_tmpl_id.mineral_ids:
+                        if m.parameter_id:
+                            line_minerals[m.parameter_id] = m.percentage or m.percentage_to or m.percentage_from or 0.0
+
+                for parameter, pct in line_minerals.items():
+                    weighted_sums[parameter] = weighted_sums.get(parameter, 0.0) + line_qty * pct
+
+            # Blend percentages using correct denominator (total actual input weight)
+            currents = {param: ws / total_input_weight for param, ws in weighted_sums.items()}
+
+            html_badges = []
+            for parameter, tgt_info in targets.items():
+                current_pct = currents.get(parameter, 0.0)
+                min_val = tgt_info['min']
+                max_val = tgt_info['max']
+
+                if min_val <= current_pct <= max_val + 0.01:
+                    html_badges.append(
+                        f'<span class="badge rounded-pill text-bg-success" style="margin-right: 4px; padding: 5px 10px; font-size: 11px;">'
+                        f'{parameter.name}: مطابق ({current_pct:.2f}% | المستهدف: {min_val:.1f}% - {max_val:.1f}%)</span>'
+                    )
+                elif current_pct < min_val:
+                    deficit = min_val - current_pct
+                    html_badges.append(
+                        f'<span class="badge rounded-pill text-bg-warning" style="margin-right: 4px; padding: 5px 10px; font-size: 11px;">'
+                        f'{parameter.name}: عجز {deficit:.2f}% ({current_pct:.2f}% / أدنى: {min_val:.1f}%)</span>'
+                    )
+                else:
+                    over = current_pct - max_val
+                    html_badges.append(
+                        f'<span class="badge rounded-pill text-bg-danger" style="margin-right: 4px; padding: 5px 10px; font-size: 11px;">'
+                        f'{parameter.name}: زيادة +{over:.2f}% ({current_pct:.2f}% / أقصى: {max_val:.1f}%)</span>'
+                    )
+
+            mo.remaining_minerals = "".join(html_badges) if html_badges else ""
+
+    def _check_minerals_stable(self):
+        """Validate both lower and upper mineral limits before sending to quality."""
+        for mo in self:
+            if not mo.product_tmpl_id or not mo.product_tmpl_id.has_minerals:
+                continue
+
+            targets = {}
+            for m in mo.product_tmpl_id.mineral_ids:
+                if m.parameter_id:
+                    min_val = m.percentage_from or m.percentage
+                    max_val = m.percentage_to or m.percentage
+                    targets[m.parameter_id] = {
+                        'min': min_val,
+                        'max': max_val,
+                    }
+
+            if not targets:
+                continue
+
+            # BUG-6/7 FIX: Use total input weight; exclude returner/customer_return moves
+            total_input_weight = 0.0
+            for line in mo.move_raw_ids:
+                if line.state == 'cancel':
+                    continue
+                if getattr(line, 'is_returner', False) or getattr(line, 'is_customer_return', False):
+                    continue
+                lqty = line.quantity if line.quantity > 0 else line.product_uom_qty
+                if lqty <= 0:
+                    continue
+                if line.product_uom and line.product_id.uom_id and line.product_uom != line.product_id.uom_id:
+                    lqty = line.product_uom._compute_quantity(lqty, line.product_id.uom_id)
+                total_input_weight += lqty
+            total_input_weight = total_input_weight or mo.qty_producing or mo.product_qty or 1.0
+
+            weighted_sums = {}
+            for line in mo.move_raw_ids:
+                if line.state == 'cancel':
+                    continue
+                if getattr(line, 'is_returner', False) or getattr(line, 'is_customer_return', False):
+                    continue
+
+                line_qty = line.quantity if line.quantity > 0 else line.product_uom_qty
+                if line_qty <= 0:
+                    continue
+
+                if line.product_uom and line.product_id.uom_id and line.product_uom != line.product_id.uom_id:
+                    line_qty = line.product_uom._compute_quantity(line_qty, line.product_id.uom_id)
+
+                line_minerals = {}
+                if line.lot_id:
+                    check = self.env['quality.product.check'].search([
+                        ('lot_id', '=', line.lot_id.id),
+                        ('status', '=', 'approved')
+                    ], order='id desc', limit=1) or self.env['quality.product.check'].search([
+                        ('lot_id', '=', line.lot_id.id)
+                    ], order='id desc', limit=1)
+
+                    if check and check.line_ids:
+                        for l in check.line_ids:
+                            if l.parameter_id:
+                                line_minerals[l.parameter_id] = l.percentage
+
+                if not line_minerals and line.product_id and line.product_id.product_tmpl_id.has_minerals:
+                    for m in line.product_id.product_tmpl_id.mineral_ids:
+                        if m.parameter_id:
+                            line_minerals[m.parameter_id] = m.percentage or m.percentage_to or m.percentage_from or 0.0
+
+                for parameter, pct in line_minerals.items():
+                    weighted_sums[parameter] = weighted_sums.get(parameter, 0.0) + line_qty * pct
+
+            currents = {param: ws / total_input_weight for param, ws in weighted_sums.items()}
+
+            errors = []
+            for parameter, limits in targets.items():
+                current_pct = currents.get(parameter, 0.0)
+                min_lim = limits['min']
+                max_lim = limits['max']
+
+                if min_lim and current_pct < (min_lim - 0.01):
+                    errors.append(
+                        f"- {parameter.name}: الحالي {current_pct:.2f}% أقل من الحد الأدنى المقبول {min_lim:.2f}%"
+                    )
+                elif max_lim and current_pct > (max_lim + 0.01):
+                    errors.append(
+                        f"- {parameter.name}: الحالي {current_pct:.2f}% أعلى من الحد الأقصى المسموح به {max_lim:.2f}%"
+                    )
+
+            if errors:
+                raise ValidationError(
+                    "لا يمكن المتابعة. معايير ومكونات الخامات لا تطابق مواصفات المنتج:\n" +
+                    "\n".join(errors)
+                )

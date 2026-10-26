@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_inter_branch_transfer" model="ir.actions.report">
+        <field name="name">إذن تحويل بين الفروع (Transfer Request)</field>
+        <field name="model">stock.inter.branch.request</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">internal_consumption_flow.report_inter_branch_transfer_template</field>
+        <field name="report_file">internal_consumption_flow.report_inter_branch_transfer_template</field>
+        <field name="print_report_name">'إذن_تحويل_مخزني_%s' % (object.name)</field>
+        <field name="binding_model_id" ref="model_stock_inter_branch_request"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="report_inter_branch_transfer_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page" dir="rtl" style="font-family: 'Cairo', 'DejaVu Sans', sans-serif; font-size: 14px;">
+                        <div class="text-center mb-4 pb-2 border-bottom">
+                            <h2 style="font-weight: bold; color: #1a365d;">إذن ومستند تحويل مخزني بين الفروع</h2>
+                            <h4 style="color: #4a5568;"><span t-field="o.name"/></h4>
+                        </div>
+
+                        <div class="row mb-4" style="background-color: #f7fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                            <div class="col-6">
+                                <p><strong>تاريخ الطلب: </strong> <span t-field="o.date"/></p>
+                                <p><strong>مخزن الفرع الطالب: </strong> <span t-field="o.branch_warehouse_id.name"/></p>
+                                <p><strong>مقدم الطلب: </strong> <span t-field="o.user_id.name"/></p>
+                            </div>
+                            <div class="col-6">
+                                <p><strong>المخزن الرئيسي (المصروف منه): </strong> <span t-field="o.source_warehouse_id.name"/></p>
+                                <p><strong>الموقع الوسيط (الترانزيت): </strong> <span t-field="o.transit_location_id.display_name"/></p>
+                                <p><strong>الحالة الحالية: </strong> <span t-field="o.state"/></p>
+                            </div>
+                        </div>
+
+                        <table class="table table-bordered text-center mb-4" style="border: 1px solid #cbd5e0;">
+                            <thead style="background-color: #edf2f7; font-weight: bold;">
+                                <tr>
+                                    <th style="width: 8%;">م</th>
+                                    <th style="width: 20%;">كود الصنف</th>
+                                    <th style="width: 35%;">اسم الصنف</th>
+                                    <th style="width: 12%;">الكمية المطلوبة</th>
+                                    <th style="width: 12%;">الكمية المشحونة</th>
+                                    <th style="width: 13%;">الوحدة</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-set="idx" t-value="1"/>
+                                <tr t-foreach="o.line_ids" t-as="l">
+                                    <td><t t-esc="idx"/></td>
+                                    <td><span t-field="l.product_id.default_code"/></td>
+                                    <td class="text-right" style="text-align: right;"><span t-field="l.product_id.name"/></td>
+                                    <td style="font-weight: bold;"><span t-field="l.qty_requested"/></td>
+                                    <td><span t-field="l.qty_dispatched"/></td>
+                                    <td><span t-field="l.product_uom_id.name"/></td>
+                                    <t t-set="idx" t-value="idx + 1"/>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <t t-if="o.notes">
+                            <div class="mb-4 p-2 border rounded" style="background-color: #fffaf0; border-color: #feebc8;">
+                                <strong>ملاحظات: </strong>
+                                <span t-field="o.notes"/>
+                            </div>
+                        </t>
+
+                        <div class="row mt-5 pt-4 text-center">
+                            <div class="col-3">
+                                <strong>طالب التحويل (الفرع)</strong>
+                                <br/><br/><br/>
+                                <span>............................</span>
+                            </div>
+                            <div class="col-3">
+                                <strong>أمين المخزن الرئيسي</strong>
+                                <br/><br/><br/>
+                                <span>............................</span>
+                            </div>
+                            <div class="col-3">
+                                <strong>سائق النقل / الشحن</strong>
+                                <br/><br/><br/>
+                                <span>............................</span>
+                            </div>
+                            <div class="col-3">
+                                <strong>مسؤول استلام الفرع</strong>
+                                <br/><br/><br/>
+                                <span>............................</span>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

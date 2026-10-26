@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree / List View -->
+    <record id="view_stock_inter_branch_request_tree" model="ir.ui.view">
+        <field name="name">stock.inter.branch.request.list</field>
+        <field name="model">stock.inter.branch.request</field>
+        <field name="arch" type="xml">
+            <list string="Inter-Branch Transfer Requests" decoration-info="state == 'draft'" decoration-warning="state == 'to_approve'" decoration-primary="state == 'approved'" decoration-muted="state == 'in_transit'" decoration-success="state == 'done'" decoration-danger="state == 'cancel'" sample="1">
+                <field name="name" decoration-bf="1"/>
+                <field name="request_type" widget="badge"
+                       decoration-info="request_type == 'transfer'"
+                       decoration-warning="request_type == 'return'"/>
+                <field name="date"/>
+                <field name="branch_warehouse_id"/>
+                <field name="source_warehouse_id"/>
+                <field name="transit_location_id" optional="show"/>
+                <field name="user_id" widget="many2one_avatar_user"/>
+                <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+                <field name="state" widget="badge"
+                       decoration-info="state == 'draft'"
+                       decoration-warning="state == 'to_approve'"
+                       decoration-primary="state == 'approved'"
+                       decoration-muted="state == 'in_transit'"
+                       decoration-success="state == 'done'"
+                       decoration-danger="state == 'cancel'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_stock_inter_branch_request_form" model="ir.ui.view">
+        <field name="name">stock.inter.branch.request.form</field>
+        <field name="model">stock.inter.branch.request</field>
+        <field name="arch" type="xml">
+            <form string="Inter-Branch Transfer Request">
+                <header>
+                    <button name="action_submit" string="إرسال للاعتماد (Submit)" type="object" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_approve" string="اعتماد وبدء التحويل (Approve)" type="object" class="btn-success" invisible="state != 'to_approve'" groups="internal_consumption_flow.group_inter_branch_manager"/>
+                    <button name="action_reject" string="رفض الطلب (Reject)" type="object" class="btn-danger" invisible="state != 'to_approve'" groups="internal_consumption_flow.group_inter_branch_manager"/>
+                    <button name="action_cancel" string="إلغاء (Cancel)" type="object" invisible="state in ('done', 'cancel')"/>
+                    <button name="action_draft" string="إعادة تعيين لمسودة (Reset to Draft)" type="object" invisible="state != 'cancel'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,to_approve,approved,in_transit,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_pickings" type="object" class="oe_stat_button" icon="fa-truck" invisible="picking_count == 0">
+                            <div class="o_stat_info">
+                                <field name="picking_count" class="o_stat_value"/>
+                                <span class="o_stat_text">حركات النقل</span>
+                            </div>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <span class="o_form_label">طلب تحويل مخزني بين الفروع</span>
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <!-- Hidden: always 'transfer' in transfers screen -->
+                    <field name="request_type" invisible="1"/>
+                    <group>
+                        <group string="بيانات المخازن والفرع">
+                            <field name="is_manager" invisible="1"/>
+                            <field name="branch_warehouse_id" readonly="state != 'draft'" force_save="1" options="{'no_create': True}"/>
+                            <!-- Source warehouse is determined and selected by the Manager/HQ when approving or reviewing -->
+                            <field name="source_warehouse_id"
+                                   groups="internal_consumption_flow.group_inter_branch_manager"
+                                   readonly="state not in ('draft', 'to_approve')"
+                                   options="{'no_create': True}"/>
+                            <!-- Transit location is calculated automatically and editable by managers if they want to choose a specific transit location -->
+                            <field name="transit_location_id"
+                                   groups="internal_consumption_flow.group_inter_branch_manager"
+                                   readonly="state not in ('draft', 'to_approve')"
+                                   force_save="1"
+                                   domain="[('usage', '=', 'transit')]"
+                                   options="{'no_create': True}"/>
+                        </group>
+                        <group string="بيانات الطلب والمسؤول">
+                            <field name="date" readonly="1" force_save="1"/>
+                            <field name="user_id" readonly="1" force_save="1" options="{'no_create': True}"/>
+                            <field name="company_id" groups="base.group_multi_company" readonly="1" force_save="1"/>
+                            <field name="picking_out_id" invisible="not picking_out_id"/>
+                            <field name="picking_in_id" invisible="not picking_in_id"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="الأصناف والكميات المطلوبة" name="lines">
+                            <field name="line_ids" readonly="state not in ('draft', 'to_approve')">
+                                <list editable="bottom">
+                                    <field name="product_id"/>
+                                    <field name="product_uom_id"/>
+                                    <field name="qty_requested"/>
+                                    <field name="available_qty_source" string="المتاح بالمخزن المصروف منه"
+                                           groups="internal_consumption_flow.group_inter_branch_manager"
+                                           decoration-danger="available_qty_source &lt; qty_requested"
+                                           decoration-success="available_qty_source &gt;= qty_requested"/>
+                                    <field name="qty_dispatched" string="المشحون" column_invisible="parent.state in ('draft', 'to_approve')"/>
+                                    <field name="qty_received" string="المستلم بالفرع" column_invisible="parent.state in ('draft', 'to_approve', 'approved')"/>
+                                    <field name="notes" optional="show"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="ملاحظات وسبب الطلب" name="notes">
+                            <field name="notes" placeholder="اكتب هنا أي تفاصيل أو أسباب إضافية للطلب..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Kanban View -->
+    <record id="view_stock_inter_branch_request_kanban" model="ir.ui.view">
+        <field name="name">stock.inter.branch.request.kanban</field>
+        <field name="model">stock.inter.branch.request</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state" sample="1" quick_create="false">
+                <field name="name"/>
+                <field name="date"/>
+                <field name="branch_warehouse_id"/>
+                <field name="source_warehouse_id"/>
+                <field name="user_id"/>
+                <field name="state"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click p-3 mb-2 rounded shadow-sm border bg-white">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <strong class="text-primary fs-6"><field name="name"/></strong>
+                                <span class="text-muted small"><field name="date"/></span>
+                            </div>
+                            <div class="mb-1">
+                                <span class="fw-bold">من: </span><field name="source_warehouse_id"/>
+                            </div>
+                            <div class="mb-2">
+                                <span class="fw-bold">إلى: </span><field name="branch_warehouse_id"/>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center pt-2 border-top">
+                                <field name="user_id" widget="many2one_avatar_user"/>
+                                <field name="state" widget="label_selection"
+                                       options="{'classes': {'draft': 'info', 'to_approve': 'warning', 'approved': 'primary', 'in_transit': 'secondary', 'done': 'success', 'cancel': 'danger'}}"/>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_stock_inter_branch_request_search" model="ir.ui.view">
+        <field name="name">stock.inter.branch.request.search</field>
+        <field name="model">stock.inter.branch.request</field>
+        <field name="arch" type="xml">
+            <search string="Search Inter-Branch Transfer Requests">
+                <field name="name" string="رقم الطلب"/>
+                <field name="branch_warehouse_id" string="مخزن الفرع الطالب"/>
+                <field name="source_warehouse_id" string="المخزن الرئيسي المصروف منه"/>
+                <field name="user_id" string="مقدم الطلب"/>
+                <separator/>
+                <filter string="طلبات المرتجعات (Returns)" name="filter_returns" domain="[('request_type', '=', 'return')]"/>
+                <filter string="طلبات التحويل (Transfers)" name="filter_transfers" domain="[('request_type', '=', 'transfer')]"/>
+                <separator/>
+                <filter string="مسودة (Draft)" name="filter_draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="بانتظار الموافقة (To Approve)" name="filter_to_approve" domain="[('state', '=', 'to_approve')]"/>
+                <filter string="معتمد (Approved)" name="filter_approved" domain="[('state', '=', 'approved')]"/>
+                <filter string="في الطريق (In Transit)" name="filter_in_transit" domain="[('state', '=', 'in_transit')]"/>
+                <filter string="مكتمل ومستلم (Done)" name="filter_done" domain="[('state', '=', 'done')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="نوع الطلب" name="group_request_type" context="{'group_by': 'request_type'}"/>
+                    <filter string="مخزن الفرع" name="group_branch" context="{'group_by': 'branch_warehouse_id'}"/>
+                    <filter string="المخزن الرئيسي" name="group_source" context="{'group_by': 'source_warehouse_id'}"/>
+                    <filter string="الحالة" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="تاريخ الطلب" name="group_date" context="{'group_by': 'date'}"/>
+                    <filter string="مقدم الطلب" name="group_user" context="{'group_by': 'user_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+
+    <!-- ════════════════════════════════════════════════════════════
+         RETURNS-ONLY VIEWS — طلبات المرتجعات فقط (شاشة مستقلة)
+         ════════════════════════════════════════════════════════════ -->
+
+    <!-- List View — Returns only -->
+    <record id="view_branch_return_request_list" model="ir.ui.view">
+        <field name="name">stock.inter.branch.request.return.list</field>
+        <field name="model">stock.inter.branch.request</field>
+        <field name="arch" type="xml">
+            <list string="طلبات مرتجعات الفروع"
+                  decoration-info="state == 'draft'"
+                  decoration-warning="state == 'to_approve'"
+                  decoration-primary="state == 'approved'"
+                  decoration-muted="state == 'in_transit'"
+                  decoration-success="state == 'done'"
+                  decoration-danger="state == 'cancel'"
+                  sample="1">
+                <field name="name" decoration-bf="1"/>
+                <field name="date"/>
+                <field name="branch_warehouse_id" string="مخزن الفرع المُرتجَع منه"/>
+                <field name="source_warehouse_id" string="مخزن المرتجعات"/>
+                <field name="user_id" widget="many2one_avatar_user"/>
+                <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+                <field name="state" widget="badge"
+                       decoration-info="state == 'draft'"
+                       decoration-warning="state == 'to_approve'"
+                       decoration-primary="state == 'approved'"
+                       decoration-muted="state == 'in_transit'"
+                       decoration-success="state == 'done'"
+                       decoration-danger="state == 'cancel'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View — Returns only (no request_type radio, always return) -->
+    <record id="view_branch_return_request_form" model="ir.ui.view">
+        <field name="name">stock.inter.branch.request.return.form</field>
+        <field name="model">stock.inter.branch.request</field>
+        <field name="arch" type="xml">
+            <form string="طلب مرتجع فرع">
+                <header>
+                    <button name="action_submit" string="إرسال للاعتماد" type="object"
+                            class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_approve" string="اعتماد وبدء الإرجاع" type="object"
+                            class="btn-success" invisible="state != 'to_approve'"
+                            groups="internal_consumption_flow.group_inter_branch_manager"/>
+                    <button name="action_reject" string="رفض" type="object"
+                            class="btn-danger" invisible="state != 'to_approve'"
+                            groups="internal_consumption_flow.group_inter_branch_manager"/>
+                    <button name="action_cancel" string="إلغاء" type="object"
+                            invisible="state in ('done', 'cancel')"/>
+                    <button name="action_draft" string="إعادة لمسودة" type="object"
+                            invisible="state != 'cancel'"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,to_approve,approved,in_transit,done"/>
+                </header>
+                <sheet>
+                    <!-- Return badge indicator -->
+                    <div class="alert alert-warning d-flex align-items-center mb-3" role="alert"
+                         invisible="state != 'draft'">
+                        <i class="fa fa-undo me-2 fs-5"/>
+                        <span>
+                            هذه الشاشة مخصصة لـ <strong>طلبات الإرجاع من الفروع إلى مخزن المرتجعات</strong> فقط.
+                        </span>
+                    </div>
+
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_pickings" type="object"
+                                class="oe_stat_button" icon="fa-truck"
+                                invisible="picking_count == 0">
+                            <div class="o_stat_info">
+                                <field name="picking_count" class="o_stat_value"/>
+                                <span class="o_stat_text">حركات الإرجاع</span>
+                            </div>
+                        </button>
+                    </div>
+
+                    <!-- Hidden: always 'return' -->
+                    <field name="request_type" invisible="1"/>
+
+                    <div class="oe_title">
+                        <span class="o_form_label text-danger fw-bold">
+                            ↩ طلب مرتجع فرع
+                        </span>
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+
+                    <group>
+                        <group string="بيانات المخازن والفرع">
+                            <field name="is_manager" invisible="1"/>
+                            <field name="branch_warehouse_id"
+                                   string="مخزن الفرع المُرتجَع منه"
+                                   readonly="state != 'draft'"
+                                   force_save="1"
+                                   options="{'no_create': True}"/>
+                            <field name="source_warehouse_id"
+                                   string="مخزن المرتجعات (الوجهة)"
+                                   groups="internal_consumption_flow.group_inter_branch_manager"
+                                   readonly="state not in ('draft', 'to_approve')"
+                                   domain="[('code', '=', 'RETWH')]"
+                                   options="{'no_create': True}"/>
+                            <field name="transit_location_id"
+                                   groups="internal_consumption_flow.group_inter_branch_manager"
+                                   readonly="state not in ('draft', 'to_approve')"
+                                   force_save="1"
+                                   domain="[('usage', '=', 'transit')]"
+                                   options="{'no_create': True}"/>
+                        </group>
+                        <group string="بيانات الطلب والمسؤول">
+                            <field name="date" readonly="1" force_save="1"/>
+                            <field name="user_id" readonly="1" force_save="1"
+                                   options="{'no_create': True}"/>
+                            <field name="company_id" groups="base.group_multi_company"
+                                   readonly="1" force_save="1"/>
+                            <field name="picking_out_id" invisible="not picking_out_id"/>
+                            <field name="picking_in_id" invisible="not picking_in_id"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="الأصناف والكميات المُرتجَعة" name="lines">
+                            <field name="line_ids" readonly="state not in ('draft', 'to_approve')">
+                                <list editable="bottom">
+                                    <field name="product_id"/>
+                                    <field name="product_uom_id"/>
+                                    <field name="qty_requested" string="الكمية المُرتجَعة"/>
+                                    <field name="available_qty_source"
+                                           string="المتاح بمخزن الفرع"
+                                           groups="internal_consumption_flow.group_inter_branch_manager"
+                                           decoration-danger="available_qty_source &lt; qty_requested"
+                                           decoration-success="available_qty_source &gt;= qty_requested"/>
+                                    <field name="qty_dispatched" string="المُصرَّح بإرجاعه"
+                                           column_invisible="parent.state in ('draft', 'to_approve')"/>
+                                    <field name="qty_received" string="المستلم بمخزن المرتجعات"
+                                           column_invisible="parent.state in ('draft', 'to_approve', 'approved')"/>
+                                    <field name="notes" optional="show"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="سبب الإرجاع والملاحظات" name="notes">
+                            <field name="notes"
+                                   placeholder="اكتب هنا سبب الإرجاع وأي تفاصيل إضافية..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Window Action — Returns only -->
+    <record id="action_branch_return_request" model="ir.actions.act_window">
+        <field name="name">طلبات مرتجعات الفروع</field>
+        <field name="res_model">stock.inter.branch.request</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('request_type', '=', 'return')]</field>
+        <field name="context">{'default_request_type': 'return', 'search_default_filter_returns': 1}</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'list', 'view_id': ref('view_branch_return_request_list')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('view_branch_return_request_form')}),
+        ]"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                لا توجد طلبات مرتجعات حتى الآن
+            </p>
+            <p>
+                استخدم هذه الشاشة لإرجاع المنتجات من الفروع إلى مخزن المرتجعات.
+                كل طلب يحتاج موافقة الإدارة قبل تنفيذ الحركة المخزنية.
+            </p>
+        </field>
+    </record>
+
+    <!-- Window Action — Transfers only (updated to exclude returns) -->
+    <record id="action_stock_inter_branch_request" model="ir.actions.act_window">
+        <field name="name">طلبات التحويل بين الفروع (Inter-Branch Transfers)</field>
+        <field name="res_model">stock.inter.branch.request</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="domain">[('request_type', '=', 'transfer')]</field>
+        <field name="context">{'default_request_type': 'transfer', 'search_default_filter_transfers': 1}</field>
+        <field name="search_view_id" ref="view_stock_inter_branch_request_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                اضغط هنا لإنشاء أول طلب تحويل مخزني من المخزن الرئيسي إلى فرعك!
+            </p>
+            <p>
+                يقوم هذا النظام بإدارة دورة التحويلات المخزنية بين الفروع والمخزن الرئيسي بدقة،
+                عبر طلب موافقة الإدارة وتتبع البضاعة أثناء مرحلة النقل حتى وصولها واستلامها بالفرع.
+            </p>
+        </field>
+    </record>
+
+</odoo>
+
+
