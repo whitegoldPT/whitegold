@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="stock_card_wizard_rule_own" model="ir.rule">
+        <field name="name">Stock Card Wizard: own records</field>
+        <field name="model_id" ref="model_stock_card_wizard"/>
+        <field name="domain_force">[('create_uid', '=', user.id)]</field>
+    </record>
+
+    <record id="stock_card_line_rule_own" model="ir.rule">
+        <field name="name">Stock Card Line: own records</field>
+        <field name="model_id" ref="model_stock_card_line"/>
+        <field name="domain_force">[('create_uid', '=', user.id)]</field>
+    </record>
+
+    <record id="stock_card_line_rule_company" model="ir.rule">
+        <field name="name">Stock Card Line: multi-company</field>
+        <field name="model_id" ref="model_stock_card_line"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+</odoo>

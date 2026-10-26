@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_stock_card_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="wizard">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <style>
+                            .stock-card-table {
+                                width: 100%;
+                                border-collapse: collapse;
+                                font-size: 10px;
+                            }
+                            .stock-card-table th {
+                                background-color: #875A7B;
+                                color: white;
+                                padding: 8px 4px;
+                                text-align: center;
+                                border: 1px solid #ddd;
+                            }
+                            .stock-card-table td {
+                                padding: 6px 4px;
+                                border: 1px solid #ddd;
+                            }
+                            .stock-card-table .text-right {
+                                text-align: right;
+                            }
+                            .stock-card-table .text-center {
+                                text-align: center;
+                            }
+                            .opening-row {
+                                background-color: #E8F5E9;
+                                font-style: italic;
+                            }
+                            .closing-row {
+                                background-color: #E3F2FD;
+                                font-weight: bold;
+                            }
+                            .total-row {
+                                background-color: #F3E5F5;
+                                font-weight: bold;
+                            }
+                            .report-header {
+                                margin-bottom: 20px;
+                            }
+                            .report-title {
+                                font-size: 18px;
+                                font-weight: bold;
+                                color: #875A7B;
+                            }
+                            .report-info {
+                                font-size: 11px;
+                                margin-top: 10px;
+                            }
+                        </style>
+
+                        <div class="report-header">
+                            <div class="report-title">Stock Card Summary Report</div>
+                            <div class="report-info">
+                                <strong>Period:</strong> <t t-out="wizard.date_from"/> to <t t-out="wizard.date_to"/>
+                                <br/>
+                                <strong>Location:</strong> <t t-out="wizard.location_id.complete_name"/>
+                                <br/>
+                                <strong>Company:</strong> <t t-out="wizard.company_id.name"/>
+                            </div>
+                        </div>
+
+                        <table class="stock-card-table">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Category</th>
+                                    <th>UoM</th>
+                                    <th>Initial Balance</th>
+                                    <th>Total In</th>
+                                    <th>Total Out</th>
+                                    <th>Closing Balance</th>
+                                    <th>Unit Cost</th>
+                                    <th>Balance Value</th>
+                                </tr>
+                            </thead>
+                            <t t-set="rows" t-value="wizard._get_summary_rows()"/>
+                            <t t-set="totals" t-value="wizard._get_summary_totals(rows)"/>
+                            <t t-set="num" t-value="{'widget': 'float', 'precision': 2}"/>
+                            <t t-set="money" t-value="{'widget': 'monetary', 'display_currency': wizard.company_id.currency_id}"/>
+                            <tbody>
+                                <tr t-foreach="rows" t-as="row">
+                                    <td><t t-out="row['product']"/></td>
+                                    <td><t t-out="row['category']"/></td>
+                                    <td><t t-out="row['uom']"/></td>
+                                    <td class="text-right"><t t-out="row['initial_balance']" t-options="num"/></td>
+                                    <td class="text-right"><t t-out="row['total_in']" t-options="num"/></td>
+                                    <td class="text-right"><t t-out="row['total_out']" t-options="num"/></td>
+                                    <td class="text-right"><t t-out="row['balance']" t-options="num"/></td>
+                                    <td class="text-right"><t t-out="row['unit_cost']" t-options="money"/></td>
+                                    <td class="text-right"><t t-out="row['balance_value']" t-options="money"/></td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr class="total-row">
+                                    <td colspan="3" class="text-right"><strong>TOTALS:</strong></td>
+                                    <td class="text-right"><t t-if="'initial_balance' in totals" t-out="totals['initial_balance']" t-options="num"/></td>
+                                    <td class="text-right"><t t-if="'total_in' in totals" t-out="totals['total_in']" t-options="num"/></td>
+                                    <td class="text-right"><t t-if="'total_out' in totals" t-out="totals['total_out']" t-options="num"/></td>
+                                    <td class="text-right"><t t-if="'balance' in totals" t-out="totals['balance']" t-options="num"/></td>
+                                    <td class="text-right"></td>
+                                    <td class="text-right"><t t-out="totals['balance_value']" t-options="money"/></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

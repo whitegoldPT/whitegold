@@ -1,0 +1,498 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* fs_stock_card
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0-20261007\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-07 07:13+0000\n"
+"PO-Revision-Date: 2026-10-07 07:13+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: fs_stock_card
+#: model:ir.actions.report,print_report_name:fs_stock_card.action_report_stock_card
+msgid "'Stock_Card_Report_%s_%s' % (object.date_from, object.date_to)"
+msgstr ""
+
+#. module: fs_stock_card
+#: model_terms:ir.ui.view,arch_db:fs_stock_card.report_stock_card_template
+msgid ""
+"<br/>\n"
+"                                <strong>Company:</strong>"
+msgstr ""
+
+#. module: fs_stock_card
+#: model_terms:ir.ui.view,arch_db:fs_stock_card.report_stock_card_template
+msgid ""
+"<br/>\n"
+"                                <strong>Location:</strong>"
+msgstr ""
+
+#. module: fs_stock_card
+#: model_terms:ir.ui.view,arch_db:fs_stock_card.report_stock_card_template
+msgid "<strong>Period:</strong>"
+msgstr ""
+
+#. module: fs_stock_card
+#: model_terms:ir.ui.view,arch_db:fs_stock_card.report_stock_card_template
+msgid "<strong>TOTALS:</strong>"
+msgstr ""
+
+#. module: fs_stock_card
+#: model:ir.model.fields,field_description:fs_stock_card.field_stock_card_line__balance
+msgid "Balance"
+msgstr ""
+
+#. module: fs_stock_card
+#. odoo-python
+#: code:addons/fs_stock_card/wizard/stock_card_wizard.py:0
+#: model:ir.model.fields,field_description:fs_stock_card.field_stock_card_line__balance_value
+#: model_terms:ir.ui.view,arch_db:fs_stock_card.report_stock_card_template
+#: model_terms:ir.ui.view,arch_db:fs_stock_card.view_stock_card_line_list
+msgid "Balance Value"
+msgstr ""
+
+#. module: fs_stock_card
+#: model_terms:ir.ui.view,arch_db:fs_stock_card.view_stock_card_wizard_form
+msgid "Cancel"
+msgstr ""
+
+#. module: fs_stock_card
+#. odoo-python
+#: code:addons/fs_stock_card/wizard/stock_card_wizard.py:0
+#: model:ir.model.fields,field_description:fs_stock_card.field_stock_card_line__categ_id
+#: model:ir.model.fields.selection,name:fs_stock_card.selection__stock_card_wizard__group_by__category
+#: model_terms:ir.ui.view,arch_db:fs_stock_card.report_stock_card_template
+#: model_terms:ir.ui.view,arch_db:fs_stock_card.view_stock_card_line_search
+msgid "Category"
+msgstr ""
+
+#. module: fs_stock_card
+#. odoo-python
+#: code:addons/fs_stock_card/models/stock_card_line.py:0
+#: code:addons/fs_stock_card/wizard/stock_card_wizard.py:0
+#: model:ir.model.fields.selection,name:fs_stock_card.selection__stock_card_line__line_type__closing
+#: model_terms:ir.ui.view,arch_db:fs_stock_card.report_stock_card_template
+#: model_terms:ir.ui.view,arch_db:fs_stock_card.view_stock_card_line_search
+msgid "Closing Balance"
+msgstr ""
+
+#. module: fs_stock_card
+#: model:ir.model.fields,field_description:fs_stock_card.field_stock_card_line__company_id
+#: model:ir.model.fields,field_description:fs_stock_card.field_stock_card_wizard__company_id
+msgid "Company"
+msgstr ""
+
+#. module: fs_stock_card
+#. odoo-python
+#: code:addons/fs_stock_card/wizard/stock_card_wizard.py:0
+msgid "Company: %s"
+msgstr ""
+
+#. module: fs_stock_card
+#: model:ir.model.fields,field_description:fs_stock_card.field_stock_card_line__create_uid
+#: model:ir.model.fields,field_description:fs_stock_card.field_stock_card_wizard__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: fs_stock_card
+#: model:ir.model.fields,field_description:fs_stock_card.field_stock_card_line__create_date
+#: model:ir.model.fields,field_description:fs_stock_card.field_stock_card_wizard__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: fs_stock_card
+#: model:ir.model.fields,field_description:fs_stock_card.field_stock_card_line__currency_id
+msgid "Currency"
+msgstr ""
+
+#. module: fs_stock_card
+#: model:ir.model.fields,field_description:fs_stock_card.field_stock_card_line__date
+#: model_terms:ir.ui.view,arch_db:fs_stock_card.view_stock_card_line_search
+msgid "Date"
+msgstr ""
+
+#. module: fs_stock_card
+#: model:ir.model.fields,help:fs_stock_card.field_stock_card_line__uom_id
+msgid "Default unit of measure used for all stock operations."
+msgstr ""
+
+#. module: fs_stock_card
+#: model:ir.model.fields,field_description:fs_stock_card.field_stock_card_line__location_dest_id
+msgid "Destination Location"
+msgstr ""
+
+#. module: fs_stock_card
+#: model:ir.model.fields,field_description:fs_stock_card.field_stock_card_line__display_name
+#: model:ir.model.fields,field_description:fs_stock_card.field_stock_card_wizard__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: fs_stock_card
+#: model:ir.model.fields,field_description:fs_stock_card.field_stock_card_wizard__date_to
+msgid "End Date"
+msgstr ""
+
+#. module: fs_stock_card
+#: model:ir.model.fields,field_description:fs_stock_card.field_stock_card_wizard__excel_file
+msgid "Excel File"
+msgstr ""
+
+#. module: fs_stock_card
+#: model:ir.model.fields,field_description:fs_stock_card.field_stock_card_wizard__excel_filename
+msgid "Excel Filename"
+msgstr ""
+
+#. module: fs_stock_card
+#: model:ir.model.fields,field_description:fs_stock_card.field_stock_card_wizard__filter_by
+msgid "Filter By"
+msgstr ""
+
+#. module: fs_stock_card
+#: model_terms:ir.ui.view,arch_db:fs_stock_card.view_stock_card_wizard_form
+msgid "General Configuration"
+msgstr ""
+
+#. module: fs_stock_card
+#: model_terms:ir.ui.view,arch_db:fs_stock_card.view_stock_card_wizard_form
+msgid "Generate Excel"
+msgstr ""
+
+#. module: fs_stock_card
+#: model_terms:ir.ui.view,arch_db:fs_stock_card.view_stock_card_wizard_form
+msgid "Generate PDF"
+msgstr ""
+
+#. module: fs_stock_card
+#: model:ir.model.fields,field_description:fs_stock_card.field_stock_card_wizard__group_by
+msgid "Group By"
+msgstr ""
+
+#. module: fs_stock_card
+#: model_terms:ir.ui.view,arch_db:fs_stock_card.view_stock_card_wizard_form
+msgid "Grouping"
+msgstr ""
+
+#. module: fs_stock_card
+#: model:ir.model.fields,field_description:fs_stock_card.field_stock_card_line__id
+#: model:ir.model.fields,field_description:fs_stock_card.field_stock_card_wizard__id
+msgid "ID"
+msgstr ""
+
+#. module: fs_stock_card
+#: model:ir.model.fields,field_description:fs_stock_card.field_stock_card_line__qty_in
+msgid "In Qty"
+msgstr ""
+
+#. module: fs_stock_card
+#: model:ir.model.fields,field_description:fs_stock_card.field_stock_card_wizard__include_child_locations
+msgid "Include Child Locations"
+msgstr ""
+
+#. module: fs_stock_card
+#: model:ir.model.fields,field_description:fs_stock_card.field_stock_card_wizard__include_zero_movements
+msgid "Include Zero Movements"
+msgstr ""
+
+#. module: fs_stock_card
+#. odoo-python
+#: code:addons/fs_stock_card/wizard/stock_card_wizard.py:0
+#: model:ir.model.fields,field_description:fs_stock_card.field_stock_card_line__initial_balance
+#: model_terms:ir.ui.view,arch_db:fs_stock_card.report_stock_card_template
+msgid "Initial Balance"
+msgstr ""
+
+#. module: fs_stock_card
+#: model:ir.model.fields,field_description:fs_stock_card.field_stock_card_line__write_uid
+#: model:ir.model.fields,field_description:fs_stock_card.field_stock_card_wizard__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: fs_stock_card
+#: model:ir.model.fields,field_description:fs_stock_card.field_stock_card_line__write_date
+#: model:ir.model.fields,field_description:fs_stock_card.field_stock_card_wizard__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: fs_stock_card
+#: model_terms:ir.ui.view,arch_db:fs_stock_card.view_stock_card_wizard_form
+msgid "Leave empty to include all categories"
+msgstr ""
+
+#. module: fs_stock_card
+#: model_terms:ir.ui.view,arch_db:fs_stock_card.view_stock_card_wizard_form
+msgid "Leave empty to include all products"
+msgstr ""
+
+#. module: fs_stock_card
+#: model:ir.model.fields,field_description:fs_stock_card.field_stock_card_line__line_type
+msgid "Line Type"
+msgstr ""
+
+#. module: fs_stock_card
+#: model:ir.model.fields,field_description:fs_stock_card.field_stock_card_wizard__location_id
+#: model_terms:ir.ui.view,arch_db:fs_stock_card.view_stock_card_wizard_form
+msgid "Location"
+msgstr ""
+
+#. module: fs_stock_card
+#. odoo-python
+#: code:addons/fs_stock_card/wizard/stock_card_wizard.py:0
+msgid "Location: %s"
+msgstr ""
+
+#. module: fs_stock_card
+#. odoo-python
+#: code:addons/fs_stock_card/wizard/stock_card_wizard.py:0
+msgid "No products found matching the criteria."
+msgstr ""
+
+#. module: fs_stock_card
+#. odoo-python
+#: code:addons/fs_stock_card/wizard/stock_card_wizard.py:0
+msgid "No stock movements found for the selected criteria."
+msgstr ""
+
+#. module: fs_stock_card
+#. odoo-python
+#: code:addons/fs_stock_card/models/stock_card_line.py:0
+#: code:addons/fs_stock_card/wizard/stock_card_wizard.py:0
+#: model:ir.model.fields.selection,name:fs_stock_card.selection__stock_card_line__line_type__opening
+#: model_terms:ir.ui.view,arch_db:fs_stock_card.view_stock_card_line_search
+msgid "Opening Balance"
+msgstr ""
+
+#. module: fs_stock_card
+#: model:ir.model.fields,field_description:fs_stock_card.field_stock_card_line__qty_out
+msgid "Out Qty"
+msgstr ""
+
+#. module: fs_stock_card
+#: model:ir.model.fields,field_description:fs_stock_card.field_stock_card_line__partner_id
+#: model_terms:ir.ui.view,arch_db:fs_stock_card.view_stock_card_line_search
+msgid "Partner"
+msgstr ""
+
+#. module: fs_stock_card
+#: model_terms:ir.ui.view,arch_db:fs_stock_card.view_stock_card_wizard_form
+msgid "Period"
+msgstr ""
+
+#. module: fs_stock_card
+#. odoo-python
+#: code:addons/fs_stock_card/wizard/stock_card_wizard.py:0
+msgid "Period: %(date_from)s to %(date_to)s"
+msgstr ""
+
+#. module: fs_stock_card
+#. odoo-python
+#: code:addons/fs_stock_card/wizard/stock_card_wizard.py:0
+#: model:ir.model.fields,field_description:fs_stock_card.field_stock_card_line__product_id
+#: model:ir.model.fields.selection,name:fs_stock_card.selection__stock_card_wizard__filter_by__product
+#: model:ir.model.fields.selection,name:fs_stock_card.selection__stock_card_wizard__group_by__product
+#: model_terms:ir.ui.view,arch_db:fs_stock_card.report_stock_card_template
+#: model_terms:ir.ui.view,arch_db:fs_stock_card.view_stock_card_line_search
+msgid "Product"
+msgstr ""
+
+#. module: fs_stock_card
+#: model:ir.model.fields,field_description:fs_stock_card.field_stock_card_wizard__categ_ids
+msgid "Product Categories"
+msgstr ""
+
+#. module: fs_stock_card
+#: model:ir.model.fields.selection,name:fs_stock_card.selection__stock_card_wizard__filter_by__category
+msgid "Product Category"
+msgstr ""
+
+#. module: fs_stock_card
+#: model_terms:ir.ui.view,arch_db:fs_stock_card.view_stock_card_wizard_form
+msgid "Product Filter"
+msgstr ""
+
+#. module: fs_stock_card
+#: model:ir.model.fields,field_description:fs_stock_card.field_stock_card_wizard__product_ids
+msgid "Products"
+msgstr ""
+
+#. module: fs_stock_card
+#: model:ir.model.fields,field_description:fs_stock_card.field_stock_card_line__reference
+#: model_terms:ir.ui.view,arch_db:fs_stock_card.view_stock_card_line_list
+msgid "Reference"
+msgstr ""
+
+#. module: fs_stock_card
+#: model:ir.model.fields,field_description:fs_stock_card.field_stock_card_line__sequence
+msgid "Sequence"
+msgstr ""
+
+#. module: fs_stock_card
+#: model:ir.model.fields,field_description:fs_stock_card.field_stock_card_line__source_document
+msgid "Source Document"
+msgstr ""
+
+#. module: fs_stock_card
+#: model:ir.model.fields,field_description:fs_stock_card.field_stock_card_line__location_id
+msgid "Source Location"
+msgstr ""
+
+#. module: fs_stock_card
+#: model:ir.model.fields,field_description:fs_stock_card.field_stock_card_wizard__date_from
+msgid "Start Date"
+msgstr ""
+
+#. module: fs_stock_card
+#: model:ir.ui.menu,name:fs_stock_card.menu_stock_card_report
+msgid "Stock Card"
+msgstr ""
+
+#. module: fs_stock_card
+#: model_terms:ir.ui.view,arch_db:fs_stock_card.view_stock_card_line_pivot
+msgid "Stock Card Analysis"
+msgstr ""
+
+#. module: fs_stock_card
+#: model:ir.model,name:fs_stock_card.model_stock_card_line
+msgid "Stock Card Line"
+msgstr ""
+
+#. module: fs_stock_card
+#: model:ir.model.fields,field_description:fs_stock_card.field_stock_card_wizard__line_ids
+#: model_terms:ir.ui.view,arch_db:fs_stock_card.view_stock_card_line_search
+msgid "Stock Card Lines"
+msgstr ""
+
+#. module: fs_stock_card
+#. odoo-python
+#: code:addons/fs_stock_card/wizard/stock_card_wizard.py:0
+#: model:ir.actions.act_window,name:fs_stock_card.action_stock_card_wizard
+#: model:ir.actions.report,name:fs_stock_card.action_report_stock_card
+#: model_terms:ir.ui.view,arch_db:fs_stock_card.view_stock_card_line_list
+#: model_terms:ir.ui.view,arch_db:fs_stock_card.view_stock_card_wizard_form
+msgid "Stock Card Report"
+msgstr ""
+
+#. module: fs_stock_card
+#: model:ir.model,name:fs_stock_card.model_stock_card_wizard
+msgid "Stock Card Report Wizard"
+msgstr ""
+
+#. module: fs_stock_card
+#. odoo-python
+#: code:addons/fs_stock_card/wizard/stock_card_wizard.py:0
+#: model_terms:ir.ui.view,arch_db:fs_stock_card.report_stock_card_template
+msgid "Stock Card Summary Report"
+msgstr ""
+
+#. module: fs_stock_card
+#: model:ir.model.fields,field_description:fs_stock_card.field_stock_card_line__move_id
+msgid "Stock Move"
+msgstr ""
+
+#. module: fs_stock_card
+#: model:ir.model.fields,field_description:fs_stock_card.field_stock_card_line__move_line_id
+msgid "Stock Move Line"
+msgstr ""
+
+#. module: fs_stock_card
+#. odoo-python
+#: code:addons/fs_stock_card/wizard/stock_card_wizard.py:0
+msgid "TOTALS:"
+msgstr ""
+
+#. module: fs_stock_card
+#. odoo-python
+#: code:addons/fs_stock_card/wizard/stock_card_wizard.py:0
+msgid "The start date must be before or equal to the end date."
+msgstr ""
+
+#. module: fs_stock_card
+#. odoo-python
+#: code:addons/fs_stock_card/wizard/stock_card_wizard.py:0
+#: model_terms:ir.ui.view,arch_db:fs_stock_card.report_stock_card_template
+msgid "Total In"
+msgstr ""
+
+#. module: fs_stock_card
+#. odoo-python
+#: code:addons/fs_stock_card/wizard/stock_card_wizard.py:0
+#: model_terms:ir.ui.view,arch_db:fs_stock_card.report_stock_card_template
+msgid "Total Out"
+msgstr ""
+
+#. module: fs_stock_card
+#: model_terms:ir.ui.view,arch_db:fs_stock_card.view_stock_card_line_list
+msgid "Total Value In"
+msgstr ""
+
+#. module: fs_stock_card
+#: model_terms:ir.ui.view,arch_db:fs_stock_card.view_stock_card_line_list
+msgid "Total Value Out"
+msgstr ""
+
+#. module: fs_stock_card
+#: model:ir.model.fields.selection,name:fs_stock_card.selection__stock_card_line__line_type__transaction
+msgid "Transaction"
+msgstr ""
+
+#. module: fs_stock_card
+#: model_terms:ir.ui.view,arch_db:fs_stock_card.view_stock_card_line_search
+msgid "Transactions"
+msgstr ""
+
+#. module: fs_stock_card
+#: model:ir.model.fields,field_description:fs_stock_card.field_stock_card_line__uom_id
+msgid "Unit"
+msgstr ""
+
+#. module: fs_stock_card
+#. odoo-python
+#: code:addons/fs_stock_card/wizard/stock_card_wizard.py:0
+#: model:ir.model.fields,field_description:fs_stock_card.field_stock_card_line__unit_cost
+#: model_terms:ir.ui.view,arch_db:fs_stock_card.report_stock_card_template
+msgid "Unit Cost"
+msgstr ""
+
+#. module: fs_stock_card
+#. odoo-python
+#: code:addons/fs_stock_card/wizard/stock_card_wizard.py:0
+#: model_terms:ir.ui.view,arch_db:fs_stock_card.report_stock_card_template
+msgid "UoM"
+msgstr ""
+
+#. module: fs_stock_card
+#: model:ir.model.fields,field_description:fs_stock_card.field_stock_card_line__value_in
+msgid "Value In"
+msgstr ""
+
+#. module: fs_stock_card
+#: model:ir.model.fields,field_description:fs_stock_card.field_stock_card_line__value_out
+msgid "Value Out"
+msgstr ""
+
+#. module: fs_stock_card
+#: model_terms:ir.ui.view,arch_db:fs_stock_card.view_stock_card_wizard_form
+msgid "View Report"
+msgstr ""
+
+#. module: fs_stock_card
+#: model:ir.model.fields,field_description:fs_stock_card.field_stock_card_line__wizard_id
+msgid "Wizard"
+msgstr ""
+
+#. module: fs_stock_card
+#: model_terms:ir.ui.view,arch_db:fs_stock_card.report_stock_card_template
+msgid "to"
+msgstr ""
+
+#. module: fs_stock_card
+#. odoo-python
+#: code:addons/fs_stock_card/wizard/stock_card_wizard.py:0
+msgid "xlsxwriter library is required for Excel export. Please install it."
+msgstr ""

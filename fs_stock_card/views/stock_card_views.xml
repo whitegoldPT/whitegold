@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_stock_card_line_list" model="ir.ui.view">
+        <field name="name">stock.card.line.list</field>
+        <field name="model">stock.card.line</field>
+        <field name="arch" type="xml">
+            <list string="Stock Card Report" 
+                  decoration-info="line_type == 'opening'" 
+                  decoration-success="line_type == 'closing'"
+                  decoration-bf="line_type == 'closing'"
+                  decoration-it="line_type == 'opening'"
+                  expand="1"
+                  default_order="product_id, sequence, date, id">
+                <field name="date"/>
+                <field name="product_id"/>
+                <field name="categ_id" optional="show"/>
+                <field name="reference" string="Reference"/>
+                <field name="source_document"/>
+                <field name="partner_id"/>
+                <field name="uom_id" optional="show" groups="uom.group_uom"/>
+                <field name="initial_balance" optional="show"/>
+                <field name="qty_in"/>
+                <field name="qty_out"/>
+                <field name="balance"/>
+                <field name="unit_cost" optional="show"/>
+                <field name="value_in" sum="Total Value In" optional="show"/>
+                <field name="value_out" sum="Total Value Out" optional="show"/>
+                <field name="balance_value" string="Balance Value" optional="show"/>
+                <field name="line_type" column_invisible="1"/>
+                <field name="sequence" column_invisible="1"/>
+                <field name="wizard_id" column_invisible="1"/>
+                <field name="currency_id" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_stock_card_line_search" model="ir.ui.view">
+        <field name="name">stock.card.line.search</field>
+        <field name="model">stock.card.line</field>
+        <field name="arch" type="xml">
+            <search string="Stock Card Lines">
+                <field name="product_id"/>
+                <field name="categ_id"/>
+                <field name="reference"/>
+                <field name="source_document"/>
+                <field name="partner_id"/>
+                <separator/>
+                <filter name="filter_opening" string="Opening Balance" domain="[('line_type', '=', 'opening')]"/>
+                <filter name="filter_transactions" string="Transactions" domain="[('line_type', '=', 'transaction')]"/>
+                <filter name="filter_closing" string="Closing Balance" domain="[('line_type', '=', 'closing')]"/>
+                <separator/>
+                <group>
+                    <filter name="group_by_product" string="Product" context="{'group_by': 'product_id'}"/>
+                    <filter name="group_by_category" string="Category" context="{'group_by': 'categ_id'}"/>
+                    <filter name="group_by_date" string="Date" context="{'group_by': 'date'}"/>
+                    <filter name="group_by_partner" string="Partner" context="{'group_by': 'partner_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_stock_card_line_pivot" model="ir.ui.view">
+        <field name="name">stock.card.line.pivot</field>
+        <field name="model">stock.card.line</field>
+        <field name="arch" type="xml">
+            <pivot string="Stock Card Analysis">
+                <field name="product_id" type="row"/>
+                <field name="qty_in" type="measure"/>
+                <field name="qty_out" type="measure"/>
+                <field name="value_in" type="measure"/>
+                <field name="value_out" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+</odoo>
