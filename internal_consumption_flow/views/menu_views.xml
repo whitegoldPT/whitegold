@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Main Menu: Internal Movements & Branch Transfers -->
+    <menuitem id="menu_consumption_root"
+              name="التحويلات والصرف الداخلي"
+              web_icon="internal_consumption_flow,static/description/icon.png"
+              sequence="12"/>
+
+    <!-- Operations Submenu -->
+    <menuitem id="menu_consumption_operations"
+              name="العمليات (Operations)"
+              parent="menu_consumption_root"
+              sequence="10"/>
+
+    <!-- Inter-Branch Transfer Request Menu in Custom App (Default / First screen) -->
+    <menuitem id="menu_inter_branch_transfer_main"
+              name="طلبات التحويل بين الفروع"
+              parent="menu_consumption_operations"
+              action="action_stock_inter_branch_request"
+              sequence="5"/>
+
+    <!-- ═══ RETURNS — شاشة مستقلة للمرتجعات ═══ -->
+    <menuitem id="menu_branch_return_request_main"
+              name="↩ طلبات مرتجعات الفروع"
+              parent="menu_consumption_operations"
+              action="action_branch_return_request"
+              sequence="6"/>
+
+    <!-- Internal Consumption Request Menu -->
+    <menuitem id="menu_consumption_request"
+              name="طلبات الصرف الداخلي (Consumption)"
+              parent="menu_consumption_operations"
+              action="action_consumption_request"
+              sequence="10"/>
+
+    <menuitem id="menu_consumption_audit"
+              name="سجل الرقابة والتدقيق (Forensic Audit)"
+              parent="menu_consumption_operations"
+              action="action_consumption_forensic_audit"
+              sequence="20"/>
+
+    <!-- Also link into Inventory App Operations menu for easy access by Warehouse staff -->
+    <menuitem id="menu_stock_inter_branch_transfer"
+              name="طلبات التحويل بين الفروع (Inter-Branch)"
+              parent="stock.menu_stock_warehouse_mgmt"
+              action="action_stock_inter_branch_request"
+              sequence="14"/>
+
+    <!-- ═══ RETURNS in Inventory App ═══ -->
+    <menuitem id="menu_stock_branch_return"
+              name="↩ مرتجعات الفروع (Branch Returns)"
+              parent="stock.menu_stock_warehouse_mgmt"
+              action="action_branch_return_request"
+              sequence="15"/>
+</odoo>

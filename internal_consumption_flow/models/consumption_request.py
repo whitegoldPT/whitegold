@@ -1,0 +1,262 @@
+from odoo import api, fields, models, _
+from odoo.exceptions import UserError
+
+class ConsumptionRequest(models.Model):
+    _name = "consumption.request"
+    _description = "Internal Consumption Request"
+    _inherit = ["mail.thread", "mail.activity.mixin"]
+    _order = "id desc"
+
+    name = fields.Char(
+        string="Reference",
+        required=True,
+        copy=False,
+        readonly=True,
+        default=lambda self: _("New"),
+    )
+    state = fields.Selection(
+        [
+            ("draft", "Draft"),
+            ("submitted", "Submitted"),
+            ("approved", "Approved"),
+            ("dispatched", "Dispatched"),
+            ("done", "Done"),
+            ("refused", "Refused"),
+            ("cancelled", "Cancelled"),
+        ],
+        default="draft",
+        string="Status",
+        required=True,
+        tracking=True,
+    )
+
+    employee_id = fields.Many2one(
+        "hr.employee",
+        string="Requester",
+        required=True,
+        default=lambda self: self.env.user.employee_id,
+        tracking=True,
+    )
+    department_id = fields.Many2one(
+        "hr.department",
+        string="Department",
+        related="employee_id.department_id",
+        store=True,
+    )
+    request_date = fields.Date(
+        string="Request Date",
+        default=fields.Date.context_today,
+        required=True,
+        tracking=True,
+    )
+
+    line_ids = fields.One2many(
+        "consumption.request.line", "request_id", string="Request Lines",
+        copy=True,
+    )
+
+    # Picking references for Delivery and Receipt
+    picking_send_id = fields.Many2one(
+        "stock.picking", string="Delivery Picking (Stock -> Transit)",
+        copy=False, readonly=True,
+    )
+    picking_receive_id = fields.Many2one(
+        "stock.picking", string="Receipt Picking (Transit -> Consumption)",
+        copy=False, readonly=True,
+    )
+    
+    is_department_manager = fields.Boolean(compute="_compute_is_department_manager")
+
+    def _compute_is_department_manager(self):
+        for rec in self:
+            is_admin = self.env.user._is_admin() or self.env.user.has_group('base.group_system') or self.env.su
+            is_global_manager = is_admin or self.env.user.has_group('internal_consumption_flow.group_consumption_manager')
+            
+            # If department has no manager, fallback to global managers or admin
+            if not rec.department_id or not rec.department_id.manager_id:
+                rec.is_department_manager = is_global_manager
+                continue
+                
+            is_dept_manager = rec.department_id.manager_id.user_id == self.env.user
+            rec.is_department_manager = is_dept_manager or is_global_manager
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            if vals.get("name", _("New")) == _("New"):
+                vals["name"] = (
+                    self.env["ir.sequence"].next_by_code("consumption.request")
+                    or _("New")
+                )
+        return super().create(vals_list)
+
+    def action_submit(self):
+        for rec in self:
+            if not rec.line_ids:
+                raise UserError(_("Please add at least one line."))
+            if any(not line.account_id for line in rec.line_ids):
+                raise UserError(_("Some products do not have an Expense/Stock Output Account configured in their category. Please configure them before submitting."))
+            rec.state = "submitted"
+
+    def action_approve(self):
+        for rec in self:
+            is_admin = self.env.user._is_admin() or self.env.user.has_group('base.group_system') or self.env.su
+            if not rec.is_department_manager and not is_admin:
+                raise UserError(_("Only the Department Manager or a Consumption Manager can approve this request."))
+            rec.write({"state": "approved"})
+
+    def action_refuse(self):
+        for rec in self:
+            rec.write({"state": "refused"})
+
+    def action_cancel(self):
+        for rec in self:
+            rec.write({"state": "cancelled"})
+
+    def action_draft(self):
+        for rec in self:
+            rec.write({"state": "draft"})
+
+    def action_dispatch(self):
+        """Step 1: Warehouse sends items to Transit"""
+        for rec in self:
+            if rec.state != "approved":
+                continue
+            
+            # Logic to create picking from Main Stock to a Transit Location
+            picking = rec._create_picking(step="send")
+            rec.picking_send_id = picking
+            rec.state = "dispatched"
+
+    def action_receive(self):
+        """Step 2: Employee confirms receipt, moves from Transit to Virtual Consumption"""
+        for rec in self:
+            if rec.state != "dispatched":
+                continue
+            
+            picking = rec._create_picking(step="receive")
+            if rec.picking_send_id:
+                for send_move in rec.picking_send_id.move_ids:
+                    svls = send_move.sudo().stock_valuation_layer_ids
+                    if svls:
+                        qty = sum(svls.mapped('quantity'))
+                        val = sum(svls.mapped('value'))
+                        cost = abs(val / qty) if qty else 0.0
+                    else:
+                        cost = send_move.price_unit or send_move.product_id.standard_price
+                    recv_moves = picking.move_ids.filtered(lambda m: m.product_id == send_move.product_id)
+                    for rm in recv_moves:
+                        if cost:
+                            rm.sudo().write({'price_unit': cost})
+                        rm.sudo().write({'move_orig_ids': [(4, send_move.id)]})
+
+            rec.picking_receive_id = picking
+            rec.state = "done"
+
+    def action_view_picking(self):
+        """View linked stock pickings"""
+        self.ensure_one()
+        picking_ids = [self.picking_send_id.id, self.picking_receive_id.id]
+        picking_ids = [pid for pid in picking_ids if pid]
+        
+        action = self.env["ir.actions.actions"]._for_xml_id("stock.action_picking_tree_all")
+        if len(picking_ids) > 1:
+            action['domain'] = [('id', 'in', picking_ids)]
+        elif picking_ids:
+            action['views'] = [(self.env.ref('stock.view_picking_form').id, 'form')]
+            action['res_id'] = picking_ids[0]
+        return action
+
+    def _get_transit_location(self):
+        param = self.env["ir.config_parameter"].sudo()
+        dest_loc_id = int(param.get_param("internal_consumption_flow.transit_location_id", 0) or 0)
+        dest_loc = self.env["stock.location"].browse(dest_loc_id).exists()
+        if not dest_loc:
+            dest_loc = self.env.ref("internal_consumption_flow.stock_location_consumption_transit", raise_if_not_found=False)
+        if not dest_loc:
+            dest_loc = self.env.company.internal_transit_location_id
+        if not dest_loc:
+            dest_loc = self.env["stock.location"].search([("usage", "=", "transit")], limit=1)
+        if not dest_loc:
+            virtual_loc = self.env.ref("stock.stock_location_locations_virtual", raise_if_not_found=False)
+            parent_id = virtual_loc.id if virtual_loc else False
+            dest_loc = self.env["stock.location"].sudo().create({
+                "name": "Consumption Transit",
+                "usage": "transit",
+                "location_id": parent_id,
+                "company_id": False,
+            })
+        if dest_loc and str(dest_loc.id) != str(dest_loc_id):
+            param.set_param("internal_consumption_flow.transit_location_id", dest_loc.id)
+        return dest_loc
+
+    def _get_consumption_location(self):
+        param = self.env["ir.config_parameter"].sudo()
+        dest_loc_id = int(param.get_param("internal_consumption_flow.consumption_location_id", 0) or 0)
+        dest_loc = self.env["stock.location"].browse(dest_loc_id).exists()
+        if not dest_loc:
+            dest_loc = self.env.ref("internal_consumption_flow.stock_location_internal_consumption", raise_if_not_found=False)
+        if not dest_loc:
+            dest_loc = self.env["stock.location"].search([("usage", "=", "inventory"), ("name", "ilike", "Consumption")], limit=1)
+        if not dest_loc:
+            dest_loc = self.env["stock.location"].search([("usage", "=", "inventory")], limit=1)
+        if not dest_loc:
+            virtual_loc = self.env.ref("stock.stock_location_locations_virtual", raise_if_not_found=False)
+            parent_id = virtual_loc.id if virtual_loc else False
+            dest_loc = self.env["stock.location"].sudo().create({
+                "name": "Internal Consumption",
+                "usage": "inventory",
+                "location_id": parent_id,
+                "company_id": False,
+            })
+        if dest_loc and str(dest_loc.id) != str(dest_loc_id):
+            param.set_param("internal_consumption_flow.consumption_location_id", dest_loc.id)
+        return dest_loc
+
+    def _create_picking(self, step="send"):
+        self.ensure_one()
+        company = getattr(self, 'company_id', False) or self.env.company
+        warehouse = self.env["stock.warehouse"].search([("company_id", "=", company.id)], limit=1)
+        if not warehouse:
+            warehouse = self.env["stock.warehouse"].search([], limit=1)
+        picking_type = warehouse.int_type_id or self.env["stock.picking.type"].search([
+            ("warehouse_id", "=", warehouse.id),
+            ("code", "=", "internal")
+        ], limit=1)
+        if not picking_type:
+            picking_type = self.env["stock.picking.type"].search([("code", "=", "internal")], limit=1)
+
+        if step == "send":
+            src_loc = warehouse.lot_stock_id
+            dest_loc = self._get_transit_location()
+        else:
+            # step == receive
+            src_loc = self._get_transit_location()
+            dest_loc = self._get_consumption_location()
+
+        if not src_loc or not dest_loc:
+            raise UserError(_("Transit or Consumption locations are not configured in Settings."))
+
+        picking_vals = {
+            "picking_type_id": picking_type.id,
+            "location_id": src_loc.id,
+            "location_dest_id": dest_loc.id,
+            "origin": self.name,
+            "move_ids": [
+                (0, 0, {
+                    "name": line.product_id.display_name,
+                    "product_id": line.product_id.id,
+                    "product_uom_qty": line.product_qty,
+                    "product_uom": line.product_id.uom_id.id,
+                    "location_id": src_loc.id,
+                    "location_dest_id": dest_loc.id,
+                    # Dynamic Accounting integration:
+                    # In Odoo 18, ensure consumption_line_id and analytic_distribution are always passed
+                    "consumption_line_id": line.id,
+                    "analytic_distribution": line.analytic_distribution,
+                }) for line in self.line_ids
+            ],
+        }
+        picking = self.env["stock.picking"].create(picking_vals)
+        picking.action_confirm()
+        return picking

@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_consumption_request_user,consumption.request,model_consumption_request,base.group_user,1,1,1,1
+access_consumption_request_line_user,consumption.request.line,model_consumption_request_line,base.group_user,1,1,1,1
+access_forensic_audit_manager,forensic.audit.manager,model_consumption_forensic_audit,internal_consumption_flow.group_consumption_manager,1,1,1,1
+access_forensic_audit_user,forensic.audit.user,model_consumption_forensic_audit,base.group_user,1,0,0,0
+access_stock_inter_branch_request_user,stock.inter.branch.request.user,model_stock_inter_branch_request,base.group_user,1,1,1,1
+access_stock_inter_branch_request_line_user,stock.inter.branch.request.line.user,model_stock_inter_branch_request_line,base.group_user,1,1,1,1
+access_stock_inter_branch_request_manager,stock.inter.branch.request.manager,model_stock_inter_branch_request,internal_consumption_flow.group_inter_branch_manager,1,1,1,1
+access_stock_inter_branch_request_line_manager,stock.inter.branch.request.line.manager,model_stock_inter_branch_request_line,internal_consumption_flow.group_inter_branch_manager,1,1,1,1
