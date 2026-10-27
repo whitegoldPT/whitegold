@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<odoo noupdate="1">
-    <record id="analytic_plan_general_expenses" model="account.analytic.plan">
-        <field name="name">مصروفات عمومية</field>
-        <field name="parent_id" eval="False"/>
-        <field name="color">4</field>
-    </record>
-</odoo>
